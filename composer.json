@@ -2,7 +2,23 @@
   "name": "recanalyst/recanalyst",
   "description": "Analyzes Age of Empires 2 recorded game files.",
   "version": "3.0.0",
+  "type": "library",
+  "homepage": "http://idlebeaver.ninja/recanalyst",
   "autoload": {
     "psr-4": { "RecAnalyst\\": "src/" }
-  }
+  },
+  "license": "GPL-3.0",
+
+  "authors": [
+    {
+      "name": "biegleux",
+      "email": "biegleux[at]gmail[dot]com",
+      "homepage": "http://recanalyst.sourceforge.net"
+    },
+    {
+      "name": "Idle Beaver",
+      "email": "me@idlebeaver.ninja",
+      "homepage": "http://idlebeaver.ninja"
+    }
+  ]
 }
