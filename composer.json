@@ -1,5 +1,6 @@
 {
   "name": "recanalyst/recanalyst",
+  "description": "Analyzes Age of Empires 2 recorded game files.",
   "version": "3.0.0",
   "autoload": {
     "psr-4": { "RecAnalyst\\": "src/" }
