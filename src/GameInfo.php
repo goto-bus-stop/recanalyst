@@ -15,17 +15,24 @@ namespace RecAnalyst;
  */
 class GameInfo {
     const VERSION_UNKNOWN     = 0;
+    // AoKings
     const VERSION_AOK         = 1;
     const VERSION_AOKTRIAL    = 2;
     const VERSION_AOK20       = 3;
     const VERSION_AOK20A      = 4;
+    // AoConquerors
     const VERSION_AOC         = 5;
     const VERSION_AOCTRIAL    = 6;
     const VERSION_AOC10       = 7;
     const VERSION_AOC10C      = 8;
-    const VERSION_AOC11       = 9;
-    const VERSION_AOC21       = 10;
+    // AoConquerors + UserPatch (derp. Weird numbers because I suck.)
+    const VERSION_AOFE21      = 10;
+    const VERSION_UserPatch11 = 9;
+    const VERSION_UserPatch12 = 12;
+    const VERSION_UserPatch13 = 13;
     const VERSION_UserPatch14 = 11;
+    // HD Edition
+    const VERSION_HD = 14;
 
     /**
      * RecAnalyst owner instance.
@@ -39,6 +46,12 @@ class GameInfo {
      * @see Const\GameVersion
      */
     public $_gameVersion;
+    
+    /**
+     * Game sub-version. E.g., Game version = HD, Game sub-version = 3.0.
+     * @var int
+     */
+    public $_gameSubVersion;
 
     /**
      * Game duration.
