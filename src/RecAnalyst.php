@@ -2442,10 +2442,7 @@ class RecAnalyst {
                 $player->name = substr($player->name, 1);
             }
         }
-        $source = $chat;
         $chat = substr($chat, strlen($player->name) + 2);
-        $msg = new ChatMessage($time, $player, $chat, $group);
-        $msg->source = $source;
-        return $msg;
+        return new ChatMessage($time, $player, $chat, $group);
     }
 }
