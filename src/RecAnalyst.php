@@ -990,6 +990,10 @@ class RecAnalyst {
                             }
                             $this->bodyStream->skip($length - 12);
                             break;
+                        case 0xFF: // multiplayer postgame data in UP1.4 RC2+
+                            $this->bodyStream->skip(1);
+                            $this->readPostgameData($this->bodyStream);
+                            break;
                         default:
                             $this->bodyStream->skip($length);
                             break;
@@ -1691,6 +1695,121 @@ class RecAnalyst {
             $header->skip($this->_isMgx ? 41249 : 34277);
             $header->skip($this->_mapWidth * $this->_mapHeight);
         }
+    }
+
+    /**
+     * Extracts post-game data (achievements etc) from the body stream.
+     * 
+     * Post-game data will be set on $this->postgameData.
+     *
+     * @param Stream $stream
+     */
+    protected function readPostgameData($stream) {
+        // Prize for ugliest, most boring method of the project goes to…
+        $data = new \stdClass;
+
+        $stream->skip(3);
+        $stream->read($scenarioFilename, 32);
+        $data->scenarioFilename = rtrim($scenarioFilename);
+        $stream->skip(4);
+        $stream->readInt($data->duration);
+        $stream->readChar($data->allowCheats);
+        $stream->readChar($data->complete);
+        $stream->skip(14);
+        $stream->readChar($data->mapSize);
+        $stream->readChar($data->mapId);
+        $stream->readChar($data->population);
+        $stream->skip(1);
+        $stream->readChar($data->victory);
+        $stream->readChar($data->startingAge);
+        $stream->readChar($data->resources);
+        $stream->readChar($data->allTechs);
+        $stream->readChar($data->teamTogether);
+        $stream->readChar($data->revealMap);
+        $stream->skip(3);
+        $stream->readChar($data->lockTeams);
+        $stream->readChar($data->lockSpeed);
+        $stream->skip(1);
+
+        $players = array();
+        for ($i = 0; $i < 8; $i++) {
+            $playerStats = new \stdClass;
+            $stream->read($playerName, 16);
+            $playerStats->name = rtrim($playerName);
+            $stream->readWord($playerStats->totalScore);
+            $totalScores = array();
+            for ($j = 0; $j < 8; $j++) {
+                $stream->readWord($totalScores[$j]);
+            }
+            $playerStats->totalScores = $totalScores;
+            $stream->readChar($playerStats->victory);
+            $stream->readChar($playerStats->civId);
+            $stream->readChar($playerStats->colorId);
+            $stream->readChar($playerStats->team);
+            $stream->skip(2);
+            $stream->readChar($playerStats->mvp);
+            $stream->skip(3);
+            $stream->readChar($playerStats->result);
+            $stream->skip(3);
+
+            $militaryStats = new \stdClass;
+            $stream->readWord($militaryStats->score);
+            $stream->readWord($militaryStats->unitsKilled);
+            $stream->readWord($militaryStats->u0);
+            $stream->readWord($militaryStats->unitsLost);
+            $stream->readWord($militaryStats->buildingsRazed);
+            $stream->readWord($militaryStats->u1);
+            $stream->readWord($militaryStats->buildingsLost);
+            $stream->readWord($militaryStats->unitsConverted);
+            $playerStats->militaryStats = $militaryStats;
+
+            $stream->skip(32);
+
+            $economyStats = new \stdClass;
+            $stream->readWord($economyStats->score);
+            $stream->readWord($economyStats->u0);
+            $stream->readInt($economyStats->foodCollected);
+            $stream->readInt($economyStats->woodCollected);
+            $stream->readInt($economyStats->stoneCollected);
+            $stream->readInt($economyStats->goldCollected);
+            $stream->readWord($economyStats->tributeSent);
+            $stream->readWord($economyStats->tributeReceived);
+            $stream->readWord($economyStats->tradeProfit);
+            $stream->readWord($economyStats->relicGold);
+            $playerStats->economyStats = $economyStats;
+
+            $stream->skip(16);
+
+            $techStats = new \stdClass;
+            $stream->readWord($techStats->score);
+            $stream->readWord($techStats->u0);
+            $stream->readInt($techStats->feudalTime);
+            $stream->readInt($techStats->castleTime);
+            $stream->readInt($techStats->imperialTime);
+            $stream->readChar($techStats->mapExploration);
+            $stream->readChar($techStats->researchCount);
+            $stream->readChar($techStats->researchPercent);
+            $playerStats->techStats = $techStats;
+
+            $stream->skip(1);
+
+            $societyStats = new \stdClass;
+            $stream->readWord($societyStats->score);
+            $stream->readChar($societyStats->totalWonders);
+            $stream->readChar($societyStats->totalCastles);
+            $stream->readChar($societyStats->relicsCaptured);
+            $stream->readChar($societyStats->u0);
+            $stream->readWord($societyStats->villagerHigh);
+            $playerStats->societyStats = $societyStats;
+
+            $stream->skip(84);
+
+            $players[] = $playerStats;
+        }
+        $data->players = $players;
+
+        $stream->skip(4);
+        $this->postgameData = $data;
     }
 
     /**
