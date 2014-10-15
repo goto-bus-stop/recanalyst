@@ -42,6 +42,11 @@ namespace RecAnalyst;
  */
 class RecAnalyst {
 
+    const MGX_EXT = 'mgx';
+    const MGL_EXT = 'mgl';
+    const MGZ_EXT = 'mgz';
+    const MGX2_EXT = 'mgx2';
+
     /**
      * Internal stream containing header information.
      * @var string
@@ -180,10 +185,6 @@ class RecAnalyst {
     private $_headerLen;
     private $_nextPos;
 
-    const MGX_EXT = 'mgx';
-    const MGL_EXT = 'mgl';
-    const MGZ_EXT = 'mgz';
-
     /**
      * Class constructor.
      * @see RecAnalyst::reset().
@@ -279,6 +280,10 @@ class RecAnalyst {
             $this->_isMgx = true;
             $this->_isMgl = false;
             $this->_isMgz = true;
+        } elseif ($ext == self::MGX2_EXT) {
+            $this->_isMgx = true;
+            $this->_isMgl = false;
+            $this->_isMgz = false;
         } else {
             throw new RecAnalystException('Wrong file extension, file format is not supported',
                 RecAnalystException::FILEFORMAT_NOT_SUPPORTED);
@@ -476,7 +481,9 @@ class RecAnalyst {
 
         if ($this->_isMgx) {
             if (isset(RecAnalystConst::$MAPS[$map_id])) {
+                $gameSettings->_mapId = $map_id;
                 $gameSettings->map = RecAnalystConst::$MAPS[$map_id];
+
                 if ($map_id == Map::CUSTOM) {
                     $gameSettings->_mapStyle = GameSettings::MAPSTYLE_CUSTOM;
                 } elseif (in_array($map_id, RecAnalystConst::$REAL_WORLD_MAPS)) {
@@ -484,8 +491,6 @@ class RecAnalyst {
                 } else {
                     $gameSettings->_mapStyle = GameSettings::MAPSTYLE_STANDARD;
                 }
-
-                $gameSettings->_mapId = $map_id;
             }
         }
 
@@ -618,6 +623,10 @@ class RecAnalyst {
             $gameSettings->_gameType = $game_type;
         }
 
+        if ($subVersion >= 11.96) {
+          $header->skip(1);
+        }
+
         // here comes pre-game chat (mgl doesn't keep this information)
         if ($this->_isMgx) {
             $header->readInt($num_chat);
@@ -632,7 +641,13 @@ class RecAnalyst {
                 // "PlayerName" is a name of the player, "Message" is a chat message itself, messages usually ends with #0, but not always
                 if ($chat[0] == '@' && $chat[1] == '#' && $chat[2] >= '1' && $chat[2] <= '8') {
                     $chat = rtrim($chat); // throw null-termination character
-                    $this->pregameChat[] = self::createChatMessage(null, $this->playersByIndex[$chat[2]], substr($chat, 3));
+                    if (!empty($this->playersByIndex[$chat[2]])) {
+                        $player = $this->playersByIndex[$chat[2]];
+                    } else {
+                        // this player left before the game started
+                        $player = null;
+                    }
+                    $this->pregameChat[] = self::createChatMessage(null, $player, substr($chat, 3));
                 }
             }
             unset($chat);
@@ -657,6 +672,9 @@ class RecAnalyst {
                 $header->skip(400 * $num_rule);
             }
             $header->skip(5544);
+            if ($subVersion >= 11.96) {
+                $header->skip(1280);
+            }
         }
 
         /* getting data */
@@ -665,18 +683,24 @@ class RecAnalyst {
         $header->skip(37);
         $header->readWord($rec_player_ref);
         $header->readChar($num_player);
+        if ($this->_isMgx) {
+            $header->skip(2);
+        }
+        $header->readWord($game_mode);
 
         $gameSettings->_gameSpeed = $game_speed;
+        if ($game_mode == 1) {
+            $gameSettings->gameMode = GameSettings::MODE_SINGLEPLAYER;
+        } else {
+            $gameSettings->gameMode = GameSettings::MODE_MULTIPLAYER;
+        }
 
         if ($player = $this->playersByIndex[$rec_player_ref]) {
             $player->owner = true;
         }
 
         /* getting map */
-        if ($this->_isMgx) {
-            $header->skip(2);
-        }
-        $header->skip(60);
+        $header->skip(58);
         $header->readInt($map_size_x);
         $header->readInt($map_size_y);
         $this->_mapWidth = $map_size_x;
@@ -691,7 +715,7 @@ class RecAnalyst {
                 $header->skip(1275 + $map_size_x * $map_size_y);
             }
             $header->readInt($num_float);
-            $header->skip(($num_float << 2) + 4);
+            $header->skip(($num_float * 4) + 4);
         }
         $header->skip(2);
 
@@ -700,7 +724,7 @@ class RecAnalyst {
             for ($x = 0; $x < $map_size_x; $x++) {
                 $header->readChar($terrain_id);
                 $header->readChar($elevation);
-                $this->_mapData[$x][$y] = $terrain_id + 1000 * ($elevation + 1); // hack to save memory
+                $this->_mapData[$x][$y] = $terrain_id;
             }
         }
 
@@ -708,7 +732,7 @@ class RecAnalyst {
         $header->skip(4 + ($num_data * 4));
         for ($i = 0; $i < $num_data; $i++) {
             $header->readInt($num_couples);
-            $header->skip($num_couples << 2);
+            $header->skip($num_couples * 8);
         }
         $header->readInt($map_size_x2);
         $header->readInt($map_size_y2);
@@ -716,119 +740,21 @@ class RecAnalyst {
         $header->readInt($num_unknown_data2);
         $header->skip(27 * $num_unknown_data2 + 4);
 
-        $this->_queue[] = $num_player;
-        $this->_queue[] = $header->getPosition();
-
         /* getting Player_info */
-        if (!$this->readPlayerInfoBlockEx()) {
-            // something went wrong with extended analysis, use this older one
-            $this->gaiaObjects = [];
-            $this->playerObjects = [];
-
-            array_shift($this->_queue);
-            $header->setPosition(array_shift($this->_queue));
-            // first is GAIA, skip some useless bytes
-            if ($gameInfo->_gameVersion == GameInfo::VERSION_AOKTRIAL || $gameInfo->_gameVersion == GameInfo::VERSION_AOCTRIAL) {
-                $header->skip(4);
-            }
-            $header->skip($num_player + 70); // + 2 len of playerlen
-            $header->skip($this->_isMgx ? 792 : 756);
-            $header->skip($this->_isMgx ? 41249 : 34277);
-            $header->skip($map_size_x * $map_size_y);
-            foreach ($this->players as &$player) {
-                // skip cooping player, he/she has no data in Player_info
-                $player_ = $this->playersByIndex[$player->index];
-                if ($player_ && $player_ !== $player && $player_->civId) {
-                    $player->civId = $player_->civId;
-                    $player->colorId = $player_->colorId;
-                    $player->team = $player_->team;
-                    $player->isCooping = true;
-                    continue;
-                }
-
-                if (count($this->_queue) >= 1) {  // we have already found a position in the extended analysis, saves us from re-searching it again
-                    $header->setPosition(array_shift($this->_queue));
-                } else {
-                    $pos = $header->find($player_info_end_separator);
-                    $header->skip(strlen($player_info_end_separator));
-
-                    if ($gameInfo->_gameVersion == GameInfo::VERSION_AOKTRIAL || $gameInfo->_gameVersion == GameInfo::VERSION_AOCTRIAL) {
-                        $header->skip(4);
-                    }
-                    $header->skip($num_player + 52 + strlen($player->name)); // + null-terminator
-                }
-
-                /* Civ_header */
-                $header->readFloat($food);
-                $header->readFloat($wood);
-                $header->readFloat($stone);
-                $header->readFloat($gold);
-                /* headroom = (house capacity - population) */
-                $header->readFloat($headroom);
-                $header->skip(4);
-                /* Starting Age, note: PostImperial Age = Imperial Age here */
-                $header->readFloat($data6);
-                $header->skip(16);
-                $header->readFloat($population);
-                $header->skip(100);
-                $header->readFloat($civilian_pop);
-                $header->skip(8);
-                $header->readFloat($military_pop);
-                $header->skip($this->_isMgx ? 629 : 593);
-                $header->readFloat($init_camera_pos_x);
-                $header->readFloat($init_camera_pos_y);
-                $header->skip($this->_isMgx ? 9 : 5);
-                $header->readChar($civilization);
-                // sometimes(?) civilization is zero in scenarios when the first player is briton (only? always? rule?)
-                if (!$civilization) {
-                    $civilization++;
-                }
-                /* skip unknown9[3] */
-                $header->skip(3);
-                $header->readChar($player_color);
-
-                $player->civId = $civilization;
-                $player->colorId = $player_color;
-                $player->initialState->position = array(round($init_camera_pos_x), round($init_camera_pos_y));
-                $player->initialState->food = round($food);
-                $player->initialState->wood = round($wood);
-                $player->initialState->stone = round($stone);
-                $player->initialState->gold = round($gold);
-                $player->initialState->startingAge = round($data6);
-                $player->initialState->houseCapacity = round($headroom) + round($population);
-                $player->initialState->population = round($population);
-                $player->initialState->civilianPop = round($civilian_pop);
-                $player->initialState->militaryPop = round($military_pop);
-                $player->initialState->extraPop = $player->initialState->population -
-                    ($player->initialState->civilianPop + $player->initialState->militaryPop);
-
-                $header->skip($this->_isMgx ? 41249 : 34277);
-                $header->skip($map_size_x * $map_size_y);
-            }
+        $pos = $header->getPosition();
+        if (!$this->readPlayerInfoBlockEx($num_player)) {
+            $header->setPosition($pos);
+            $this->readPlayerInfoBlock($num_player);
         }
 
         if ($scenario_header_pos > 0) {
-            $header->setPosition($scenario_header_pos - count($this->players) * 1473/* achievement length */);
-            $header->skip(13);
-            $header->readInt($total_point);
-            $header->skip(26);
-            $header->readInt($war_point);
-            $header->skip(34);
-            $header->readInt($num_kill);
-            $header->skip(28);
-            $header->readInt($num_killed);
-            $header->skip(28);
-            $header->readInt($num_kill2);
-            $header->skip(4);
-            $header->readInt($num_destroyed_bldg);
-
             /* getting objectives or instructions */
             $header->setPosition($scenario_header_pos + 4433);
             /* original scenario file name */
             $header->readString($original_sc_filename, 2);
             if ($original_sc_filename != '') {
                 $gameInfo->scFileName = $original_sc_filename;
-                if (!$this->_Mgx) {
+                if ($this->_isMgl) {
                     $gameSettings->gameType = GameSettings::TYPE_SCENARIO;  // this way we detect scenarios in mgl, is there any other way?
                 }
             }
@@ -934,7 +860,12 @@ class RecAnalyst {
                             if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
                                 // skip messages like "--Warning: You are being under attack... --"
                             } else {
-                                $this->ingameChat[] = createChatMessage($time_cnt, $this->playersByIndex[$chat[2]], substr($chat, 3));
+                                if (!empty($this->players[$chat[2] - 1])) {
+                                    $player = $this->players[$chat[2] - 1];
+                                } else {
+                                    $player = null;
+                                }
+                                $this->ingameChat[] = self::createChatMessage($time_cnt, $player, substr($chat, 3));
                             }
                         }
                     }
@@ -958,18 +889,20 @@ class RecAnalyst {
                         case 0x0B: // player resign
                             $this->bodyStream->skip(1);
                             $this->bodyStream->readChar($player_index);
+                            $this->bodyStream->readChar($player_number);
+                            $this->bodyStream->readChar($disconnected);
                             if (($player = $this->playersByIndex[$player_index]) && $player->resignTime == 0) {
                                 $player->resignTime = $time_cnt;
                                 $this->ingameChat[] = new ChatMessage($time_cnt, null, $player->name . ' resigned');
                             }
-                            $this->bodyStream->skip($length - 2);
+                            $this->bodyStream->skip($length - 4);
                             break;
                         case 0x65: // researches
-                            $this->bodyStream->skip(8);
+                            $this->bodyStream->skip(4);
+                            $this->bodyStream->readInt($building_id);
                             $this->bodyStream->readWord($player_id);
                             $this->bodyStream->readWord($research_id);
                             if (!($player = $this->playersByIndex[$player_id])) {
-
                                 $this->bodyStream->skip($length - 12);
                                 break;
                             }
@@ -992,7 +925,8 @@ class RecAnalyst {
                             $this->bodyStream->skip($length - 12);
                             break;
                         case 0x77: // training unit
-                            $this->bodyStream->skip(8);
+                            $this->bodyStream->skip(4);
+                            $this->bodyStream->readInt($building_id);
                             $this->bodyStream->readWord($unit_type_id);
                             $this->bodyStream->readWord($unit_num);
 
@@ -1073,7 +1007,7 @@ class RecAnalyst {
                         /* next_pos - header_len = offset of compressed chapter data */
                         $next_command_block = $od_type;
                         $this->bodyStream->readInt($this->_nextPos); // next_chapter_pos
-                        $this->bodyStream->seek($next_command_block - $this->_headerLen - 8, Stream::soFromBeginning);
+                        $this->bodyStream->setPosition($next_command_block - $this->_headerLen - 8);
                     } else {
                         // shouldn't occure, just to prevent unexpected endless cycling
                         $this->bodyStream->skip(1);
@@ -1391,7 +1325,7 @@ class RecAnalyst {
         if (!$this->analyzeheaderStream()) {
             return false;
         }
-        if (!$this->analyzeBodyStreamF()) {
+        if (!$this->analyzeBodyStream()) {
             return false;
         }
         //TODO: triedit units, buildings v post analyze?
@@ -1405,7 +1339,7 @@ class RecAnalyst {
      * Extended analysis of the PlayerInfo block.
      *
      */
-    protected function readPlayerInfoBlockEx() {
+    protected function readPlayerInfoBlockEx($num_player) {
         $exist_object_separator     = pack('c*', 0x0B, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00);
         $object_end_separator       = pack('c*', 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x80, 0xBF,
             0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
@@ -1414,7 +1348,6 @@ class RecAnalyst {
         $player_info_end_separator  = pack('c*', 0x00, 0x0B, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0B);
         $objects_mid_separator_gaia = pack('c*', 0x00, 0x0B, 0x00, 0x40, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00);
 
-        $num_player = array_shift($this->_queue);
         $map_size_x = $this->_mapWidth;
         $map_size_y = $this->_mapHeight;
 
@@ -1442,8 +1375,6 @@ class RecAnalyst {
               $this->headerStream->readWord($player_name_len);
               $this->headerStream->skip($player_name_len + 6);
 
-              // save position of PlayerInfo block, so we don't need to re-search it again in case this analysis fails
-              $this->_queue[] = $this->headerStream->getPosition();
               // Civ header
               $this->headerStream->readFloat($food);
               $this->headerStream->readFloat($wood);
@@ -1676,6 +1607,93 @@ class RecAnalyst {
     }
 
     /**
+     * Standard PlayerInfo block analysis. Used for HD.
+     */
+    protected function readPlayerInfoBlock($num_player) {
+        $player_info_end_separator  = pack('c*', 0x00, 0x0B, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0B);
+
+        $gameInfo = $this->gameInfo;
+        $header = $this->headerStream;
+
+        $this->gaiaObjects = [];
+        $this->playerObjects = [];
+        // first is GAIA, skip some useless bytes
+        if ($gameInfo->_gameVersion == GameInfo::VERSION_AOKTRIAL || $gameInfo->_gameVersion == GameInfo::VERSION_AOCTRIAL) {
+            $header->skip(4);
+        }
+        $header->skip($num_player + 70); // + 2 len of playerlen
+        $header->skip($this->_isMgx ? 792 : 756);
+        $header->skip($this->_isMgx ? 41249 : 34277);
+        $header->skip($this->_mapWidth * $this->_mapHeight);
+        foreach ($this->players as &$player) {
+            // skip cooping player, they have no data in Player_info
+            $player_ = $this->playersByIndex[$player->index];
+            if ($player_ && $player_ !== $player && $player_->civId) {
+                $player->civId = $player_->civId;
+                $player->colorId = $player_->colorId;
+                $player->team = $player_->team;
+                $player->isCooping = true;
+                continue;
+            }
+
+            $pos = $header->find($player_info_end_separator);
+            $header->skip(strlen($player_info_end_separator));
+
+            if ($gameInfo->_gameVersion == GameInfo::VERSION_AOKTRIAL || $gameInfo->_gameVersion == GameInfo::VERSION_AOCTRIAL) {
+                $header->skip(4);
+            }
+            $header->skip($num_player + 52 + strlen($player->name)); // + null-terminator
+
+            /* Civ_header */
+            $header->readFloat($food);
+            $header->readFloat($wood);
+            $header->readFloat($stone);
+            $header->readFloat($gold);
+            /* headroom = (house capacity - population) */
+            $header->readFloat($headroom);
+            $header->skip(4);
+            /* Starting Age, note: PostImperial Age = Imperial Age here */
+            $header->readFloat($data6);
+            $header->skip(16);
+            $header->readFloat($population);
+            $header->skip(100);
+            $header->readFloat($civilian_pop);
+            $header->skip(8);
+            $header->readFloat($military_pop);
+            $header->skip($this->_isMgx ? 629 : 593);
+            $header->readFloat($init_camera_pos_x);
+            $header->readFloat($init_camera_pos_y);
+            $header->skip($this->_isMgx ? 9 : 5);
+            $header->readChar($civilization);
+            // sometimes(?) civilization is zero in scenarios when the first player is briton (only? always? rule?)
+            if (!$civilization) {
+                $civilization++;
+            }
+            /* skip unknown9[3] */
+            $header->skip(3);
+            $header->readChar($player_color);
+
+            $player->civId = $civilization;
+            $player->colorId = $player_color;
+            $player->initialState->position = array(round($init_camera_pos_x), round($init_camera_pos_y));
+            $player->initialState->food = round($food);
+            $player->initialState->wood = round($wood);
+            $player->initialState->stone = round($stone);
+            $player->initialState->gold = round($gold);
+            $player->initialState->startingAge = round($data6);
+            $player->initialState->houseCapacity = round($headroom) + round($population);
+            $player->initialState->population = round($population);
+            $player->initialState->civilianPop = round($civilian_pop);
+            $player->initialState->militaryPop = round($military_pop);
+            $player->initialState->extraPop = $player->initialState->population -
+                ($player->initialState->civilianPop + $player->initialState->militaryPop);
+
+            $header->skip($this->_isMgx ? 41249 : 34277);
+            $header->skip($this->_mapWidth * $this->_mapHeight);
+        }
+    }
+
+    /**
      * Generates a map image.
      *
      * @return resource GD image resource.
@@ -1699,9 +1717,7 @@ class RecAnalyst {
 
         for ($x = 0; $x < $this->_mapWidth; $x++) {
             for ($y = 0; $y < $this->_mapHeight; $y++) {
-                $terrain_id = $this->_mapData[$x][$y]%1000;
-                $elevation = (int)(($this->_mapData[$x][$y] - $terrain_id) / 1000);
-                $elevation--;
+                $terrain_id = $this->_mapData[$x][$y];
 
                 if (isset($colors[$terrain_id])) {
                     imagesetpixel($gd, $x, $y, $colors[$terrain_id]);
@@ -2300,7 +2316,17 @@ class RecAnalyst {
             $group = substr($chat, 1, $end - 1);
             $chat = substr($chat, $end + 1);
         }
+        if (is_null($player)) {
+            $player = new Player();
+            $player->name = substr($chat, 0, strpos($chat, ': '));
+            if ($player->name[0] === ' ') {
+                $player->name = substr($player->name, 1);
+            }
+        }
+        $source = $chat;
         $chat = substr($chat, strlen($player->name) + 2);
-        return new ChatMessage($time, $player, $chat, $group);
+        $msg = new ChatMessage($time, $player, $chat, $group);
+        $msg->source = $source;
+        return $msg;
     }
 }

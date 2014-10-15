@@ -52,6 +52,10 @@ class GameSettings {
     const SIZE_LARGE  = 4;
     const SIZE_GIANT  = 5;
 
+    /* Game Mode */
+    const MODE_SINGLEPLAYER = 0;
+    const MODE_MULTIPLAYER = 1;
+
     /**
      * RecAnalyst owner instance.
      * @var RecAnalyst

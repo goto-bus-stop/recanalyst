@@ -23,6 +23,10 @@ final class RecAnalystConst {
     const VER_93 = 'VER 9.3'; // AoK
     const VER_94 = 'VER 9.4'; // AoC
     const VER_95 = 'VER 9.5'; // AoFE
+    const VER_98 = 'VER 9.8'; // UserPatch 1.2
+    const VER_99 = 'VER 9.9'; // UserPatch 1.3
+    const VER_9A = 'VER 9.A'; // UserPatch 1.4 RC1
+    const VER_9B = 'VER 9.B'; // UserPatch 1.4 RC2
     const VER_9C = 'VER 9.C'; // UserPatch 1.4
 
     const IMG_EXT = '.gif';
