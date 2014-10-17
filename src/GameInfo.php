@@ -149,8 +149,8 @@ class GameInfo
     {
         $owner = null;
         foreach ($this->owner->players as $player) {
-            if ($this->owner->player->owner) {
-                $owner = $this->owner->player;
+            if ($player->owner) {
+                $owner = $player;
                 break;
             }
         }
