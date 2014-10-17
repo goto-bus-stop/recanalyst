@@ -2,18 +2,18 @@
 /**
  * Defines GameSettings class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
 
 /**
- * Class GameSettings.
+ * Guess what the GameSettings class contains.
  *
- * GameSettings implements game information holder.
- * @package recAnalyst
+ * @package RecAnalyst
  */
-class GameSettings {
+class GameSettings
+{
 
     /* Game Types */
     const TYPE_RANDOMMAP  = 0;
@@ -60,50 +60,50 @@ class GameSettings {
      * RecAnalyst owner instance.
      * @var RecAnalyst
      */
-    protected $_owner;
+    protected $ra;
 
     /**
      * Game type.
      * @var int
      */
-    public $_gameType;
+    public $gameType;
 
     /**
      * Map style.
      * @var int
      */
-    public $_mapStyle;
+    public $mapStyle;
 
     /**
      * Difficulty level.
      * @var int
      */
-    public $_difficultyLevel;
+    public $difficultyLevel;
 
     /**
      * Game speed.
      * @var int
      */
-    public $_gameSpeed;
+    public $gameSpeed;
 
     /**
      * Reveal Map setting.
      * @var int
      */
-    public $_revealMap;
+    public $revealMap;
 
     /**
      * Map size.
      * @var int
      */
-    public $_mapSize;
+    public $mapSize;
 
     /**
      * Map id.
      * @var int
      * @see Map
      */
-    public $_mapId;
+    public $mapId;
 
     /**
      * Map.
@@ -131,129 +131,158 @@ class GameSettings {
 
     /**
      * Class constructor.
+     *
+     * @param RecAnalyst $recanalyst The RA instance that this will belong to.
+     *
      * @return void
      */
-    public function __construct(RecAnalyst $recanalyst) {
-        $this->_owner = $recanalyst;
-        $this->_gameType = GameSettings::TYPE_RANDOMMAP;
-        $this->_mapStyle = self::MAPSTYLE_STANDARD;
-        $this->_difficultyLevel = self::LEVEL_HARDEST;
-        $this->_gameSpeed = self::SPEED_NORMAL;
-        $this->_revealMap = self::REVEAL_NORMAL;
-        $this->_mapSize = self::SIZE_TINY;
+    public function __construct(RecAnalyst $recanalyst)
+    {
+        $this->ra = $recanalyst;
+        $this->gameType = GameSettings::TYPE_RANDOMMAP;
+        $this->mapStyle = self::MAPSTYLE_STANDARD;
+        $this->difficultyLevel = self::LEVEL_HARDEST;
+        $this->gameSpeed = self::SPEED_NORMAL;
+        $this->revealMap = self::REVEAL_NORMAL;
+        $this->mapSize = self::SIZE_TINY;
         $this->map = '';
-        $this->_mapId = $this->popLimit = 0;
+        $this->mapId = $this->popLimit = 0;
         $this->lockDiplomacy = false;
         $this->victory = new VictorySettings();
     }
 
     /**
      * Returns game type string.
+     *
      * @return string
      */
-    public function getGameTypeString() {
-        return isset(RecAnalystConst::$GAME_TYPES[$this->_gameType]) ?
-            RecAnalystConst::$GAME_TYPES[$this->_gameType] : '';
+    public function getGameTypeString()
+    {
+        return isset(RecAnalystConst::$GAME_TYPES[$this->gameType]) ?
+            RecAnalystConst::$GAME_TYPES[$this->gameType] : '';
     }
 
     /**
      * Returns map style string.
+     *
      * @return string
      */
-    public function getMapStyleString() {
-        return isset(RecAnalystConst::$MAP_STYLES[$this->_mapStyle]) ?
-            RecAnalystConst::$MAP_STYLES[$this->_mapStyle] : '';
+    public function getMapStyleString()
+    {
+        return isset(RecAnalystConst::$MAP_STYLES[$this->mapStyle]) ?
+            RecAnalystConst::$MAP_STYLES[$this->mapStyle] : '';
     }
 
     /**
      * Returns difficulty level string.
+     *
      * @return string
      */
-    public function getDifficultyLevelString() {
-        switch ($this->_owner->gameInfo->_gameVersion) {
-            case GameInfo::VERSION_AOC:
-            case GameInfo::VERSION_AOC10:
-            case GameInfo::VERSION_AOC10C:
-            case GameInfo::VERSION_AOCTRIAL:
-                return RecAnalystConst::$DIFFICULTY_LEVELS[$this->_difficultyLevel];
-                break;
-            case GameInfo::VERSION_AOK:
-            case GameInfo::VERSION_AOK20:
-            case GameInfo::VERSION_AOK20A:
-            case GameInfo::VERSION_AOKTRIAL:
-                return RecAnalystConst::$AOK_DIFFICULTY_LEVELS[$this->_difficultyLevel];
-                break;
-            case GameInfo::VERSION_UNKNOWN:
-            default:
-                return '';
-                break;
+    public function getDifficultyLevelString()
+    {
+        switch ($this->ra->gameInfo->_gameVersion) {
+        case GameInfo::VERSION_AOC:
+        case GameInfo::VERSION_AOC10:
+        case GameInfo::VERSION_AOC10C:
+        case GameInfo::VERSION_AOCTRIAL:
+            return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
+            break;
+        case GameInfo::VERSION_AOK:
+        case GameInfo::VERSION_AOK20:
+        case GameInfo::VERSION_AOK20A:
+        case GameInfo::VERSION_AOKTRIAL:
+            return RecAnalystConst::$AOK_DIFFICULTY_LEVELS[$this->difficultyLevel];
+            break;
+        case GameInfo::VERSION_UNKNOWN:
+        default:
+            return '';
+            break;
         }
     }
 
     /**
      * Returns game speed string.
+     *
      * @return string
      */
-    public function getGameSpeedString() {
-        return isset(RecAnalystConst::$GAME_SPEEDS[$this->_gameSpeed]) ?
-            RecAnalystConst::$GAME_SPEEDS[$this->_gameSpeed] : sprintf('(%.1f)', $this->_gameSpeed / 10);
+    public function getGameSpeedString()
+    {
+        if (isset(RecAnalystConst::$GAME_SPEEDS[$this->gameSpeed])) {
+            return RecAnalystConst::$GAME_SPEEDS[$this->gameSpeed];
+        } else {
+            return sprintf('(%.1f)', $this->gameSpeed / 10);
+        }
     }
 
     /**
      * Returns reveal map string.
+     *
      * @return string
      */
-    public function getRevealMapString() {
-        return isset(RecAnalystConst::$REVEAL_SETTINGS[$this->_revealMap]) ?
-            RecAnalystConst::$REVEAL_SETTINGS[$this->_revealMap] : '';
+    public function getRevealMapString()
+    {
+        return isset(RecAnalystConst::$REVEAL_SETTINGS[$this->revealMap]) ?
+            RecAnalystConst::$REVEAL_SETTINGS[$this->revealMap] : '';
     }
 
     /**
      * Returns map size string.
+     *
      * @return string
      */
-    public function getMapSizeString() {
-        return isset(RecAnalystConst::$MAP_SIZES[$this->_mapSize]) ?
-            RecAnalystConst::$MAP_SIZES[$this->_mapSize] : '';
+    public function getMapSizeString()
+    {
+        return isset(RecAnalystConst::$MAP_SIZES[$this->mapSize]) ?
+            RecAnalystConst::$MAP_SIZES[$this->mapSize] : '';
     }
 
     /**
      * Returns map name.
+     *
      * @return string
      */
-    public function getMapName() {
+    public function getMapName()
+    {
         return $this->map;
     }
 
     /**
      * Returns population limit.
+     *
      * @return int
      */
-    public function getPopLimit() {
+    public function getPopLimit()
+    {
         return $this->popLimit;
     }
 
     /**
      * Returns whether diplomacy was locked.
+     *
      * @return bool
      */
-    public function getLockDiplomacy() {
+    public function getLockDiplomacy()
+    {
         return $this->lockDiplomacy;
     }
 
     /**
      * Returns victory settings.
+     *
      * @return VictorySettings
      */
-    public function getVictorySettings() {
+    public function getVictorySettings()
+    {
         return $this->victory;
     }
 
     /**
      * Returns true if game type is scenario, false otherwise.
+     *
      * @return bool
      */
-    public function isScenario() {
-        return $this->_gameType == GameSettings::TYPE_SCENARIO;
+    public function isScenario()
+    {
+        return $this->gameType == GameSettings::TYPE_SCENARIO;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Defines Config class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
@@ -13,12 +13,15 @@ namespace RecAnalyst;
  * Configuration class.
  * Config implements configuration constants used for RecAnalyst.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
-class Config {
+class Config
+{
 
     /**
-     * Defines a path (absolute or relative) to directory where we store resources required for generating research timelines.
+     * Defines a path (absolute or relative) to directory where we store
+     * resources required for generating research timelines.
+     *
      * @var string
      */
     public $resourcesDir;
@@ -34,8 +37,6 @@ class Config {
      * @var int
      */
     public $mapHeight;
-
-    /* following two configuration constants are applied for research timelines image */
 
     /**
      * Defines width and height of one research tile in research timelines image.
@@ -91,9 +92,11 @@ class Config {
 
     /**
      * Class constructor. Tries to do some default stuff.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $baseDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
         $this->resourcesDir = $baseDir . 'resources' . DIRECTORY_SEPARATOR;
 

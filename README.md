@@ -1,12 +1,14 @@
-# RecAnalyst
+RecAnalyst
+----------
 
-RecAnalyst is a PHP package for analyzing Age of Kings, The Conquerors, Forgotten Empires and Age of Empires 2 HD recorded games.  
-Age of Empires 2 HD: The Forgotten `.mgx2` files are not yet supported.
+RecAnalyst is a PHP package for analyzing Age of Kings, The Conquerors, Forgotten Empires and Age of Empires 2 HD (The Forgotten) recorded games.
+
+## Credits
 
 Based on Biegleux's work, but now with `RecAnalyst\` namespace, Composer support and some fixes to actually make it work again.  
 v2.1.0 (c) 2007-2010 biegleux <biegleux@gmail.com>  
-Original project homepage: 		http://recanalyst.sourceforge.net/  
-Original project documentation:	http://recanalyst.sourceforge.net/documentation/
+[Original project homepage](http://recanalyst.sourceforge.net/)  
+[Original project documentation](http://recanalyst.sourceforge.net/documentation/)
 
 ## Requirements
 
@@ -15,8 +17,6 @@ RecAnalyst needs PHP5 with GD installed, and zlib if you want to use `RecAnalyst
 ## Todo
 
   * Make `RecAnalyst\Archive` do things.
-  * Extract achievements from the header stream.
-  * Support for Forgotten's `.mgx2` files.
   * Proper documentation.
 
 ## Installation

@@ -2,12 +2,18 @@
 /**
  * Defines built-in Maps constant class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
 
-class Map {
+/**
+ * Some map constants.
+ *
+ * @package RecAnalyst
+ */
+class Map
+{
     const ARABIA         = 9;
     const ARCHIPELAGO    = 10;
     const BALTIC         = 11;
@@ -46,5 +52,12 @@ class Map {
     const CUSTOM         = 44;
     const BLINDRANDOM    = 48;
 
-    private function __construct(){}
+    /**
+     * Not instantiable.
+     *
+     * @return void
+     */
+    private function __construct()
+    {
+    }
 }

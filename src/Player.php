@@ -2,18 +2,20 @@
 /**
  * Defines Player class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
 
 /**
- * Class Player.
+ * The Player class represents a player in the game. This includes co-op players.
+ * It does not include players who joined the lobby but didn't launch into
+ * the actual game.
  *
- * Player implements a player in the game.
- * @package recAnalyst
+ * @package RecAnalyst
  */
-class Player {
+class Player
+{
 
     /**
      * Player's name.
@@ -103,88 +105,109 @@ class Player {
 
     /**
      * Class constructor.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
          $this->name = '';
          $this->index = $this->team = $this->colorId = -1;
          $this->human = $this->owner = $this->isCooping = false;
          $this->civId = Civilization::NONE;
-         $this->feudalTime = $this->castleTime = $this->imperialTime = $this->resignTime = 0;
+         $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
+         $this->resignTime = 0;
          $this->researches = array();
          $this->initialState = new InitialState();
     }
 
     /**
-     * Returns civilizaton string.
-     * @return string
+     * Returns civilization string.
+     *
+     * @return string This player's Civilization name.
      */
-    public function getCivString() {
+    public function getCivString()
+    {
         return isset(RecAnalystConst::$CIVS[$this->civId][0]) ?
             RecAnalystConst::$CIVS[$this->civId][0] : '';
     }
 
     /**
      * Returns whether the player is a human player.
-     * @return bool True if human, false if AI.
+     *
+     * @return boolean True if human, false if AI.
      */
-    public function isHuman() {
-     return $this->human;
+    public function isHuman()
+    {
+        return $this->human;
     }
 
     /**
      * Returns the index of the player's team in RecAnalyst::$teams.
+     *
      * @return int
      */
-    public function getTeamID() {
-     return $this->team;
+    public function getTeamID()
+    {
+        return $this->team;
     }
 
     /**
      * Returns the player's name.
-     * @return string
+     *
+     * @return string Player name.
      */
-    public function getName() {
-     return $this->name;
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
      * Returns whether the player is co-oping.
-     * @return bool
+     *
+     * @return boolean True if the player is co-oping, false otherwise.
      */
-    public function isCooping() {
-     return $this->isCooping;
+    public function isCooping()
+    {
+        return $this->isCooping;
     }
 
     /**
      * Returns this player's feudal age advance time.
-     * @return int
+     *
+     * @return int Feudal age time in milliseconds since the start of the game.
      */
-    public function getFeudalTime() {
-     return $this->feudalTime;
+    public function getFeudalTime()
+    {
+        return $this->feudalTime;
     }
 
     /**
      * Returns this player's castle age advance time.
-     * @return int
+     *
+     * @return int Castle age time in milliseconds since the start of the game.
      */
-    public function getCastleTime() {
-     return $this->castleTime;
+    public function getCastleTime()
+    {
+        return $this->castleTime;
     }
 
     /**
      * Returns this player's imperial age advance time.
-     * @return int
+     *
+     * @return int Imperial age time in milliseconds since the start of the game.
      */
-    public function getImperialTime() {
-     return $this->imperialTime;
+    public function getImperialTime()
+    {
+        return $this->imperialTime;
     }
 
     /**
      * Returns this player's resign time.
-     * @return int
+     *
+     * @return int Resignation time in milliseconds since the start of the game.
      */
-    public function getResignTime() {
-     return $this->resignTime;
+    public function getResignTime()
+    {
+        return $this->resignTime;
     }
 }

@@ -2,12 +2,18 @@
 /**
  * Defines Civilization constant class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
 
-final class Civilization {
+/**
+ * Some civilization constants.
+ *
+ * @package RecAnalyst
+ */
+final class Civilization
+{
     const NONE       = 0;
     const BRITONS    = 1;
     const FRANKS     = 2;
@@ -33,6 +39,13 @@ final class Civilization {
     const MAGYARS    = 22;
     const SLAVS      = 23;
 
-    private function __construct(){}
+    /**
+     * Not instantiable.
+     *
+     * @return void
+     */
+    private function __construct()
+    {
+    }
 }
 

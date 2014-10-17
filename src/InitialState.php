@@ -2,7 +2,7 @@
 /**
  * Defines InitialState class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
@@ -11,9 +11,11 @@ namespace RecAnalyst;
  * Class InitialState.
  *
  * InitialState implements initial state of a player.
- * @package recAnalyst
+ *
+ * @package RecAnalyst
  */
-class InitialState {
+class InitialState
+{
 
     const DARKAGE         = 0;
     const FEUDALAGE       = 1;
@@ -89,9 +91,11 @@ class InitialState {
 
     /**
      * Class constructor.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->food = $this->wood = $this->stone = 0;
         $this->startingAge = self::DARKAGE;
         $this->houseCapacity = 0;
@@ -101,9 +105,11 @@ class InitialState {
 
     /**
      * Returns starting age string.
+     *
      * @return string
      */
-    public function getStartingAgeString() {
+    public function getStartingAgeString()
+    {
         return isset(RecAnalystConst::$STARTING_AGES[$this->startingAge]) ?
             RecAnalystConst::$STARTING_AGES[$this->startingAge] : '';
     }

@@ -2,7 +2,7 @@
 /**
  * Defines MemoryStream class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
@@ -11,59 +11,66 @@ namespace RecAnalyst;
  * Class MemoryStream.
  *
  * MemoryStream is a stream that stores its data in dynamic memory.
- * @package recAnalyst
- * @subpackage basics
+ *
+ * @package RecAnalyst
  */
-class MemoryStream extends Stream {
+class MemoryStream extends Stream
+{
 
     /**
      * Internal data holder.
      * @var string
      */
-    protected $_dataString = '';
+    protected $dataString = '';
 
     /**
      * Data size.
      * @var int
      */
-    protected $_size = 0;
+    protected $size = 0;
 
     /**
      * Current position.
      * @var int
      */
-    protected $_position = 0;
+    protected $position = 0;
 
     /**
      * Class constructor.
+     *
      * @param string $string Data string
+     *
      * @return void
      */
-    public function __construct($string = '') {
-        $this->_dataString = $string;
-        $this->_size = strlen($this->_dataString);
-        $this->_position = 0;
+    public function __construct($string = '')
+    {
+        $this->dataString = $string;
+        $this->size = strlen($this->dataString);
+        $this->position = 0;
     }
 
     /**
      * Class destructor.
+     *
      * @return void
      */
-    public function __destruct() {
-        $this->_dataString = '';
-        $this->_size = $this->_position = 0;
+    public function __destruct()
+    {
+        $this->dataString = '';
+        $this->size = $this->position = 0;
     }
 
     /**
      * @see Stream::read()
      */
-    public function read(&$buffer, $count) {
-        if ($count > 0 && ($len = $this->_size - $this->_position) > 0) {
+    public function read(&$buffer, $count)
+    {
+        if ($count > 0 && ($len = $this->size - $this->position) > 0) {
             if ($len > $count) {
                 $len = $count;
             }
-            $buffer = substr($this->_dataString, $this->_position, $len);
-            $this->_position += $len;
+            $buffer = substr($this->dataString, $this->position, $len);
+            $this->position += $len;
             return $len;
         }
         return 0;
@@ -72,73 +79,83 @@ class MemoryStream extends Stream {
     /**
      * @see Stream::write()
      */
-    public function write($buffer) {
-        if ($this->_position == $this->_size) {
-            $this->_dataString .= $buffer;
+    public function write($buffer)
+    {
+        if ($this->position == $this->size) {
+            $this->dataString .= $buffer;
         } else {
-            $this->_dataString = substr_replace($this->_dataString, $buffer, $this->_position, 0);
+            $this->dataString = substr_replace($this->dataString, $buffer, $this->position, 0);
         }
-        $this->_size += ($len = strlen($buffer));
-        $this->_position += $len;
+        $this->size += ($len = strlen($buffer));
+        $this->position += $len;
         return $len;
     }
 
     /**
      * @see Stream::seek()
      */
-    public function seek($offset, $origin) {
+    public function seek($offset, $origin)
+    {
         switch ($origin) {
-            case self::soFromBeginning:
-                $this->_position = $offset;
-                break;
-            case self::soFromCurrent:
-                $this->_position += $offset;
-                break;
-            case self::soFromEnd:
-                $this->_position = $this->_size - $offset;
-                break;
+        case self::soFromBeginning:
+            $this->position = $offset;
+            break;
+        case self::soFromCurrent:
+            $this->position += $offset;
+            break;
+        case self::soFromEnd:
+            $this->position = $this->size - $offset;
+            break;
         }
-        if ($this->_position > $this->_size) {
-            $this->_position = $this->_size;
-        } elseif ($this->_position < 0) {
-            $this->_position = 0;
+        if ($this->position > $this->size) {
+            $this->position = $this->size;
+        } elseif ($this->position < 0) {
+            $this->position = 0;
         }
-        return $this->_position;
+        return $this->position;
     }
 
     /**
      * Moves the current position within the stream by the indicated offset, relative to the current position.
-     * @param int $count Offset
-     * @return The current position
+     *
+     * @param int $count Offset.
+     *
+     * @return The current position.
      */
-    public function skip($count) {
+    public function skip($count)
+    {
         return $this->seek($count, self::soFromCurrent);
     }
 
     /**
      * Returns the data string.
+     *
      * @return string
      */
-    public function getDataString() {
-        return $this->_dataString;
+    public function getDataString()
+    {
+        return $this->dataString;
     }
 
     /**
      * Reads the string into the buffer.
+     *
      * @param string $buffer
-     * @param int $length Indicates number of bytes holding string length information
+     * @param int    $length Number of bytes holding string length information.
+     *
      * @return void
      * @throws Exception
      */
-    public function readString(&$buffer, $length = 4) {
+    public function readString(&$buffer, $length = 4)
+    {
         switch ($length) {
-            case 2:
-                $this->readWord($len);
-                break;
-            case 4:
-            default:
-                $this->readUInt($len);
-                break;
+        case 2:
+            $this->readWord($len);
+            break;
+        case 4:
+        default:
+            $this->readUInt($len);
+            break;
         }
         if ($len) {
             $this->readBuffer($buffer, $len);
@@ -149,22 +166,28 @@ class MemoryStream extends Stream {
 
     /**
      * Reads integer value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
      * @throws Exception
      */
-    public function readUInt(&$buffer) {
+    public function readUInt(&$buffer)
+    {
         $this->readBuffer($bytes, 4);
         $buffer = ord($bytes[0]) | (ord($bytes[1]) << 8) | (ord($bytes[2]) << 16) | (ord($bytes[3]) << 24);
     }
 
     /**
      * Reads integer value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
      * @throws Exception
      */
-    public function readInt(&$buffer) {
+    public function readInt(&$buffer)
+    {
         // !note: signed long (always 32 bit, machine byte order)
         $this->readBuffer($bytes, 4);
         $unpacked_data = unpack('l', $bytes);
@@ -173,11 +196,14 @@ class MemoryStream extends Stream {
 
     /**
      * Reads word value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
      * @throws Exception
      */
-    public function readWord(&$buffer) {
+    public function readWord(&$buffer)
+    {
         $this->readBuffer($bytes, 2);
         $buffer = ord($bytes[0]) | (ord($bytes[1]) << 8);
     }
@@ -188,18 +214,22 @@ class MemoryStream extends Stream {
      * @return void
      * @throws Exception
      */
-    public function readChar(&$buffer) {
+    public function readChar(&$buffer)
+    {
         $this->readBuffer($bytes, 1);
         $buffer = ord($bytes[0]);
     }
 
     /**
      * Reads float value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
      * @throws Exception
      */
-    public function readFloat(&$buffer) {
+    public function readFloat(&$buffer)
+    {
         $this->readBuffer($bytes, 4);
         $unpacked_data = unpack('f', $bytes);
         $buffer = $unpacked_data[1];
@@ -207,41 +237,50 @@ class MemoryStream extends Stream {
 
     /**
      * Reads Bool value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
      * @throws Exception
      */
-    public function readBool(&$buffer) {
+    public function readBool(&$buffer)
+    {
         $this->readUInt($int);
         $buffer = ($int == 0) ? false : true;
     }
 
     /**
      * Find position of first occurrence of a string in the stream.
-     * @param int $needle The string to find
+     *
+     * @param int $needle The string to find.
+     *
      * @return int Position in the stream or -1 if needle has not been not found
      */
-    public function find($needle) {
-        $pos = strpos($this->_dataString, $needle, $this->_position);
+    public function find($needle)
+    {
+        $pos = strpos($this->dataString, $needle, $this->position);
         if ($pos === false) {
             $pos = -1;
         } else {
-            $this->_position = $pos;
+            $this->position = $pos;
         }
         return $pos;
     }
 
     /**
      * Find position of last occurrence of a string in the stream.
-     * @param int $needle The string to find
+     *
+     * @param int $needle The string to find.
+     *
      * @return int Position in the stream or -1 if needle has not been not found
      */
-    public function rfind($needle, $offset = 0) {
-        $pos = strrpos($this->_dataString, $needle, ($offset < 0) ? $offset : $this->_position);
+    public function rfind($needle, $offset = 0)
+    {
+        $pos = strrpos($this->dataString, $needle, ($offset < 0) ? $offset : $this->position);
         if ($pos == false) {
             $pos = -1;
         } else {
-            $this->_position = $pos;
+            $this->position = $pos;
         }
         return $pos;
     }

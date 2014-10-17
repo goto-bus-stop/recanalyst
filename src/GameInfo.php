@@ -2,18 +2,18 @@
 /**
  * Defines GameInfo class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
 
 /**
- * Class GameInfo.
+ * GameInfo holds metadata about the analyzed game.
  *
- * GameInfo holds information about analyzed game.
- * @package recAnalyst
+ * @package RecAnalyst
  */
-class GameInfo {
+class GameInfo
+{
     const VERSION_UNKNOWN     = 0;
     // AoKings
     const VERSION_AOK         = 1;
@@ -38,20 +38,20 @@ class GameInfo {
      * RecAnalyst owner instance.
      * @var RecAnalyst
      */
-    protected $_owner;
+    protected $owner;
 
     /**
      * Game version.
      * @var int
      * @see Const\GameVersion
      */
-    public $_gameVersion;
+    public $gameVersion;
     
     /**
      * Game sub-version. E.g., Game version = HD, Game sub-version = 3.0.
      * @var int
      */
-    public $_gameSubVersion;
+    public $gameSubVersion;
 
     /**
      * Game duration.
@@ -73,34 +73,41 @@ class GameInfo {
 
     /**
      * Class constructor.
+     *
      * @param RecAnalyst $recanalyst Owner.
+     *
      * @return void
      */
-    public function __construct(RecAnalyst $recanalyst) {
-        $this->_owner = $recanalyst;
-        $this->_gameVersion = self::VERSION_UNKNOWN;
+    public function __construct(RecAnalyst $recanalyst)
+    {
+        $this->owner = $recanalyst;
+        $this->gameVersion = self::VERSION_UNKNOWN;
         $this->playTime = 0;
         $this->objectivesString = $this->scFileName = '';
     }
 
     /**
      * Returns game versions string.
+     *
      * @return string
      */
-    public function getGameVersionString() {
-        return isset(RecAnalystConst::$GAME_VERSIONS[$this->_gameVersion]) ?
-            RecAnalystConst::$GAME_VERSIONS[$this->_gameVersion] : '';
+    public function getGameVersionString()
+    {
+        return isset(RecAnalystConst::$GAME_VERSIONS[$this->gameVersion]) ?
+            RecAnalystConst::$GAME_VERSIONS[$this->gameVersion] : '';
     }
 
     /**
      * Returns the players string (1v1, FFA, etc.)
+     *
      * @return string
      */
-    public function getPlayersString() {
+    public function getPlayersString()
+    {
         // players
         $idx = 0;
         $team_ary = array(0, 0, 0, 0, 0, 0, 0, 0);
-        foreach ($this->_owner->teams as $team) {
+        foreach ($this->owner->teams as $team) {
             foreach ($team->players as $player) {
                 if (!$player->isCooping) {
                     $team_ary[$idx]++;
@@ -109,7 +116,9 @@ class GameInfo {
             $idx++;
         }
         $team_ary = array_diff($team_ary, array(0));
-        if (array_sum($team_ary) === count($this->_owner->teams) && count($this->_owner->teams) > 2) {
+        if (array_sum($team_ary) === count($this->owner->teams)
+            && count($this->owner->teams) > 2
+        ) {
             return 'FFA';
         } else {
             return implode($team_ary, 'v');
@@ -118,10 +127,12 @@ class GameInfo {
 
     /**
      * Returns the point of view.
+     *
      * @return string
      */
-    public function getPOV() {
-        foreach ($this->_owner->players as $player) {
+    public function getPOV()
+    {
+        foreach ($this->owner->players as $player) {
             if ($player->owner) {
                 return $player->name;
             }
@@ -131,13 +142,15 @@ class GameInfo {
 
     /**
      * Returns extended point of view (including coop players).
-     * @var string
+     *
+     * @return string POV player name(s).
      */
-    public function getPOVEx() {
+    public function getPOVEx()
+    {
         $owner = null;
-        foreach ($this->_owner->players as $player) {
-            if ($this->_owner->player->owner) {
-                $owner = $this->_owner->player;
+        foreach ($this->owner->players as $player) {
+            if ($this->owner->player->owner) {
+                $owner = $this->owner->player;
                 break;
             }
         }
@@ -146,7 +159,7 @@ class GameInfo {
         }
 
         $names = array();
-        foreach ($this->_owner->players as $player) {
+        foreach ($this->owner->players as $player) {
             if ($player === $owner) {
                 continue;
             }
@@ -162,10 +175,12 @@ class GameInfo {
 
     /**
      * Determines if there is a cooping player in the game.
+     *
      * @return bool True, if there is a cooping player in the game, false otherwise.
      */
-    public function ingameCoop() {
-        foreach ($this->_owner->players as $player) {
+    public function ingameCoop()
+    {
+        foreach ($this->owner->players as $player) {
             if ($player->isCooping) {
                 return true;
             }
@@ -175,25 +190,31 @@ class GameInfo {
 
     /**
      * Returns the duration of the game.
+     *
      * @return number The duration of the game in seconds.
      */
-    public function getPlayTime() {
+    public function getPlayTime()
+    {
         return $this->playTime;
     }
 
     /**
      * Returns the objectives string.
+     *
      * @return string The objectives.
      */
-    public function getObjectives() {
+    public function getObjectives()
+    {
         return $this->objectivesString;
     }
 
     /**
      * Returns the Scenario file name.
+     *
      * @return string The Scenario file name.
      */
-    public function getScenarioFilename() {
+    public function getScenarioFilename()
+    {
         return $this->scFileName;
     }
 }

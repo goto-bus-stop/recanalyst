@@ -2,7 +2,7 @@
 /**
  * Defines Stream class.
  *
- * @package recAnalyst
+ * @package RecAnalyst
  */
 
 namespace RecAnalyst;
@@ -11,11 +11,12 @@ namespace RecAnalyst;
  * Class Stream.
  *
  * Stream is a base class type for stream objects.
- * @package recAnalyst
+ * @package RecAnalyst
  * @subpackage basics
  * @abstract
  */
-abstract class Stream {
+abstract class Stream
+{
 
     /* Stream seek origins */
     const soFromBeginning = 0;
@@ -24,40 +25,51 @@ abstract class Stream {
 
     /**
      * Class constructor.
+     *
      * @return void
+     *
      * @abstract
      */
     abstract public function __construct();
 
     /**
      * Class destructor.
+     *
      * @return void
+     *
      * @abstract
      */
     abstract public function __destruct();
 
     /**
      * Get the current position in the stream.
+     *
      * @return int
      */
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->seek(0, self::soFromCurrent);
     }
 
     /**
      * Set the current position in the stream.
+     *
      * @param int $pos Position
+     *
      * @return void
      */
-    public function setPosition($pos) {
+    public function setPosition($pos)
+    {
         $this->seek($pos, self::soFromBeginning);
     }
 
     /**
      * Get the size of the stream.
+     *
      * @return int
      */
-    public function getSize() {
+    public function getSize()
+    {
         $pos = $this->seek(0, self::soFromCurrent);
         $result = $this->seek(0, self::soFromEnd);
         $this->seek($pos, self::soFromBeginning);
@@ -66,8 +78,10 @@ abstract class Stream {
 
     /**
      * Reads the contents of the stream from the current position into a buffer.
+     *
      * @param mixed $buff Buffer the data will be transferred into
      * @param int $count Number of bytes to read
+     *
      * @return int Number of bytes actually transferred to buffer
      * @abstract
      */
@@ -75,16 +89,20 @@ abstract class Stream {
 
     /**
      * Writes the buffer into the stream, starting at the current position.
+     *
      * @param mixed $buff Data we want to insert
      * @return int Number of bytes actually inserted.
+     *
      * @abstract
      */
     abstract protected function write($buffer);
 
     /**
      * Moves the current position within the stream by the indicated offset, relative to the origin.
+     *
      * @param int $offset Offset
      * @param int $origin One of the seek stream origings
+     *
      * @return int The current position
      * @abstract
      */
@@ -92,12 +110,15 @@ abstract class Stream {
 
     /**
      * Reads bytes from the stream into buffer.
+     *
      * @param mixed $buff
      * @param int $count
+     *
      * @return void
      * @throws Exception
      */
-    public function readBuffer(&$buffer, $count) {
+    public function readBuffer(&$buffer, $count)
+    {
         if ($count != 0 && $this->read($buffer, $count) != $count) {
             throw new \Exception('Stream read error');
         }
@@ -105,12 +126,15 @@ abstract class Stream {
 
     /**
      * Writes bytes from buffer onto the stream.
+     *
      * @param mixed $buff
      * @param int $count
+     *
      * @return void
      * @throws Exception
      */
-    public function writeBuffer($buffer) {
+    public function writeBuffer($buffer)
+    {
         if (($count = strlen($buffer)) != 0 && $this->write($buffer) != $count) {
             throw new \Exception('Stream write error');
         }
@@ -118,11 +142,14 @@ abstract class Stream {
 
     /**
      * Copies a specified number of bytes from one stream to another.
+     *
      * @param Stream $source Source stream
      * @param int $count Number of bytes
+     *
      * @return int Number of bytes copied.
      */
-    public function copyFrom(Stream $source, $count) {
+    public function copyFrom(Stream $source, $count)
+    {
         $maxBufSize = 0xF000;
         if ($count == 0) {
             $source->position = 0;
