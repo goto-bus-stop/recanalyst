@@ -273,6 +273,7 @@ class RecAnalyst
      * @return void
      * @throws RecAnalystException
      * @todo input as file contents
+     * @todo figure out $ext based on file contents
      */
     protected function extractStreams($ext, $input)
     {
@@ -814,26 +815,27 @@ class RecAnalyst
         $time_cnt = $this->gameSettings->gameSpeed;
         $age_flag = array(0, 0, 0, 0, 0, 0, 0, 0);
 
-        $this->bodyStream->setPosition(0);
-        $size = $this->bodyStream->getSize();
+        $body = $this->bodyStream;
+        $body->setPosition(0);
+        $size = $body->getSize();
 
-        while ($this->bodyStream->getPosition() < $size - 3) {
-            if ($this->bodyStream->getPosition() == 0 && !$this->isMgx) {
+        while ($body->getPosition() < $size - 3) {
+            if ($body->getPosition() == 0 && !$this->isMgx) {
                 $od_type = 0x04;
             } else {
-                $this->bodyStream->readInt($od_type);
+                $body->readInt($od_type);
             }
             // ope_data types: 4(Game_start or Chat), 2(Sync), or 1(Command)
             switch ($od_type) {
             // Game_start or Chat command
             case 0x04:
             case 0x03:
-                $this->bodyStream->readInt($command);
+                $body->readInt($command);
                 if ($command == 0x01F4) {
                     // Game_start
                     if ($this->isMgl) {
-                        $this->bodyStream->skip(28);
-                        $this->bodyStream->readChar($ver);
+                        $body->skip(28);
+                        $body->readChar($ver);
                         switch ($ver) {
                         case 0:
                             if ($this->gameInfo->gameVersion != GameInfo::VERSION_AOKTRIAL) {
@@ -844,7 +846,7 @@ class RecAnalyst
                             $this->gameInfo->gameVersion = GameInfo::VERSION_AOK20A;
                             break;
                         }
-                        $this->bodyStream->skip(3);
+                        $body->skip(3);
                     } else {
                         switch ($od_type) {
                         case 0x03:
@@ -858,7 +860,7 @@ class RecAnalyst
                             }
                             break;
                         }
-                        $this->bodyStream->skip(20);
+                        $body->skip(20);
                     }
                 } elseif ($command == -1) {
                     // Chat
@@ -878,7 +880,7 @@ class RecAnalyst
                         }
                     }
 
-                    $this->bodyStream->readString($chat);
+                    $body->readString($chat);
                     // see reading pre-game messages
                     if ($chat[0] == '@' && $chat[1] == '#' && $chat[2] >= '1' && $chat[2] <= '8') {
                         $chat = rtrim($chat); // throw null-termination character
@@ -897,38 +899,38 @@ class RecAnalyst
                 break;
             // Sync
             case 0x02:
-                $this->bodyStream->readInt($time);
+                $body->readInt($time);
                 $time_cnt += $time; // time_cnt is in miliseconds
-                $this->bodyStream->readInt($unknown);
+                $body->readInt($unknown);
                 if ($unknown == 0) {
-                    $this->bodyStream->skip(28);
+                    $body->skip(28);
                 }
-                $this->bodyStream->skip(12);
+                $body->skip(12);
                 break;
             // Command
             case 0x01:
-                $this->bodyStream->readInt($length);
-                $this->bodyStream->readChar($command);
-                $this->bodyStream->skip(-1);
+                $body->readInt($length);
+                $body->readChar($command);
+                $body->skip(-1);
                 switch ($command) {
                 case 0x0B: // player resign
-                    $this->bodyStream->skip(1);
-                    $this->bodyStream->readChar($player_index);
-                    $this->bodyStream->readChar($player_number);
-                    $this->bodyStream->readChar($disconnected);
+                    $body->skip(1);
+                    $body->readChar($player_index);
+                    $body->readChar($player_number);
+                    $body->readChar($disconnected);
                     if (($player = $this->playersByIndex[$player_index]) && $player->resignTime == 0) {
                         $player->resignTime = $time_cnt;
                         $this->ingameChat[] = new ChatMessage($time_cnt, null, $player->name . ' resigned');
                     }
-                    $this->bodyStream->skip($length - 4);
+                    $body->skip($length - 4);
                     break;
                 case 0x65: // researches
-                    $this->bodyStream->skip(4);
-                    $this->bodyStream->readInt($building_id);
-                    $this->bodyStream->readWord($player_id);
-                    $this->bodyStream->readWord($research_id);
+                    $body->skip(4);
+                    $body->readInt($building_id);
+                    $body->readWord($player_id);
+                    $body->readWord($research_id);
                     if (!($player = $this->playersByIndex[$player_id])) {
-                        $this->bodyStream->skip($length - 12);
+                        $body->skip($length - 12);
                         break;
                     }
                     switch ($research_id) {
@@ -947,37 +949,37 @@ class RecAnalyst
                         break;
                     }
                     $player->researches[$research_id] = $time_cnt;
-                    $this->bodyStream->skip($length - 12);
+                    $body->skip($length - 12);
                     break;
                 case 0x77: // training unit
-                    $this->bodyStream->skip(4);
-                    $this->bodyStream->readInt($building_id);
-                    $this->bodyStream->readWord($unit_type_id);
-                    $this->bodyStream->readWord($unit_num);
+                    $body->skip(4);
+                    $body->readInt($building_id);
+                    $body->readWord($unit_type_id);
+                    $body->readWord($unit_num);
 
                     if (!isset($this->units[$unit_type_id])) {
                         $this->units[$unit_type_id] = $unit_num;
                     } else {
                         $this->units[$unit_type_id] += $unit_num;
                     }
-                    $this->bodyStream->skip($length - 12);
+                    $body->skip($length - 12);
                     break;
                 case 0x64: // pc trains unit
-                    $this->bodyStream->skip(10);
-                    $this->bodyStream->readWord($unit_type_id);
+                    $body->skip(10);
+                    $body->readWord($unit_type_id);
                     $unit_num = 1; // always for pc?
                     if (!isset($this->units[$unit_type_id])) {
                         $this->units[$unit_type_id] = $unit_num;
                     } else {
                         $this->units[$unit_type_id] += $unit_num;
                     }
-                    $this->bodyStream->skip($length - 12);
+                    $body->skip($length - 12);
                     break;
                 case 0x66: // building
-                    $this->bodyStream->skip(2);
-                    $this->bodyStream->readWord($player_id);
-                    $this->bodyStream->skip(8);
-                    $this->bodyStream->readWord($building_type_id);
+                    $body->skip(2);
+                    $body->readWord($player_id);
+                    $body->skip(8);
+                    $body->readWord($building_type_id);
 
                     if (in_array($building_type_id, RecAnalystConst::$GATE_UNITS)) {
                         $building_type_id = Unit::GATE;
@@ -990,15 +992,15 @@ class RecAnalyst
                     } else {
                         $this->buildings[$player_id][$building_type_id]++;
                     }
-                    $this->bodyStream->skip($length - 14);
+                    $body->skip($length - 14);
                     break;
                 case 0x6C: // tributing
-                    $this->bodyStream->skip(1);
-                    $this->bodyStream->readChar($player_id_from);
-                    $this->bodyStream->readChar($player_id_to);
-                    $this->bodyStream->readChar($resource_id);
-                    $this->bodyStream->readFloat($amount_tributed);
-                    $this->bodyStream->readFloat($market_fee);
+                    $body->skip(1);
+                    $body->readChar($player_id_from);
+                    $body->readChar($player_id_to);
+                    $body->readChar($resource_id);
+                    $body->readFloat($amount_tributed);
+                    $body->readFloat($market_fee);
 
                     $playerFrom = $this->playersByIndex[$player_id_from];
                     $playerTo = $this->playersByIndex[$player_id_to];
@@ -1013,33 +1015,33 @@ class RecAnalyst
                         $tribute->fee = $market_fee;
                         $this->tributes[] = $tribute;
                     }
-                    $this->bodyStream->skip($length - 12);
+                    $body->skip($length - 12);
                     break;
                 case 0xFF: // multiplayer postgame data in UP1.4 RC2+
-                    $this->bodyStream->skip(1);
-                    $this->readPostgameData($this->bodyStream);
+                    $body->skip(1);
+                    $this->readPostgameData($body);
                     break;
                 default:
-                    $this->bodyStream->skip($length);
+                    $body->skip($length);
                     break;
                 }
-                $this->bodyStream->skip(4);
+                $body->skip(4);
                 break;
             default:
                 /* detect if this is a header of saved chapter */
                 /* sometimes header of the saved chapter is in $03 command, instead of $20 as it should be,
                    when this happens the length of $20 command is $0E, otherwise it is $02 (always?, rule?),
                    we do not rely on it, that's why we are skipping saved chapter data here and not in $20 command */
-                if ($this->bodyStream->getPosition() == $this->_nextPos - $this->_headerLen - 4) {
+                if ($body->getPosition() === $this->_nextPos - $this->_headerLen - 4) {
                     /* this is a header of saved chapter data, we have already read next_command_block
                        that's why -4 in the if-statement */
                     /* next_pos - header_len = offset of compressed chapter data */
                     $next_command_block = $od_type;
-                    $this->bodyStream->readInt($this->_nextPos); // next_chapter_pos
-                    $this->bodyStream->setPosition($next_command_block - $this->_headerLen - 8);
+                    $body->readInt($this->_nextPos); // next_chapter_pos
+                    $body->setPosition($next_command_block - $this->_headerLen - 8);
                 } else {
                     // shouldn't occure, just to prevent unexpected endless cycling
-                    $this->bodyStream->skip(1);
+                    $body->skip(1);
                 }
                 break;
             }

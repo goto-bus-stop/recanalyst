@@ -124,7 +124,13 @@ class MemoryStream extends Stream
      */
     public function skip($count)
     {
-        return $this->seek($count, self::soFromCurrent);
+        $this->position += $count;
+        if ($this->position > $this->size) {
+            $this->position = $this->size;
+        } elseif ($this->position < 0) {
+            $this->position = 0;
+        }
+        return $this->position;
     }
 
     /**
@@ -170,12 +176,13 @@ class MemoryStream extends Stream
      * @param int $buffer
      *
      * @return void
-     * @throws Exception
      */
     public function readUInt(&$buffer)
     {
-        $this->readBuffer($bytes, 4);
-        $buffer = ord($bytes[0]) | (ord($bytes[1]) << 8) | (ord($bytes[2]) << 16) | (ord($bytes[3]) << 24);
+        $bytes = substr($this->dataString, $this->position, 4);
+        $this->position += 4;
+        $unpacked_data = unpack('L', $bytes);
+        $buffer = $unpacked_data[1];
     }
 
     /**
@@ -184,12 +191,12 @@ class MemoryStream extends Stream
      * @param int $buffer
      *
      * @return void
-     * @throws Exception
      */
     public function readInt(&$buffer)
     {
         // !note: signed long (always 32 bit, machine byte order)
-        $this->readBuffer($bytes, 4);
+        $bytes = substr($this->dataString, $this->position, 4);
+        $this->position += 4;
         $unpacked_data = unpack('l', $bytes);
         $buffer = $unpacked_data[1];
     }
@@ -200,24 +207,25 @@ class MemoryStream extends Stream
      * @param int $buffer
      *
      * @return void
-     * @throws Exception
      */
     public function readWord(&$buffer)
     {
-        $this->readBuffer($bytes, 2);
+        $bytes = substr($this->dataString, $this->position, 2);
+        $this->position += 2;
         $buffer = ord($bytes[0]) | (ord($bytes[1]) << 8);
     }
 
     /**
      * Reads char value into the buffer.
+     *
      * @param int $buffer
+     *
      * @return void
-     * @throws Exception
      */
     public function readChar(&$buffer)
     {
-        $this->readBuffer($bytes, 1);
-        $buffer = ord($bytes[0]);
+        $buffer = ord($this->dataString[$this->position]);
+        $this->position++;
     }
 
     /**
@@ -226,11 +234,11 @@ class MemoryStream extends Stream
      * @param int $buffer
      *
      * @return void
-     * @throws Exception
      */
     public function readFloat(&$buffer)
     {
-        $this->readBuffer($bytes, 4);
+        $bytes = substr($this->dataString, $this->position, 4);
+        $this->position += 4;
         $unpacked_data = unpack('f', $bytes);
         $buffer = $unpacked_data[1];
     }
@@ -241,7 +249,6 @@ class MemoryStream extends Stream
      * @param int $buffer
      *
      * @return void
-     * @throws Exception
      */
     public function readBool(&$buffer)
     {
