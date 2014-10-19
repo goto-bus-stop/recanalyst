@@ -542,6 +542,7 @@ class RecAnalyst
                 $player->name  = $playername;
                 $player->index = $player_data_index;
                 $player->human = ($human == 0x02);
+                $player->spectator = ($human == 0x06);
                 $this->players[] = $player;
                 if (!isset($this->playersByIndex[$player->index])) {
                     $this->playersByIndex[$player->index] = $player;
@@ -1040,7 +1041,7 @@ class RecAnalyst
                     $body->readInt($this->_nextPos); // next_chapter_pos
                     $body->setPosition($next_command_block - $this->_headerLen - 8);
                 } else {
-                    // shouldn't occure, just to prevent unexpected endless cycling
+                    // shouldn't occur, just to prevent unexpected endless cycling
                     $body->skip(1);
                 }
                 break;
@@ -1905,7 +1906,7 @@ class RecAnalyst
 
             foreach ($this->players as $player) {
 
-                if ($player->isCooping) {
+                if ($player->isCooping || $player->isSpectator()) {
                     continue;
                 }
 

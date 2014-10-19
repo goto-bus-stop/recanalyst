@@ -34,6 +34,11 @@ class Player
      * @var bool
      */
     public $human;
+    /**
+     * Defines if the player is a spectator.
+     * @var bool
+     */
+    public $spectator;
 
     /**
      * Defines player's team index (0 = no team).
@@ -169,6 +174,11 @@ class Player
     public function isCooping()
     {
         return $this->isCooping;
+    }
+
+    public function isSpectator()
+    {
+        return $this->spectator;
     }
 
     /**
