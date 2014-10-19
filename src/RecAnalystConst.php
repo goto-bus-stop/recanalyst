@@ -91,7 +91,10 @@ final class RecAnalystConst {
         'AOC 1.0c',
         'AOC 1.1',
         'AOFE 2.1',
-        'AOC UP1.4'
+        'AOC UP1.4',
+        'Unknown',
+        'Unknown',
+        'HD'
     );
 
     /**
