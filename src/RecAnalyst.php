@@ -677,7 +677,7 @@ class RecAnalyst
                         // this player left before the game started
                         $player = null;
                     }
-                    $this->pregameChat[] = self::createChatMessage(null, $player, substr($chat, 3));
+                    $this->pregameChat[] = ChatMessage::create(null, $player, substr($chat, 3));
                 }
             }
             unset($chat);
@@ -893,7 +893,7 @@ class RecAnalyst
                             } else {
                                 $player = null;
                             }
-                            $this->ingameChat[] = self::createChatMessage($time_cnt, $player, substr($chat, 3));
+                            $this->ingameChat[] = ChatMessage::create($time_cnt, $player, substr($chat, 3));
                         }
                     }
                 }
@@ -1145,7 +1145,7 @@ class RecAnalyst
                         if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
                             // skip messages like "--Warning: You are being under attack... --"
                         } else {
-                            $this->ingameChat[] = self::createChatMessage($time_cnt, $this->players[$chat[2] - 1], substr($chat, 3));
+                            $this->ingameChat[] = ChatMessage::create($time_cnt, $this->players[$chat[2] - 1], substr($chat, 3));
                         }
                     }
                 }
@@ -2473,35 +2473,4 @@ class RecAnalyst
         return $a->time - $b->time;
     }
 
-    /**
-     * Helper method to create a chat message correctly. Messages have the player name
-     * and sometimes a group specifier (<Team>, <Enemy>, etc) included which is lame.
-     * This strips that part.
-     *
-     * @param int    $time   Time at which this message was sent in milliseconds since the start of the game.
-     * @param Player $player Message Sender.
-     * @param string $chat   Message contents.
-     *
-     * @return ChatMessage
-     * @static
-     */
-    protected static function createChatMessage($time, $player, $chat)
-    {
-        $group = '';
-        // this is directed someplace
-        if ($chat[0] === '<') {
-            $end = strpos($chat, '>');
-            $group = substr($chat, 1, $end - 1);
-            $chat = substr($chat, $end + 1);
-        }
-        if (is_null($player)) {
-            $player = new Player();
-            $player->name = substr($chat, 0, strpos($chat, ': '));
-            if ($player->name[0] === ' ') {
-                $player->name = substr($player->name, 1);
-            }
-        }
-        $chat = substr($chat, strlen($player->name) + 2);
-        return new ChatMessage($time, $player, $chat, $group);
-    }
 }
