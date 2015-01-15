@@ -1357,7 +1357,7 @@ class RecAnalyst
         if (!$this->analyzeBodyStream()) {
             return false;
         }
-        //TODO: triedit units, buildings v post analyze?
+
         $this->postAnalyze();
         $endtime = microtime(true);
         $this->analyzeTime = round(($endtime - $starttime) * 1000);
@@ -2400,10 +2400,9 @@ class RecAnalyst
             }
         }
 
-        //TODO: otestovat, ci je to OK
-        //units pole
         if (!empty($this->ingameChat)) {
-            usort($this->ingameChat, array('RecAnalyst\\RecAnalyst', 'chatMessagesCompare'));
+            $compareTime = function ($a, $b) { return $a->time - $b->time; };
+            usort($this->ingameChat, $compareTime);
         }
 
         if (!empty($this->buildings)) {
@@ -2412,9 +2411,30 @@ class RecAnalyst
 
         // we sort gaia objects, so we can draw first ciffs than relics,
         // this ensures that relics will overlap cliffs and not vice versa
-        usort($this->gaiaObjects, array('RecAnalyst\\RecAnalyst', 'gaiaObjectsCompare'));
+        usort($this->gaiaObjects, function ($item1, $item2) {
+            // relics show on top of everything else
+            if ($item1->id === Unit::RELIC && $item2->id !== Unit::RELIC) {
+                return 1;
+            }
+            // cliffs show below everything else
+            if (in_array($item1->id, RecAnalystConst::$CLIFF_UNITS)
+                && !in_array($item2->id, RecAnalystConst::$CLIFF_UNITS)
+            ) {
+                return -1;
+            }
+            if ($item2->id === Unit::RELIC && $item1->id !== Unit::RELIC) {
+                return -1;
+            }
+            if (in_array($item2->id, RecAnalystConst::$CLIFF_UNITS)
+                && !in_array($item1->id, RecAnalystConst::$CLIFF_UNITS)
+            ) {
+                return 1;
+            }
+            return 0;
+        });
 
-        // UserPatch population limits
+        // UserPatch supports pop limits of up to 1000, so that won't normally fit in a byte.
+        // Instead it stores N so that the pop limit is 25*N.
         if ($this->gameInfo->isUserPatch) {
             $this->gameSettings->popLimit = 25 * $this->gameSettings->popLimit;
         }
@@ -2428,49 +2448,6 @@ class RecAnalyst
     public function getAnalyzeTime()
     {
         return $this->analyzeTime;
-    }
-
-    /**
-     * Comparision callback function for sorting gaia objects.
-     *
-     * @param Unit $item1 First unit to compare.
-     * @param Unit $item2 Second unit to compare.
-     *
-     * @return int
-     * @static
-     */
-    protected static function gaiaObjectsCompare($item1, $item2)
-    {
-        if ($item1->id == Unit::RELIC && $item2->id != Unit::RELIC) {
-            return 1;
-        }
-        if (in_array($item1->id, RecAnalystConst::$CLIFF_UNITS)
-            && !in_array($item2->id, RecAnalystConst::$CLIFF_UNITS)
-        ) {
-            return -1;
-        }
-        if ($item2->id == Unit::RELIC && $item1->id != Unit::RELIC) {
-            return -1;
-        }
-        if (in_array($item2->id, RecAnalystConst::$CLIFF_UNITS)
-            && !in_array($item1->id, RecAnalystConst::$CLIFF_UNITS)
-        ) {
-            return 1;
-        }
-        return 0;
-    }
-    /**
-     * Comparison callback function for chat message objects. Compares time.
-     *
-     * @param ChatMessage $a First message to compare.
-     * @param ChatMessage $b Second message to compare.
-     *
-     * @return int
-     * @static
-     */
-    protected static function chatMessagesCompare($a, $b)
-    {
-        return $a->time - $b->time;
     }
 
 }
