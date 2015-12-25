@@ -146,13 +146,51 @@ class RecordedGame
     private $_headerLen;
     private $_nextPos;
 
-    public function __construct($filename)
+    /**
+     * Create a recorded game analyser.
+     *
+     * @param string $filename Path to the recorded game file.
+     * @return void
+     */
+    public function __construct($filename = null)
     {
         $this->filename = $filename;
-        $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        if (!is_null($filename)) {
+            $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        }
         $this->reset();
     }
 
+    /**
+     * Loads the file for analysis. Deprecated: provided for compatibility with
+     * older RecAnalyst versions.
+     *
+     * @param string $filename File name.
+     * @param mixed  $input    File handle or string contents.
+     *
+     * @return void
+     */
+    public function load($filename, $input)
+    {
+        $this->filename = $filename;
+        $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        if (is_string($input)) {
+            // Create file stream from input string
+            $this->fd = fopen('php://memory', 'r+');
+            fwrite($this->fd, $input);
+            rewind($this->fd);
+        } else {
+            $this->fd = $input;
+        }
+        $this->extractStreams();
+    }
+
+    /**
+     * Create a file handle for the recorded game file.
+     * Not sure why this is public…
+     *
+     * @return void
+     */
     public function open()
     {
         $this->fd = fopen($this->filename, 'r');
@@ -211,9 +249,6 @@ class RecordedGame
 
     /**
      * Extracts header and body streams from recorded game.
-     *
-     * @param string $ext   File extension.
-     * @param mixed  $input File handler or file contents.
      *
      * @return void
      * @throws RecAnalystException
