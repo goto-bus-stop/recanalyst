@@ -2,6 +2,8 @@
 
 [![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
+[![Join the chat at https://gitter.im/goto-bus-stop/recanalyst](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 RecAnalyst is a PHP package for analyzing Age of Kings, The Conquerors, Forgotten Empires and Age of Empires 2 HD (The Forgotten) recorded games.
 
 ## Credits
