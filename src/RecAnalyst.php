@@ -2450,4 +2450,29 @@ class RecAnalyst
         return $this->analyzeTime;
     }
 
+    /**
+     * Get the raw uncompressed header contents. Useful for debugging.
+     *
+     * @var string
+     */
+    public function getHeaderContents()
+    {
+        if ($this->headerStream->getSize() === 0) {
+            throw new \Exception('You have to load a recorded game file before calling getHeaderContents');
+        }
+        return $this->headerStream->getDataString();
+    }
+
+    /**
+     * Get the raw body contents. Useful for debugging.
+     *
+     * @var string
+     */
+    public function getBodyContents()
+    {
+        if ($this->bodyStream->getSize() === 0) {
+            throw new \Exception('You have to load a recorded game file before calling getBodyContents');
+        }
+        return $this->bodyStream->getDataString();
+    }
 }
