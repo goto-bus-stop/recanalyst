@@ -139,7 +139,7 @@ class GameSettings
     public function __construct(RecAnalyst $recanalyst)
     {
         $this->ra = $recanalyst;
-        $this->gameType = GameSettings::TYPE_RANDOMMAP;
+        $this->gameType = self::TYPE_RANDOMMAP;
         $this->mapStyle = self::MAPSTYLE_STANDARD;
         $this->difficultyLevel = self::LEVEL_HARDEST;
         $this->gameSpeed = self::SPEED_NORMAL;
