@@ -270,22 +270,33 @@ class RecordedGame
             $bindata .= $buff;
         }
         $read = 0;
+        $this->body = '';
         while (!feof($fp)) {
             $buff = fread($fp, 8192);
-            $this->bodyStream->write($buff);
+            $this->body .= $buff;
         }
+        $this->bodyStream->write($this->body);
         unset($buff);
         fclose($fp);
 
-        $this->headerStream->write(gzinflate($bindata));//, 8388608));  // 8MB
+        $this->header = gzinflate($bindata, 8388608);  // 8MB
+        $this->headerStream->write($this->header);
         unset($bindata);
 
-        if (!$this->headerStream->getSize()) {
+        if (!strlen($this->header)) {
             throw new RecAnalystException(
                 'Cannot decompress header section',
                 RecAnalystException::HEADER_DECOMPRESSERROR
             );
         }
+    }
+
+    public function getHeaderContents() {
+        return $this->header;
+    }
+
+    public function getBodyContents() {
+        return $this->body;
     }
 
     /**
@@ -594,7 +605,7 @@ class RecordedGame
             $header->skip(1);
         }
 
-        // here comes pre-game chat (mgl doesn't keep this information)
+        // multiplayer pregame chat is only stored in MGX and later
         if ($this->isMgx) {
             $header->readInt($num_chat);
             for ($i = 0; $i < $num_chat; $i++) {
