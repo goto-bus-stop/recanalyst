@@ -142,13 +142,20 @@ class RecordedGame
      */
     public $config = null;
 
+    private $fd;
     private $_headerLen;
     private $_nextPos;
 
     public function __construct($filename)
     {
         $this->filename = $filename;
+        $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
         $this->reset();
+    }
+
+    public function open()
+    {
+        $this->fd = fopen($this->filename, 'r');
     }
 
     /**
@@ -213,36 +220,18 @@ class RecordedGame
      * @todo input as file contents
      * @todo figure out $ext based on file contents
      */
-    protected function extractStreams($ext, $fp)
+    protected function extractStreams($a = null, $b = null)
     {
-        if (empty($fp)) {
+        if (empty($this->filename)) {
             throw new RecAnalystException(
                 'No file has been specified for analyzing',
                 RecAnalystException::FILE_NOT_SPECIFIED
             );
         }
-        if ($ext == self::MGL_EXT) {
-            $this->isMgl = true;
-            $this->isMgx = false;
-            $this->isMgz = false;
-        } elseif ($ext == self::MGX_EXT) {
-            $this->isMgx = true;
-            $this->isMgl = false;
-            $this->isMgz = false;
-        } elseif ($ext == self::MGZ_EXT) {
-            $this->isMgx = true;
-            $this->isMgl = false;
-            $this->isMgz = true;
-        } elseif ($ext == self::MGX2_EXT) {
-            $this->isMgx = true;
-            $this->isMgl = false;
-            $this->isMgz = false;
-        } else {
-            throw new RecAnalystException(
-                'Wrong file extension, file format is not supported',
-                RecAnalystException::FILEFORMAT_NOT_SUPPORTED
-            );
+        if (empty($this->fd)) {
+            $this->open();
         }
+        $fp = $this->fd;
         if (($packed_data = fread($fp, 4)) === false || strlen($packed_data) < 4) {
             throw new RecAnalystException(
                 'Unable to read the header length',
@@ -257,16 +246,23 @@ class RecordedGame
                 RecAnalystException::EMPTY_HEADER
             );
         }
-        if ($this->isMgx) {
-            $packed_data = fread($fp, 4);
-            if ($packed_data === false || strlen($packed_data) < 4) {
-                $this->_nextPos = 0;
-            } else {
-                $unpacked_data = unpack('V', $packed_data);
-                $this->_nextPos = $unpacked_data[1];
-            }
+        $packed_data = fread($fp, 4);
+        if ($packed_data === false || strlen($packed_data) < 4) {
+            $this->_nextPos = 0;
+        } else {
+            $unpacked_data = unpack('V', $packed_data);
+            $this->_nextPos = $unpacked_data[1];
         }
+
+        // Version detection heuristic
+        // TODO find something more accurate?
+        $this->isMgx = $this->_nextPos < filesize($this->filename);
+        $this->isMgl = !$this->isMgx;
+
         $this->_headerLen -= $this->isMgx ? 8 : 4;
+        if ($this->isMgl) {
+            fseek($fp, -4, SEEK_CUR);
+        }
         $read = 0;
         $bindata = '';
         while ($read < $this->_headerLen && ($buff = fread($fp, $this->_headerLen - $read))) {
@@ -367,6 +363,9 @@ class RecordedGame
                 $gameInfo->gameSubVersion = '2.8';
             } else if ($subVersion === 11.96) {
                 $gameInfo->gameSubVersion = '3.0';
+            } else if ($subVersion === 12.34) {
+                // TODO Which other versions?
+                $gameInfo->gameSubVersion = '4.???';
             }
         } else if ($gameInfo->gameVersion === GameInfo::VERSION_UserPatch14) {
             if ($version === RecAnalystConst::VER_9A) {
@@ -454,6 +453,12 @@ class RecordedGame
 
         $gameSettings->difficultyLevel = $difficulty;
         $gameSettings->lockDiplomacy = $lock_teams;
+
+        // TODO is this really versions ≥12?
+        if ($subVersion >= 12) {
+            // TODO is this always 16? what is in these 16 bytes?
+            $header->skip(16);
+        }
 
         /* getting Player_info data */
         for ($i = 0; $i < 9; $i++) {
@@ -565,7 +570,10 @@ class RecordedGame
             }
         }
 
-        $header->skip(1);  // always 1?
+        // TODO is <12 the correct cutoff point?
+        if ($subVersion < 12) {
+            $header->skip(1);
+        }
         $header->readInt($reveal_map);
         $header->skip(4);  // always 1?
         $header->readInt($map_size);

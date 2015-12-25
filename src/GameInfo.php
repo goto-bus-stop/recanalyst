@@ -46,7 +46,7 @@ class GameInfo
      * @see Const\GameVersion
      */
     public $gameVersion;
-    
+
     /**
      * Game sub-version. E.g., Game version = HD, Game sub-version = 3.0.
      * @var int
