@@ -192,10 +192,10 @@ class RecordedGame
 
     public function analyze()
     {
-        $ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
-        $this->extractStreams($ext, fopen($this->filename, 'r'));
-
         $starttime = microtime(true);
+        if (empty($this->header)) {
+            $this->extractStreams();
+        }
         if (!$this->analyzeHeaderStream()) {
             return false;
         }
