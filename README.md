@@ -1,5 +1,6 @@
-RecAnalyst
-----------
+# RecAnalyst
+
+[![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
 RecAnalyst is a PHP package for analyzing Age of Kings, The Conquerors, Forgotten Empires and Age of Empires 2 HD (The Forgotten) recorded games.
 
@@ -342,4 +343,3 @@ Initial extra population. (???)
 #### array InitialState::$position
 
 Starting position, `[$x, $y]`.
-
