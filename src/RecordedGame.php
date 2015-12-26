@@ -244,7 +244,7 @@ class RecordedGame extends RecAnalyst
     {
         $this->headerStream = new MemoryStream();
         $this->bodyStream = new MemoryStream();
-        $this->gameSettings = new GameSettings($this);
+        $this->gameSettings = new GameSettings();
         $this->gameInfo = new GameInfo($this);
         $this->players = [];
         $this->playersByIndex = [];

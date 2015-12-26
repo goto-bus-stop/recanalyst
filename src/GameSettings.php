@@ -39,13 +39,6 @@ class GameSettings
     const MODE_MULTIPLAYER = 1;
 
     /**
-     * RecAnalyst owner instance.
-     *
-     * @var RecAnalyst
-     */
-    protected $ra;
-
-    /**
      * Game type.
      *
      * @var int
@@ -126,12 +119,10 @@ class GameSettings
     /**
      * Class constructor.
      *
-     * @param  RecAnalyst  $recanalyst  The RA instance that this will belong to.
      * @return void
      */
-    public function __construct(RecAnalyst $recanalyst)
+    public function __construct()
     {
-        $this->ra = $recanalyst;
         $this->gameType = self::TYPE_RANDOMMAP;
         $this->mapStyle = self::MAPSTYLE_STANDARD;
         $this->difficultyLevel = self::LEVEL_HARDEST;
@@ -173,25 +164,7 @@ class GameSettings
      */
     public function getDifficultyLevelString()
     {
-        // TODO do not depend on the $ra instance
-        switch ($this->ra->gameInfo->_gameVersion) {
-            case GameInfo::VERSION_AOC:
-            case GameInfo::VERSION_AOC10:
-            case GameInfo::VERSION_AOC10C:
-            case GameInfo::VERSION_AOCTRIAL:
-                return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
-                break;
-            case GameInfo::VERSION_AOK:
-            case GameInfo::VERSION_AOK20:
-            case GameInfo::VERSION_AOK20A:
-            case GameInfo::VERSION_AOKTRIAL:
-                return RecAnalystConst::$AOK_DIFFICULTY_LEVELS[$this->difficultyLevel];
-                break;
-            case GameInfo::VERSION_UNKNOWN:
-            default:
-                return '';
-                break;
-        }
+        return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
     }
 
     /**
