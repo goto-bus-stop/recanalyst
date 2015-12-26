@@ -1,33 +1,21 @@
 <?php
-/**
- * Defines Stream class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * Class Stream.
- *
  * Stream is a base class type for stream objects.
- * @package RecAnalyst
- * @subpackage basics
- * @abstract
  */
 abstract class Stream
 {
-
     /* Stream seek origins */
-    const soFromBeginning = 0;
-    const soFromCurrent = 1;
-    const soFromEnd = 2;
+    const SEEK_FROM_START = 0;
+    const SEEK_FROM_CURRENT = 1;
+    const SEEK_FROM_END = 2;
 
     /**
      * Class constructor.
      *
      * @return void
-     *
      * @abstract
      */
     abstract public function __construct();
@@ -36,7 +24,6 @@ abstract class Stream
      * Class destructor.
      *
      * @return void
-     *
      * @abstract
      */
     abstract public function __destruct();
@@ -48,19 +35,18 @@ abstract class Stream
      */
     public function getPosition()
     {
-        return $this->seek(0, self::soFromCurrent);
+        return $this->seek(0, self::SEEK_FROM_CURRENT);
     }
 
     /**
      * Set the current position in the stream.
      *
-     * @param int $pos Position
-     *
+     * @param  int  $pos  Position
      * @return void
      */
     public function setPosition($pos)
     {
-        $this->seek($pos, self::soFromBeginning);
+        $this->seek($pos, self::SEEK_FROM_START);
     }
 
     /**
@@ -70,40 +56,40 @@ abstract class Stream
      */
     public function getSize()
     {
-        $pos = $this->seek(0, self::soFromCurrent);
-        $result = $this->seek(0, self::soFromEnd);
-        $this->seek($pos, self::soFromBeginning);
+        $pos = $this->seek(0, self::SEEK_FROM_CURRENT);
+        $result = $this->seek(0, self::SEEK_FROM_END);
+        $this->seek($pos, self::SEEK_FROM_START);
         return $result;
     }
 
     /**
      * Reads the contents of the stream from the current position into a buffer.
+     * Returns the number of bytes read.
      *
-     * @param mixed $buff Buffer the data will be transferred into
-     * @param int $count Number of bytes to read
-     *
-     * @return int Number of bytes actually transferred to buffer
+     * @param  mixed  $buff  Buffer the data will be transferred into
+     * @param  int  $count  Number of bytes to read
+     * @return int
      * @abstract
      */
     abstract protected function read(&$buffer, $count);
 
     /**
-     * Writes the buffer into the stream, starting at the current position.
+     * Writes the buffer into the stream, starting at the current position and
+     * returns the number of bytes written.
      *
-     * @param mixed $buff Data we want to insert
-     * @return int Number of bytes actually inserted.
-     *
+     * @param  mixed  $buff  Data we want to insert
+     * @return int
      * @abstract
      */
     abstract protected function write($buffer);
 
     /**
-     * Moves the current position within the stream by the indicated offset, relative to the origin.
+     * Moves the current position within the stream by the indicated offset,
+     * relative to the origin.
      *
-     * @param int $offset Offset
-     * @param int $origin One of the seek stream origings
-     *
-     * @return int The current position
+     * @param  int  $offset  Offset
+     * @param  int  $origin  One of the seek stream origins
+     * @return int
      * @abstract
      */
     abstract public function seek($offset, $origin);
@@ -111,9 +97,8 @@ abstract class Stream
     /**
      * Reads bytes from the stream into buffer.
      *
-     * @param mixed $buff
-     * @param int $count
-     *
+     * @param  mixed  $buff
+     * @param  int  $count
      * @return void
      * @throws Exception
      */
@@ -127,9 +112,8 @@ abstract class Stream
     /**
      * Writes bytes from buffer onto the stream.
      *
-     * @param mixed $buff
-     * @param int $count
-     *
+     * @param  mixed  $buff
+     * @param  int  $count
      * @return void
      * @throws Exception
      */
@@ -143,10 +127,9 @@ abstract class Stream
     /**
      * Copies a specified number of bytes from one stream to another.
      *
-     * @param Stream $source Source stream
-     * @param int $count Number of bytes
-     *
-     * @return int Number of bytes copied.
+     * @param  Stream  $source  Source stream
+     * @param  int  $count  Number of bytes
+     * @return int
      */
     public function copyFrom(Stream $source, $count)
     {

@@ -1,16 +1,9 @@
 <?php
-/**
- * Defines GameInfo class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
  * GameInfo holds metadata about the analyzed game.
- *
- * @package RecAnalyst
  */
 class GameInfo
 {

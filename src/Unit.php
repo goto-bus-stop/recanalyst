@@ -1,21 +1,12 @@
 <?php
-/**
- * Defines Unit class.
- *
- * @package recAnalyst
- */
-
 namespace RecAnalyst;
 
 /**
- * Class Unit.
- *
  * Unit represents a unit object in the game.
- * @package recAnalyst
  */
-class Unit {
-
-    /* Unit IDs that we might draw on maps */
+class Unit
+{
+    // Unit IDs that we might draw on maps
     // GAIA (needed for colours when drawing)
     const GOLDMINE   = 66;
     const STONEMINE  = 102;
@@ -48,19 +39,22 @@ class Unit {
 
     /**
      * Id of the player who owns this unit. Zero if GAIA.
+     *
      * @var int
      */
     public $owner = 0;
 
     /**
      * Unit it.
+     *
      * @var int
      */
     public $id = 0;
 
     /**
      * Unit location.
+     *
      * @var array
      */
-    public $position = array(0, 0);
+    public $position = [0, 0];
 }

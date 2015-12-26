@@ -1,50 +1,33 @@
 <?php
-/**
- * Defines GameSettings class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
-/**
- * Guess what the GameSettings class contains.
- *
- * @package RecAnalyst
- */
 class GameSettings
 {
-
-    /* Game Types */
     const TYPE_RANDOMMAP  = 0;
     const TYPE_REGICIDE   = 1;
     const TYPE_DEATHMATCH = 2;
     const TYPE_SCENARIO   = 3;
     const TYPE_CAMPAIGN   = 4;
 
-    /* Map Styles */
     const MAPSTYLE_STANDARD  = 0;
     const MAPSTYLE_REALWORLD = 1;
     const MAPSTYLE_CUSTOM    = 2;
 
-    /* Difficulty Level */
     const LEVEL_HARDEST  = 0;
     const LEVEL_HARD     = 1;
     const LEVEL_MODERATE = 2;
     const LEVEL_STANDARD = 3;
     const LEVEL_EASIEST  = 4;
 
-    /* Game Speed */
     const SPEED_SLOW   = 100;
     const SPEED_NORMAL = 150;
     const SPEED_FAST   = 200;
 
-    /* Reveal Map */
     const REVEAL_NORMAL     = 0;
     const REVEAL_EXPLORED   = 1;
     const REVEAL_ALLVISIBLE = 2;
 
-    /* Map Size */
     const SIZE_TINY   = 0;
     const SIZE_SMALL  = 1;
     const SIZE_MEDIUM = 2;
@@ -52,54 +35,61 @@ class GameSettings
     const SIZE_LARGE  = 4;
     const SIZE_GIANT  = 5;
 
-    /* Game Mode */
     const MODE_SINGLEPLAYER = 0;
     const MODE_MULTIPLAYER = 1;
 
     /**
      * RecAnalyst owner instance.
+     *
      * @var RecAnalyst
      */
     protected $ra;
 
     /**
      * Game type.
+     *
      * @var int
      */
     public $gameType;
 
     /**
      * Map style.
+     *
      * @var int
      */
     public $mapStyle;
 
     /**
      * Difficulty level.
+     *
      * @var int
      */
     public $difficultyLevel;
 
     /**
      * Game speed.
+     *
      * @var int
      */
     public $gameSpeed;
 
     /**
      * Reveal Map setting.
+     *
      * @var int
      */
     public $revealMap;
 
     /**
      * Map size.
+     *
      * @var int
      */
     public $mapSize;
 
     /**
      * Map id.
+     *
      * @var int
      * @see Map
      */
@@ -107,24 +97,28 @@ class GameSettings
 
     /**
      * Map.
+     *
      * @var string
      */
     public $map;
 
     /**
      * Population limit.
+     *
      * @var int
      */
     public $popLimit;
 
     /**
      * Diplomacy lock status.
+     *
      * @var bool
      */
     public $lockDiplomacy;
 
     /**
      * Victory settings.
+     *
      * @var Victory
      */
     public $victory;
@@ -132,8 +126,7 @@ class GameSettings
     /**
      * Class constructor.
      *
-     * @param RecAnalyst $recanalyst The RA instance that this will belong to.
-     *
+     * @param  RecAnalyst  $recanalyst  The RA instance that this will belong to.
      * @return void
      */
     public function __construct(RecAnalyst $recanalyst)
@@ -180,23 +173,24 @@ class GameSettings
      */
     public function getDifficultyLevelString()
     {
+        // TODO do not depend on the $ra instance
         switch ($this->ra->gameInfo->_gameVersion) {
-        case GameInfo::VERSION_AOC:
-        case GameInfo::VERSION_AOC10:
-        case GameInfo::VERSION_AOC10C:
-        case GameInfo::VERSION_AOCTRIAL:
-            return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
-            break;
-        case GameInfo::VERSION_AOK:
-        case GameInfo::VERSION_AOK20:
-        case GameInfo::VERSION_AOK20A:
-        case GameInfo::VERSION_AOKTRIAL:
-            return RecAnalystConst::$AOK_DIFFICULTY_LEVELS[$this->difficultyLevel];
-            break;
-        case GameInfo::VERSION_UNKNOWN:
-        default:
-            return '';
-            break;
+            case GameInfo::VERSION_AOC:
+            case GameInfo::VERSION_AOC10:
+            case GameInfo::VERSION_AOC10C:
+            case GameInfo::VERSION_AOCTRIAL:
+                return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
+                break;
+            case GameInfo::VERSION_AOK:
+            case GameInfo::VERSION_AOK20:
+            case GameInfo::VERSION_AOK20A:
+            case GameInfo::VERSION_AOKTRIAL:
+                return RecAnalystConst::$AOK_DIFFICULTY_LEVELS[$this->difficultyLevel];
+                break;
+            case GameInfo::VERSION_UNKNOWN:
+            default:
+                return '';
+                break;
         }
     }
 

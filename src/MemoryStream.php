@@ -1,36 +1,29 @@
 <?php
-/**
- * Defines MemoryStream class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * Class MemoryStream.
- *
- * MemoryStream is a stream that stores its data in dynamic memory.
- *
- * @package RecAnalyst
+ * MemoryStream is a stream that stores its data in memory.
  */
 class MemoryStream extends Stream
 {
-
     /**
      * Internal data holder.
+     *
      * @var string
      */
     protected $dataString = '';
 
     /**
      * Data size.
+     *
      * @var int
      */
     protected $size = 0;
 
     /**
      * Current position.
+     *
      * @var int
      */
     protected $position = 0;
@@ -38,8 +31,7 @@ class MemoryStream extends Stream
     /**
      * Class constructor.
      *
-     * @param string $string Data string
-     *
+     * @param  string  $string  Data string.
      * @return void
      */
     public function __construct($string = '')
@@ -96,17 +88,14 @@ class MemoryStream extends Stream
      */
     public function seek($offset, $origin)
     {
-        switch ($origin) {
-        case self::soFromBeginning:
+        if ($origin === self::SEEK_FROM_START) {
             $this->position = $offset;
-            break;
-        case self::soFromCurrent:
+        } else if ($origin === self::SEEK_FROM_CURRENT) {
             $this->position += $offset;
-            break;
-        case self::soFromEnd:
+        } else if ($origin === self::SEEK_FROM_END) {
             $this->position = $this->size - $offset;
-            break;
         }
+
         if ($this->position > $this->size) {
             $this->position = $this->size;
         } elseif ($this->position < 0) {
@@ -118,8 +107,7 @@ class MemoryStream extends Stream
     /**
      * Moves the current position within the stream by the indicated offset, relative to the current position.
      *
-     * @param int $count Offset.
-     *
+     * @param  int  $count  Offset.
      * @return The current position.
      */
     public function skip($count)
@@ -127,7 +115,7 @@ class MemoryStream extends Stream
         $this->position += $count;
         if ($this->position > $this->size) {
             $this->position = $this->size;
-        } elseif ($this->position < 0) {
+        } else if ($this->position < 0) {
             $this->position = 0;
         }
         return $this->position;
@@ -146,23 +134,20 @@ class MemoryStream extends Stream
     /**
      * Reads the string into the buffer.
      *
-     * @param string $buffer
-     * @param int    $length Number of bytes holding string length information.
-     *
+     * @param  string  $buffer
+     * @param  int  $length Number of bytes holding string length information.
      * @return void
      * @throws Exception
      */
     public function readString(&$buffer, $length = 4)
     {
-        switch ($length) {
-        case 2:
+        if ($length === 2) {
             $this->readWord($len);
-            break;
-        case 4:
-        default:
+        } else {
+            // assume 4 bytes
             $this->readUInt($len);
-            break;
         }
+
         if ($len) {
             $this->readBuffer($buffer, $len);
         } else {
@@ -173,8 +158,7 @@ class MemoryStream extends Stream
     /**
      * Reads integer value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readUInt(&$buffer)
@@ -188,8 +172,7 @@ class MemoryStream extends Stream
     /**
      * Reads integer value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readInt(&$buffer)
@@ -204,8 +187,7 @@ class MemoryStream extends Stream
     /**
      * Reads word value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readWord(&$buffer)
@@ -218,8 +200,7 @@ class MemoryStream extends Stream
     /**
      * Reads char value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readChar(&$buffer)
@@ -231,8 +212,7 @@ class MemoryStream extends Stream
     /**
      * Reads float value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readFloat(&$buffer)
@@ -246,8 +226,7 @@ class MemoryStream extends Stream
     /**
      * Reads Bool value into the buffer.
      *
-     * @param int $buffer
-     *
+     * @param  int  $buffer
      * @return void
      */
     public function readBool(&$buffer)
@@ -257,11 +236,11 @@ class MemoryStream extends Stream
     }
 
     /**
-     * Find position of first occurrence of a string in the stream.
+     * Find position of first occurrence of a string in the stream. Returns -1
+     * if the needl can't be found.
      *
-     * @param int $needle The string to find.
-     *
-     * @return int Position in the stream or -1 if needle has not been not found
+     * @param  int  $needle  The string to find.
+     * @return int
      */
     public function find($needle)
     {
@@ -275,11 +254,11 @@ class MemoryStream extends Stream
     }
 
     /**
-     * Find position of last occurrence of a string in the stream.
+     * Find position of last occurrence of a string in the stream. Returns -1
+     * if the needle cannot be found.
      *
-     * @param int $needle The string to find.
-     *
-     * @return int Position in the stream or -1 if needle has not been not found
+     * @param  int  $needle  The string to find.
+     * @return int
      */
     public function rfind($needle, $offset = 0)
     {

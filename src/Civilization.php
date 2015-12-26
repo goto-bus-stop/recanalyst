@@ -1,18 +1,11 @@
 <?php
-/**
- * Defines Civilization constant class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
  * Some civilization constants.
- *
- * @package RecAnalyst
  */
-final class Civilization
+class Civilization
 {
     const NONE       = 0;
     const BRITONS    = 1;
@@ -48,4 +41,3 @@ final class Civilization
     {
     }
 }
-

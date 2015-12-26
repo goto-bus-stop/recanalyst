@@ -1,22 +1,15 @@
 <?php
-/**
- * Defines Team class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
  * Represents a Team of Players in the game.
- *
- * @package RecAnalyst
  */
 class Team
 {
-
     /**
      * Team's index.
+     *
      * @var int
      */
     private $index;
@@ -34,14 +27,13 @@ class Team
     public function __construct()
     {
         $this->index = -1;
-        $this->players = array();
+        $this->players = [];
     }
 
     /**
      * Adds a player to the team.
      *
-     * @param Player $player The player we wish to add
-     *
+     * @param  Player  $player  The player we wish to add
      * @return void
      */
     public function addPlayer(Player $player)
@@ -55,9 +47,8 @@ class Team
     /**
      * Returns a player at the specified offset.
      *
-     * @param int An index of the player
-     *
-     * @return Player|bool The player at the index or false if the index is out of the range
+     * @param  int  An index of the player
+     * @return Player|null
      */
     public function getPlayer($index)
     {
@@ -67,7 +58,7 @@ class Team
     /**
      * Returns an index of the team.
      *
-     * @return int Team index
+     * @return int
      */
     public function getIndex()
     {

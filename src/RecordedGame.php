@@ -2,11 +2,8 @@
 
 namespace RecAnalyst;
 
-class RecordedGame
-    // temporary, to keep compat with some other classes
-    extends RecAnalyst
+class RecordedGame extends RecAnalyst
 {
-
     const MGX_EXT = 'mgx';
     const MGL_EXT = 'mgl';
     const MGZ_EXT = 'mgz';
@@ -14,75 +11,92 @@ class RecordedGame
 
     /**
      * Internal stream containing header information.
+     *
      * @var string
      */
     protected $headerStream;
 
     /**
      * Internal stream containing body information.
+     *
      * @var string
      */
     protected $bodyStream;
 
     /**
      * An array containing map data.
-     * $var array
+     *
+     * @var array
      */
     protected $mapData;
 
     /**
      * Map width.
+     *
      * @var int
      */
     protected $mapWidth;
 
     /**
      * Map height.
+     *
      * @var int
      */
     protected $mapHeight;
 
     /**
      * Game settings information.
+     *
      * @var GameSettings
      */
     public $gameSettings;
 
     /**
-     * Game information.
+     * Game meta information, like the version of the game that was used to
+     * record this replay.
+     *
      * @var GameInfo
      */
     public $gameInfo;
 
     /**
      * List of players in the game.
+     *
+     * @var array
      */
     public $players;
+
     /**
      * List of players in the game, indexed by their ingame index.
+     *
+     * @var array
      */
     public $playersByIndex;
 
     /**
      * List of teams in the game.
+     *
      * @var TeamList
      */
     public $teams;
 
     /**
-     * An array containing pre-game chat.
+     * Chat messages sent in the lobby before the game starts.
+     *
      * @var array
      */
     public $pregameChat;
 
     /**
-     * An array containing in-game chat.
+     * Chat messages sent during the game.
+     *
      * @var array
      */
     public $ingameChat;
 
     /**
      * An associative array containing "unit_type_id - unit_num" pairs.
+     *
      * @var array
      */
     public $units;
@@ -90,66 +104,92 @@ class RecordedGame
     /**
      * An associative multi-dimensional array containing building_type_id → building_num
      * pairs for each player.
+     *
      * @var array
      */
     public $buildings;
 
     /**
      * Elapsed time for analyzing in milliseconds.
+     *
      * @var int
      */
     protected $analyzeTime;
 
     /**
-     * True, if the file being analyzed is mgx. False otherwise.
+     * Whether the file being analyzed is an mgx file (AOC).
+     *
      * @var bool
      */
     protected $isMgx;
 
     /**
-     * True, if the file being analyzed is mgl. False otherwise.
+     * Whether the file being analyzed is an mgl file (AOK).
+     *
      * @var bool
      */
     protected $isMgl;
 
     /**
-     * True, if the file being analyzed is mgz. False otherwise.
+     * Whether the file being analyzed is an mgz file (UserPatch).
+     *
      * @var bool
      */
     protected $isMgz;
 
     /**
      * List of GAIA objects.
+     *
      * @var array
      */
     protected $gaiaObjects;
 
     /**
      * List of any player objects.
+     *
      * @var array
      */
     protected $playerObjects;
 
     /**
      * List of tributes.
+     *
      * @var array
      */
     public $tributes;
 
     /**
      * Configuration object.
+     *
      * @var Config
      */
     public $config = null;
 
+    /**
+     * File handle to the recorded game file.
+     *
+     * @var resource
+     */
     private $fd;
+
+    /**
+     * Size of the compressed header block.
+     *
+     * @var int
+     */
     private $_headerLen;
+
+    /**
+     * [Add documentation]
+     *
+     * @var int
+     */
     private $_nextPos;
 
     /**
      * Create a recorded game analyser.
      *
-     * @param string $filename Path to the recorded game file.
+     * @param  string  $filename  Path to the recorded game file.
      * @return void
      */
     public function __construct($filename = null)
@@ -165,9 +205,8 @@ class RecordedGame
      * Loads the file for analysis. Deprecated: provided for compatibility with
      * older RecAnalyst versions.
      *
-     * @param string $filename File name.
-     * @param mixed  $input    File handle or string contents.
-     *
+     * @param string  $filename  File name.
+     * @param mixed  $input  File handle or string contents.
      * @return void
      */
     public function load($filename, $input)
@@ -207,23 +246,23 @@ class RecordedGame
         $this->bodyStream = new MemoryStream();
         $this->gameSettings = new GameSettings($this);
         $this->gameInfo = new GameInfo($this);
-        $this->players = array();
-        $this->playersByIndex = array();
-        $this->teams = array();
-        $this->pregameChat = array();
-        $this->ingameChat = array();
-        $this->units = array();
-        $this->buildings = array();
-        $this->mapData = array();
+        $this->players = [];
+        $this->playersByIndex = [];
+        $this->teams = [];
+        $this->pregameChat = [];
+        $this->ingameChat = [];
+        $this->units = [];
+        $this->buildings = [];
+        $this->mapData = [];
         $this->mapWidth = $this->mapHeight = 0;
         $this->analyzeTime = 0;
         $this->isMgx = false;
         $this->isMgl = false;
         $this->isMgz = false;
-        $this->gaiaObjects = array();
-        $this->playerObjects = array();
+        $this->gaiaObjects = [];
+        $this->playerObjects = [];
 
-        $this->tributes = array();
+        $this->tributes = [];
         $this->_headerLen = 0;
         $this->_nextPos = 0;
     }
@@ -252,8 +291,6 @@ class RecordedGame
      *
      * @return void
      * @throws RecAnalystException
-     * @todo input as file contents
-     * @todo figure out $ext based on file contents
      */
     protected function extractStreams($a = null, $b = null)
     {
@@ -326,19 +363,30 @@ class RecordedGame
         }
     }
 
-    public function getHeaderContents() {
+    /**
+     * Return the raw decompressed header contents.
+     *
+     * @return string
+     */
+    public function getHeaderContents()
+    {
         return $this->header;
     }
 
-    public function getBodyContents() {
+    /**
+     * Return the raw body contents.
+     *
+     * @return string
+     */
+    public function getBodyContents()
+    {
         return $this->body;
     }
 
     /**
      * Analyzes header stream.
      *
-     * @return bool True if the stream was analyzed successfully, false otherwise.
-     * @throws RecAnalystException
+     * @return bool
      */
     protected function analyzeHeaderStream()
     {
@@ -361,38 +409,40 @@ class RecordedGame
         $header->readFloat($subVersion);
         $subVersion = round($subVersion, 2);
         switch ($version) {
-        case RecAnalystConst::TRL_93:
-            $gameInfo->gameVersion = $this->isMgx ? GameInfo::VERSION_AOCTRIAL : GameInfo::VERSION_AOKTRIAL;
-            break;
-        case RecAnalystConst::VER_93:
-            $gameInfo->gameVersion = GameInfo::VERSION_AOK;
-            break;
-        case RecAnalystConst::VER_94:
-            if ($this->isMgz) {
-                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch11;
-            } else if ($subVersion > 11.76) {
-                $gameInfo->gameVersion = GameInfo::VERSION_HD;
-            } else {
-                $gameInfo->gameVersion = GameInfo::VERSION_AOC;
-            }
-            break;
-        case RecAnalystConst::VER_95:
-            $gameInfo->gameVersion = GameInfo::VERSION_AOFE21;
-            break;
-        case RecAnalystConst::VER_98:
-            $gameInfo->gameVersion = GameInfo::VERSION_UserPatch12;
-            break;
-        case RecAnalystConst::VER_99:
-            $gameInfo->gameVersion = GameInfo::VERSION_UserPatch13;
-            break;
-        case RecAnalystConst::VER_9A: // RC 1
-        case RecAnalystConst::VER_9B: // RC 2
-        case RecAnalystConst::VER_9C:
-            $gameInfo->gameVersion = GameInfo::VERSION_UserPatch14;
-            break;
-        default:
-            $gameInfo->gameVersion = $version;
-            break;
+            case RecAnalystConst::TRL_93:
+                $gameInfo->gameVersion = $this->isMgx ? GameInfo::VERSION_AOCTRIAL : GameInfo::VERSION_AOKTRIAL;
+                break;
+            case RecAnalystConst::VER_93:
+                $gameInfo->gameVersion = GameInfo::VERSION_AOK;
+                break;
+            case RecAnalystConst::VER_94:
+                if ($this->isMgz) {
+                    $gameInfo->gameVersion = GameInfo::VERSION_UserPatch11;
+                } else if ($subVersion > 11.76) {
+                    $gameInfo->gameVersion = GameInfo::VERSION_HD;
+                } else {
+                    $gameInfo->gameVersion = GameInfo::VERSION_AOC;
+                }
+                break;
+            case RecAnalystConst::VER_95:
+                $gameInfo->gameVersion = GameInfo::VERSION_AOFE21;
+                break;
+            case RecAnalystConst::VER_98:
+                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch12;
+                break;
+            case RecAnalystConst::VER_99:
+                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch13;
+                break;
+            // UserPatch 1.4 RC 1
+            case RecAnalystConst::VER_9A:
+            // UserPatch 1.4 RC 2
+            case RecAnalystConst::VER_9B:
+            case RecAnalystConst::VER_9C:
+                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch14;
+                break;
+            default:
+                $gameInfo->gameVersion = $version;
+                break;
         }
 
         $gameInfo->isUserPatch = $gameInfo->gameVersion >= GameInfo::VERSION_UserPatch11 &&
@@ -433,27 +483,27 @@ class RecordedGame
         }
 
         switch ($gameInfo->gameVersion) {
-        case GameInfo::VERSION_AOK:
-        case GameInfo::VERSION_AOKTRIAL:
-            $this->isMgl = true;
-            $this->isMgx = false;
-            $this->isMgz = false;
-            break;
-        case GameInfo::VERSION_AOC:
-        case GameInfo::VERSION_AOCTRIAL:
-            $this->isMgx = true;
-            $this->isMgl = false;
-            $this->isMgz = false;
-            break;
-        case GameInfo::VERSION_UserPatch11:
-        case GameInfo::VERSION_UserPatch12:
-        case GameInfo::VERSION_UserPatch13:
-        case GameInfo::VERSION_UserPatch14:
-        case GameInfo::VERSION_AOFE21:
-            $this->isMgx = true;
-            $this->isMgl = false;
-            $this->isMgz = true;
-            break;
+            case GameInfo::VERSION_AOK:
+            case GameInfo::VERSION_AOKTRIAL:
+                $this->isMgl = true;
+                $this->isMgx = false;
+                $this->isMgz = false;
+                break;
+            case GameInfo::VERSION_AOC:
+            case GameInfo::VERSION_AOCTRIAL:
+                $this->isMgx = true;
+                $this->isMgl = false;
+                $this->isMgz = false;
+                break;
+            case GameInfo::VERSION_UserPatch11:
+            case GameInfo::VERSION_UserPatch12:
+            case GameInfo::VERSION_UserPatch13:
+            case GameInfo::VERSION_UserPatch14:
+            case GameInfo::VERSION_AOFE21:
+                $this->isMgx = true;
+                $this->isMgl = false;
+                $this->isMgz = true;
+                break;
         }
 
         /* getting Trigger_info position */
@@ -548,12 +598,12 @@ class RecordedGame
             // unknown25
             $header->readInt($unknown25);
             switch ($unknown25) {
-            case 1:
-                $gameSettings->gameType = GameSettings::TYPE_DEATHMATCH;
-                break;
-            case 256:
-                $gameSettings->gameType = GameSettings::TYPE_REGICIDE;
-                break;
+                case 1:
+                    $gameSettings->gameType = GameSettings::TYPE_DEATHMATCH;
+                    break;
+                case 256:
+                    $gameSettings->gameType = GameSettings::TYPE_REGICIDE;
+                    break;
             }
         }
 
@@ -616,7 +666,7 @@ class RecordedGame
         }
 
         /* Other_data */
-        $team_indexes = array();
+        $team_indexes = [];
         for ($i = 0; $i < 8; $i++) {
             $header->readChar($team_indexes[]);
         }
@@ -796,19 +846,17 @@ class RecordedGame
     }
 
     /**
-     * Analyzes body stream.
-     * This method is slower and is not used, just for demonstration.
+     * Analyzes the body stream. There is a faster version of this which is used
+     * instead. This method is only a more readable version for demonstration.
      *
      * @see RecAnalyst::analyzeBodyStreamF()
-     * Both methods have same functionality, but analyzeBodyStream() uses MemoryStream() methods to read bodyStream,
-     * and analyzeBodyStreamF() uses raw string manipulation
-     * @return bool True if the stream was successfully analyzed, false otherwise.
+     * @return bool
      */
     protected function analyzeBodyStream()
     {
         $pos = 0;
         $time_cnt = $this->gameSettings->gameSpeed;
-        $age_flag = array(0, 0, 0, 0, 0, 0, 0, 0);
+        $age_flag = [0, 0, 0, 0, 0, 0, 0, 0];
 
         $body = $this->bodyStream;
         $body->setPosition(0);
@@ -822,223 +870,230 @@ class RecordedGame
             }
             // ope_data types: 4(Game_start or Chat), 2(Sync), or 1(Command)
             switch ($od_type) {
-            // Game_start or Chat command
-            case 0x04:
-            case 0x03:
-                $body->readInt($command);
-                if ($command == 0x01F4) {
-                    // Game_start
-                    if ($this->isMgl) {
-                        $body->skip(28);
-                        $body->readChar($ver);
-                        switch ($ver) {
-                        case 0:
-                            if ($this->gameInfo->gameVersion != GameInfo::VERSION_AOKTRIAL) {
-                                $this->gameInfo->gameVersion = GameInfo::VERSION_AOK20;
+                // Game_start or Chat command
+                case 0x04:
+                case 0x03:
+                    $body->readInt($command);
+                    if ($command == 0x01F4) {
+                        // Game_start
+                        if ($this->isMgl) {
+                            $body->skip(28);
+                            $body->readChar($ver);
+                            switch ($ver) {
+                                case 0:
+                                    if ($this->gameInfo->gameVersion != GameInfo::VERSION_AOKTRIAL) {
+                                        $this->gameInfo->gameVersion = GameInfo::VERSION_AOK20;
+                                    }
+                                    break;
+                                case 1:
+                                    $this->gameInfo->gameVersion = GameInfo::VERSION_AOK20A;
+                                    break;
                             }
-                            break;
-                        case 1:
-                            $this->gameInfo->gameVersion = GameInfo::VERSION_AOK20A;
-                            break;
-                        }
-                        $body->skip(3);
-                    } else {
-                        switch ($od_type) {
-                        case 0x03:
-                            if ($this->gameInfo->gameVersion != GameInfo::VERSION_AOCTRIAL) {
-                                $this->gameInfo->gameVersion = GameInfo::VERSION_AOC10;
-                            }
-                            break;
-                        case 0x04:
-                            if ($this->gameInfo->gameVersion == GameInfo::VERSION_AOC) {
-                                $this->gameInfo->gameVersion = GameInfo::VERSION_AOC10C;
-                            }
-                            break;
-                        }
-                        $body->skip(20);
-                    }
-                } elseif ($command == -1) {
-                    // Chat
-                    foreach ($this->players as $i => $player) {
-                        if ($player->feudalTime != 0 && $player->feudalTime < $time_cnt && $age_flag[$i] < 1) {
-                            // see reading pre-game messages, 0 indicates game's message
-                            $this->ingameChat[] = new ChatMessage($player->feudalTime, null, $player->name . ' advanced to Feudal Age');
-                            $age_flag[$i] = 1;
-                        }
-                        if ($player->castleTime != 0 && $player->castleTime < $time_cnt && $age_flag[$i] < 2) {
-                            $this->ingameChat[] = new ChatMessage($player->castleTime, null, $player->name . ' advanced to Castle Age');
-                            $age_flag[$i] = 2;
-                        }
-                        if ($player->imperialTime != 0 && $player->imperialTime < $time_cnt && $age_flag[$i] < 3) {
-                            $this->ingameChat[] = new ChatMessage($player->imperialTime, null, $player->name . ' advanced to Imperial Age');
-                            $age_flag[$i] = 3;
-                        }
-                    }
-
-                    $body->readString($chat);
-                    // see reading pre-game messages
-                    if ($chat[0] == '@' && $chat[1] == '#' && $chat[2] >= '1' && $chat[2] <= '8') {
-                        $chat = rtrim($chat); // throw null-termination character
-                        if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
-                            // skip messages like "--Warning: You are being under attack... --"
+                            $body->skip(3);
                         } else {
-                            if (!empty($this->players[$chat[2] - 1])) {
-                                $player = $this->players[$chat[2] - 1];
-                            } else {
-                                $player = null;
+                            switch ($od_type) {
+                                case 0x03:
+                                    if ($this->gameInfo->gameVersion != GameInfo::VERSION_AOCTRIAL) {
+                                        $this->gameInfo->gameVersion = GameInfo::VERSION_AOC10;
+                                    }
+                                    break;
+                                case 0x04:
+                                    if ($this->gameInfo->gameVersion == GameInfo::VERSION_AOC) {
+                                        $this->gameInfo->gameVersion = GameInfo::VERSION_AOC10C;
+                                    }
+                                    break;
                             }
-                            $this->ingameChat[] = ChatMessage::create($time_cnt, $player, substr($chat, 3));
+                            $body->skip(20);
+                        }
+                    } elseif ($command == -1) {
+                        // Chat
+                        foreach ($this->players as $i => $player) {
+                            if ($player->feudalTime != 0 && $player->feudalTime < $time_cnt && $age_flag[$i] < 1) {
+                                // see reading pre-game messages, 0 indicates game's message
+                                $this->ingameChat[] = new ChatMessage($player->feudalTime, null, $player->name . ' advanced to Feudal Age');
+                                $age_flag[$i] = 1;
+                            }
+                            if ($player->castleTime != 0 && $player->castleTime < $time_cnt && $age_flag[$i] < 2) {
+                                $this->ingameChat[] = new ChatMessage($player->castleTime, null, $player->name . ' advanced to Castle Age');
+                                $age_flag[$i] = 2;
+                            }
+                            if ($player->imperialTime != 0 && $player->imperialTime < $time_cnt && $age_flag[$i] < 3) {
+                                $this->ingameChat[] = new ChatMessage($player->imperialTime, null, $player->name . ' advanced to Imperial Age');
+                                $age_flag[$i] = 3;
+                            }
+                        }
+
+                        $body->readString($chat);
+                        // see reading pre-game messages
+                        if ($chat[0] == '@' && $chat[1] == '#' && $chat[2] >= '1' && $chat[2] <= '8') {
+                            $chat = rtrim($chat); // throw null-termination character
+                            if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
+                                // skip messages like "--Warning: You are being under attack... --"
+                            } else {
+                                if (!empty($this->players[$chat[2] - 1])) {
+                                    $player = $this->players[$chat[2] - 1];
+                                } else {
+                                    $player = null;
+                                }
+                                $this->ingameChat[] = ChatMessage::create($time_cnt, $player, substr($chat, 3));
+                            }
                         }
                     }
-                }
-                break;
-            // Sync
-            case 0x02:
-                $body->readInt($time);
-                $time_cnt += $time; // time_cnt is in miliseconds
-                $body->readInt($unknown);
-                if ($unknown == 0) {
-                    $body->skip(28);
-                }
-                $body->skip(12);
-                break;
-            // Command
-            case 0x01:
-                $body->readInt($length);
-                $body->readChar($command);
-                $body->skip(-1);
-                switch ($command) {
-                case 0x0B: // player resign
-                    $body->skip(1);
-                    $body->readChar($player_index);
-                    $body->readChar($player_number);
-                    $body->readChar($disconnected);
-                    if (($player = $this->playersByIndex[$player_index]) && $player->resignTime == 0) {
-                        $player->resignTime = $time_cnt;
-                        $this->ingameChat[] = new ChatMessage($time_cnt, null, $player->name . ' resigned');
-                    }
-                    $body->skip($length - 4);
                     break;
-                case 0x65: // researches
+                // Sync
+                case 0x02:
+                    $body->readInt($time);
+                    $time_cnt += $time; // time_cnt is in miliseconds
+                    $body->readInt($unknown);
+                    if ($unknown == 0) {
+                        $body->skip(28);
+                    }
+                    $body->skip(12);
+                    break;
+                // Command
+                case 0x01:
+                    $body->readInt($length);
+                    $body->readChar($command);
+                    $body->skip(-1);
+                    switch ($command) {
+                        // player resign
+                        case 0x0B:
+                            $body->skip(1);
+                            $body->readChar($player_index);
+                            $body->readChar($player_number);
+                            $body->readChar($disconnected);
+                            if (($player = $this->playersByIndex[$player_index]) && $player->resignTime == 0) {
+                                $player->resignTime = $time_cnt;
+                                $this->ingameChat[] = new ChatMessage($time_cnt, null, $player->name . ' resigned');
+                            }
+                            $body->skip($length - 4);
+                            break;
+                        // researches
+                        case 0x65:
+                            $body->skip(4);
+                            $body->readInt($building_id);
+                            $body->readWord($player_id);
+                            $body->readWord($research_id);
+                            if (!($player = $this->playersByIndex[$player_id])) {
+                                $body->skip($length - 12);
+                                break;
+                            }
+                            switch ($research_id) {
+                                case 101:
+                                    $player->feudalTime = $time_cnt + 130000; // + research time
+                                    break;
+                                case 102:
+                                    // persians have faster research time
+                                    $player->castleTime = ($player->civId == Civilization::PERSIANS) ?
+                                        $time_cnt + round(160000 / 1.10) : $time_cnt + 160000;
+                                    break;
+                                case 103:
+                                    // persians have faster research time
+                                    $player->imperialTime = ($player->civId == Civilization::PERSIANS) ?
+                                        $time_cnt + round(190000 / 1.15) : $time_cnt + 190000;
+                                    break;
+                            }
+                            $player->researches[$research_id] = $time_cnt;
+                            $body->skip($length - 12);
+                            break;
+                        // training unit
+                        case 0x77:
+                            $body->skip(4);
+                            $body->readInt($building_id);
+                            $body->readWord($unit_type_id);
+                            $body->readWord($unit_num);
+
+                            if (!isset($this->units[$unit_type_id])) {
+                                $this->units[$unit_type_id] = $unit_num;
+                            } else {
+                                $this->units[$unit_type_id] += $unit_num;
+                            }
+                            $body->skip($length - 12);
+                            break;
+                        // AI trains unit
+                        case 0x64:
+                            $body->skip(10);
+                            $body->readWord($unit_type_id);
+                            $unit_num = 1; // always for pc?
+                            if (!isset($this->units[$unit_type_id])) {
+                                $this->units[$unit_type_id] = $unit_num;
+                            } else {
+                                $this->units[$unit_type_id] += $unit_num;
+                            }
+                            $body->skip($length - 12);
+                            break;
+                        // building
+                        case 0x66:
+                            $body->skip(2);
+                            $body->readWord($player_id);
+                            $body->skip(8);
+                            $body->readWord($building_type_id);
+
+                            if (in_array($building_type_id, RecAnalystConst::$GATE_UNITS)) {
+                                $building_type_id = Unit::GATE;
+                            } elseif (in_array($building_type_id, RecAnalystConst::$PALISADE_GATE_UNITS)) {
+                                $building_type_id = Unit::PALISADE_GATE;
+                            }
+
+                            if (!isset($this->buildings[$player_id][$building_type_id])) {
+                                $this->buildings[$player_id][$building_type_id] = 1;
+                            } else {
+                                $this->buildings[$player_id][$building_type_id]++;
+                            }
+                            $body->skip($length - 14);
+                            break;
+                        // tributing
+                        case 0x6C:
+                            $body->skip(1);
+                            $body->readChar($player_id_from);
+                            $body->readChar($player_id_to);
+                            $body->readChar($resource_id);
+                            $body->readFloat($amount_tributed);
+                            $body->readFloat($market_fee);
+
+                            $playerFrom = $this->playersByIndex[$player_id_from];
+                            $playerTo = $this->playersByIndex[$player_id_to];
+
+                            if ($playerFrom && $playerTo) {
+                                $tribute = new Tribute();
+                                $tribute->time = $time_cnt;
+                                $tribute->playerFrom = $playerFrom;
+                                $tribute->playerTo = $playerTo;
+                                $tribute->resourceId = $resource_id;
+                                $tribute->amount = floor($amount_tributed);
+                                $tribute->fee = $market_fee;
+                                $this->tributes[] = $tribute;
+                            }
+                            $body->skip($length - 12);
+                            break;
+                        // multiplayer postgame data in UP1.4 RC2+
+                        case 0xFF:
+                            $body->skip(1);
+                            $this->readPostgameData($body);
+                            break;
+                        default:
+                            $body->skip($length);
+                            break;
+                    }
                     $body->skip(4);
-                    $body->readInt($building_id);
-                    $body->readWord($player_id);
-                    $body->readWord($research_id);
-                    if (!($player = $this->playersByIndex[$player_id])) {
-                        $body->skip($length - 12);
-                        break;
-                    }
-                    switch ($research_id) {
-                    case 101:
-                        $player->feudalTime = $time_cnt + 130000; // + research time
-                        break;
-                    case 102:
-                        // persians have faster research time
-                        $player->castleTime = ($player->civId == Civilization::PERSIANS) ?
-                            $time_cnt + round(160000 / 1.10) : $time_cnt + 160000;
-                        break;
-                    case 103:
-                        // persians have faster research time
-                        $player->imperialTime = ($player->civId == Civilization::PERSIANS) ?
-                            $time_cnt + round(190000 / 1.15) : $time_cnt + 190000;
-                        break;
-                    }
-                    $player->researches[$research_id] = $time_cnt;
-                    $body->skip($length - 12);
-                    break;
-                case 0x77: // training unit
-                    $body->skip(4);
-                    $body->readInt($building_id);
-                    $body->readWord($unit_type_id);
-                    $body->readWord($unit_num);
-
-                    if (!isset($this->units[$unit_type_id])) {
-                        $this->units[$unit_type_id] = $unit_num;
-                    } else {
-                        $this->units[$unit_type_id] += $unit_num;
-                    }
-                    $body->skip($length - 12);
-                    break;
-                case 0x64: // pc trains unit
-                    $body->skip(10);
-                    $body->readWord($unit_type_id);
-                    $unit_num = 1; // always for pc?
-                    if (!isset($this->units[$unit_type_id])) {
-                        $this->units[$unit_type_id] = $unit_num;
-                    } else {
-                        $this->units[$unit_type_id] += $unit_num;
-                    }
-                    $body->skip($length - 12);
-                    break;
-                case 0x66: // building
-                    $body->skip(2);
-                    $body->readWord($player_id);
-                    $body->skip(8);
-                    $body->readWord($building_type_id);
-
-                    if (in_array($building_type_id, RecAnalystConst::$GATE_UNITS)) {
-                        $building_type_id = Unit::GATE;
-                    } elseif (in_array($building_type_id, RecAnalystConst::$PALISADE_GATE_UNITS)) {
-                        $building_type_id = Unit::PALISADE_GATE;
-                    }
-
-                    if (!isset($this->buildings[$player_id][$building_type_id])) {
-                        $this->buildings[$player_id][$building_type_id] = 1;
-                    } else {
-                        $this->buildings[$player_id][$building_type_id]++;
-                    }
-                    $body->skip($length - 14);
-                    break;
-                case 0x6C: // tributing
-                    $body->skip(1);
-                    $body->readChar($player_id_from);
-                    $body->readChar($player_id_to);
-                    $body->readChar($resource_id);
-                    $body->readFloat($amount_tributed);
-                    $body->readFloat($market_fee);
-
-                    $playerFrom = $this->playersByIndex[$player_id_from];
-                    $playerTo = $this->playersByIndex[$player_id_to];
-
-                    if ($playerFrom && $playerTo) {
-                        $tribute = new Tribute();
-                        $tribute->time = $time_cnt;
-                        $tribute->playerFrom = $playerFrom;
-                        $tribute->playerTo = $playerTo;
-                        $tribute->resourceId = $resource_id;
-                        $tribute->amount = floor($amount_tributed);
-                        $tribute->fee = $market_fee;
-                        $this->tributes[] = $tribute;
-                    }
-                    $body->skip($length - 12);
-                    break;
-                case 0xFF: // multiplayer postgame data in UP1.4 RC2+
-                    $body->skip(1);
-                    $this->readPostgameData($body);
                     break;
                 default:
-                    $body->skip($length);
+                    // detect if this is a header of saved chapter
+                    // sometimes header of the saved chapter is in 0x03 command, instead of 0x20 as it should be,
+                    // when this happens the length of 0x20 command is 0x0E, otherwise it is 0x02 (always?, rule?),
+                    // we do not rely on it, that's why we are skipping saved chapter data here and not in 0x20 command
+                    if ($body->getPosition() === $this->_nextPos - $this->_headerLen - 4) {
+                        /* this is a header of saved chapter data, we have already read next_command_block
+                           that's why -4 in the if-statement */
+                        /* next_pos - header_len = offset of compressed chapter data */
+                        $next_command_block = $od_type;
+                        $body->readInt($this->_nextPos); // next_chapter_pos
+                        $body->setPosition($next_command_block - $this->_headerLen - 8);
+                    } else {
+                        // shouldn't occur, just to prevent unexpected endless cycling
+                        $body->skip(1);
+                    }
                     break;
-                }
-                $body->skip(4);
-                break;
-            default:
-                /* detect if this is a header of saved chapter */
-                /* sometimes header of the saved chapter is in $03 command, instead of $20 as it should be,
-                   when this happens the length of $20 command is $0E, otherwise it is $02 (always?, rule?),
-                   we do not rely on it, that's why we are skipping saved chapter data here and not in $20 command */
-                if ($body->getPosition() === $this->_nextPos - $this->_headerLen - 4) {
-                    /* this is a header of saved chapter data, we have already read next_command_block
-                       that's why -4 in the if-statement */
-                    /* next_pos - header_len = offset of compressed chapter data */
-                    $next_command_block = $od_type;
-                    $body->readInt($this->_nextPos); // next_chapter_pos
-                    $body->setPosition($next_command_block - $this->_headerLen - 8);
-                } else {
-                    // shouldn't occur, just to prevent unexpected endless cycling
-                    $body->skip(1);
-                }
-                break;
             }
         }
 
@@ -1050,17 +1105,14 @@ class RecordedGame
     /**
      * Extended analysis of the PlayerInfo block.
      *
-     * @param int $num_player Amount of player blocks to read.
-     *
-     * @return boolean True if the info blocks were read successfully, false otherwise.
+     * @param  int  $num_player  Amount of player blocks to read.
+     * @return boolean
      */
     protected function readPlayerInfoBlockEx($num_player)
     {
         $exist_object_separator     = pack('c*', 0x0B, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00);
-        $object_end_separator       = pack('c*', 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x80, 0xBF,
-            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
-        $aok_object_end_separator   = pack('c*', 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x80, 0xBF,
-            0x00, 0x00, 0x00, 0x00, 0x00);
+        $object_end_separator       = pack('c*', 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x80, 0xBF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+        $aok_object_end_separator   = pack('c*', 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x80, 0xBF, 0x00, 0x00, 0x00, 0x00, 0x00);
         $player_info_end_separator  = pack('c*', 0x00, 0x0B, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0B);
         $objects_mid_separator_gaia = pack('c*', 0x00, 0x0B, 0x00, 0x40, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00);
 
@@ -1121,7 +1173,7 @@ class RecordedGame
 
                 $player->civId = $civilization;
                 $player->colorId = $player_color;
-                $player->initialState->position = array(round($init_camera_pos_x), round($init_camera_pos_y));
+                $player->initialState->position = [round($init_camera_pos_x), round($init_camera_pos_y)];
                 $player->initialState->food = round($food);
                 $player->initialState->wood = round($wood);
                 $player->initialState->stone = round($stone);
@@ -1153,169 +1205,159 @@ class RecordedGame
             $this->headerStream->skip(strlen($exist_object_separator));
 
             $breakflag = false;
+            $gaiaObjectTypes = [
+                Unit::GOLDMINE, Unit::STONEMINE, Unit::CLIFF1, Unit::CLIFF2,
+                Unit::CLIFF3, Unit::CLIFF4, Unit::CLIFF5, Unit::CLIFF6,
+                Unit::CLIFF7, Unit::CLIFF8, Unit::CLIFF9, Unit::CLIFF10,
+                Unit::FORAGEBUSH
+            ];
+            $herdableTypes = [
+                Unit::RELIC, Unit::DEER, Unit::BOAR,
+                Unit::JAVELINA, Unit::TURKEY, Unit::SHEEP
+            ];
             while (true) {
                 $this->headerStream->readChar($object_type);
                 $this->headerStream->readChar($owner);
                 $this->headerStream->readWord($unit_id);
 
                 switch ($object_type) {
-                case 10:
-                    switch ($unit_id) {
-                    case Unit::GOLDMINE:
-                    case Unit::STONEMINE:
-                    case Unit::CLIFF1:
-                    case Unit::CLIFF2:
-                    case Unit::CLIFF3:
-                    case Unit::CLIFF4:
-                    case Unit::CLIFF5:
-                    case Unit::CLIFF6:
-                    case Unit::CLIFF7:
-                    case Unit::CLIFF8:
-                    case Unit::CLIFF9:
-                    case Unit::CLIFF10:
-                    case Unit::FORAGEBUSH:
-                        $this->headerStream->skip(19);
-                        $this->headerStream->readFloat($pos_x);
-                        $this->headerStream->readFloat($pos_y);
-                        $go = new Unit();
-                        $go->id = $unit_id;
-                        $go->position = array(round($pos_x), round($pos_y));
-                        $this->gaiaObjects[] = $go;
-                        $this->headerStream->skip(-27);
-                        break;
-                    }
-                    $this->headerStream->skip(63-4);
-                    if ($this->isMgl) {
-                        $this->headerStream->skip(1);
-                    }
-                    break;
-                case 20:
-                    if ($this->isMgx) {
-                        $this->headerStream->skip(59);
-                        $this->headerStream->readChar($b);
-                        $this->headerStream->skip(-60);
-                        $this->headerStream->skip(68-4);
-                        if ($b == 2) {
-                            $this->headerStream->skip(34);
+                    case 10:
+                        if (in_array($unit_id, $gaiaObjectTypes)) {
+                            $this->headerStream->skip(19);
+                            $this->headerStream->readFloat($pos_x);
+                            $this->headerStream->readFloat($pos_y);
+                            $go = new Unit();
+                            $go->id = $unit_id;
+                            $go->position = [round($pos_x), round($pos_y)];
+                            $this->gaiaObjects[] = $go;
+                            $this->headerStream->skip(-27);
                         }
-                    } else {
-                        $this->headerStream->skip(103-4);
-                    }
-                    break;
-                case 30:
-                    if ($this->isMgx) {
-                        $this->headerStream->skip(59);
-                        $this->headerStream->readChar($b);
-                        $this->headerStream->skip(-60);
-                        $this->headerStream->skip(204-4);
-                        if ($b == 2) {
-                            $this->headerStream->skip(17);
+                        $this->headerStream->skip(63 - 4);
+                        if ($this->isMgl) {
+                            $this->headerStream->skip(1);
                         }
-                    } else {
-                        $this->headerStream->skip(60);
-                        $this->headerStream->readChar($b);
-                        $this->headerStream->skip(-61);
-                        $this->headerStream->skip(205-4);
-                        if ($b == 2) {
-                            $this->headerStream->skip(17);
+                        break;
+                    case 20:
+                        if ($this->isMgx) {
+                            $this->headerStream->skip(59);
+                            $this->headerStream->readChar($b);
+                            $this->headerStream->skip(-60);
+                            $this->headerStream->skip(68-4);
+                            if ($b == 2) {
+                                $this->headerStream->skip(34);
+                            }
+                        } else {
+                            $this->headerStream->skip(103-4);
                         }
-                    }
-                    break;
-                case 60:
-                    $this->headerStream->skip(204);
-                    $this->headerStream->readChar($b);
-                    $this->headerStream->skip(-205);
-                    $this->headerStream->skip(233-4);
-                    if ($b) {
-                        $this->headerStream->skip(67);
-                    }
-                    break;
-                case 70:
-                    switch ($unit_id) {
-                    case Unit::RELIC:
-                    case Unit::DEER:
-                    case Unit::BOAR:
-                    case Unit::JAVELINA:
-                    case Unit::TURKEY:
-                    case Unit::SHEEP:
-                        $this->headerStream->skip(19);
-                        $this->headerStream->readFloat($pos_x);
-                        $this->headerStream->readFloat($pos_y);
-                        $go = new Unit();
-                        $go->id = $unit_id;
-                        $go->position = array(round($pos_x), round($pos_y));
-                        $this->gaiaObjects[] = $go;
                         break;
-                    }
-                    if ($owner && $unit_id != Unit::TURKEY && $unit_id != Unit::SHEEP) {
-                        // exclude convertable objects
-                        $this->headerStream->skip(19);
-                        $this->headerStream->readFloat($pos_x);
-                        $this->headerStream->readFloat($pos_y);
-                        $uo = new Unit();
-                        $uo->id = $unit_id;
-                        $uo->owner = $owner;
-                        $uo->position = array(round($pos_x), round($pos_y));
-                        $this->playerObjects[] = $uo;
-                    }
-                    if ($this->isMgx) {
-                        $separator_pos = $this->headerStream->find($object_end_separator);
-                        $this->headerStream->skip(strlen($object_end_separator));
-                    } else {
-                        $separator_pos = $this->headerStream->find($aok_object_end_separator);
-                        $this->headerStream->skip(strlen($aok_object_end_separator));
-                    }
-                    if ($separator_pos == -1) {
-                        return false;
-                    }
-                    break;
-                case 80:
-                    if ($owner) {
-                        $this->headerStream->skip(19);
-                        $this->headerStream->readFloat($pos_x);
-                        $this->headerStream->readFloat($pos_y);
-                        $uo = new Unit();
-                        $uo->id = $unit_id;
-                        $uo->owner = $owner;
-                        $uo->position = array(round($pos_x), round($pos_y));
-                        $this->playerObjects[] = $uo;
-                    }
-                    if ($this->isMgx) {
-                        $separator_pos = $this->headerStream->find($object_end_separator);
-                        $this->headerStream->skip(strlen($object_end_separator));
-                    } else {
-                        $separator_pos = $this->headerStream->find($aok_object_end_separator);
-                        $this->headerStream->skip(strlen($aok_object_end_separator));
-                    }
-                    if ($separator_pos == -1) {
-                        return false;
-                    }
-                    $this->headerStream->skip(126);
-                    if ($this->isMgx) {
-                        $this->headerStream->skip(1);
-                    }
-                    break;
-                case 00:
-                    $this->headerStream->skip(-4);
-                    $this->headerStream->readBuffer($buff, strlen($player_info_end_separator));
-                    $this->headerStream->skip(-strlen($player_info_end_separator));
-                    if ($buff == $player_info_end_separator) {
-                        $this->headerStream->skip(strlen($player_info_end_separator));
-                        $breakflag = true;
+                    case 30:
+                        if ($this->isMgx) {
+                            $this->headerStream->skip(59);
+                            $this->headerStream->readChar($b);
+                            $this->headerStream->skip(-60);
+                            $this->headerStream->skip(204-4);
+                            if ($b == 2) {
+                                $this->headerStream->skip(17);
+                            }
+                        } else {
+                            $this->headerStream->skip(60);
+                            $this->headerStream->readChar($b);
+                            $this->headerStream->skip(-61);
+                            $this->headerStream->skip(205-4);
+                            if ($b == 2) {
+                                $this->headerStream->skip(17);
+                            }
+                        }
                         break;
-                    }
+                    case 60:
+                        $this->headerStream->skip(204);
+                        $this->headerStream->readChar($b);
+                        $this->headerStream->skip(-205);
+                        $this->headerStream->skip(233-4);
+                        if ($b) {
+                            $this->headerStream->skip(67);
+                        }
+                        break;
+                    case 70:
+                        if (in_array($unit_id, $herdableTypes)) {
+                            $this->headerStream->skip(19);
+                            $this->headerStream->readFloat($pos_x);
+                            $this->headerStream->readFloat($pos_y);
+                            $go = new Unit();
+                            $go->id = $unit_id;
+                            $go->position = [round($pos_x), round($pos_y)];
+                            $this->gaiaObjects[] = $go;
+                            break;
+                        }
+                        if ($owner && $unit_id != Unit::TURKEY && $unit_id != Unit::SHEEP) {
+                            // exclude convertable objects
+                            $this->headerStream->skip(19);
+                            $this->headerStream->readFloat($pos_x);
+                            $this->headerStream->readFloat($pos_y);
+                            $uo = new Unit();
+                            $uo->id = $unit_id;
+                            $uo->owner = $owner;
+                            $uo->position = [round($pos_x), round($pos_y)];
+                            $this->playerObjects[] = $uo;
+                        }
+                        if ($this->isMgx) {
+                            $separator_pos = $this->headerStream->find($object_end_separator);
+                            $this->headerStream->skip(strlen($object_end_separator));
+                        } else {
+                            $separator_pos = $this->headerStream->find($aok_object_end_separator);
+                            $this->headerStream->skip(strlen($aok_object_end_separator));
+                        }
+                        if ($separator_pos == -1) {
+                            return false;
+                        }
+                        break;
+                    case 80:
+                        if ($owner) {
+                            $this->headerStream->skip(19);
+                            $this->headerStream->readFloat($pos_x);
+                            $this->headerStream->readFloat($pos_y);
+                            $uo = new Unit();
+                            $uo->id = $unit_id;
+                            $uo->owner = $owner;
+                            $uo->position = [round($pos_x), round($pos_y)];
+                            $this->playerObjects[] = $uo;
+                        }
+                        if ($this->isMgx) {
+                            $separator_pos = $this->headerStream->find($object_end_separator);
+                            $this->headerStream->skip(strlen($object_end_separator));
+                        } else {
+                            $separator_pos = $this->headerStream->find($aok_object_end_separator);
+                            $this->headerStream->skip(strlen($aok_object_end_separator));
+                        }
+                        if ($separator_pos == -1) {
+                            return false;
+                        }
+                        $this->headerStream->skip(126);
+                        if ($this->isMgx) {
+                            $this->headerStream->skip(1);
+                        }
+                        break;
+                    case 00:
+                        $this->headerStream->skip(-4);
+                        $this->headerStream->readBuffer($buff, strlen($player_info_end_separator));
+                        $this->headerStream->skip(-strlen($player_info_end_separator));
+                        if ($buff == $player_info_end_separator) {
+                            $this->headerStream->skip(strlen($player_info_end_separator));
+                            $breakflag = true;
+                            break;
+                        }
 
-                    if ($buff[0] == $objects_mid_separator_gaia[0]
-                        && $buff[1] == $objects_mid_separator_gaia[1]
-                    ) {
-                        $this->headerStream->skip(strlen($objects_mid_separator_gaia));
-                    } else {
+                        if ($buff[0] == $objects_mid_separator_gaia[0]
+                            && $buff[1] == $objects_mid_separator_gaia[1]
+                        ) {
+                            $this->headerStream->skip(strlen($objects_mid_separator_gaia));
+                        } else {
+                            return false;
+                        }
+                        break;
+                    default:
                         return false;
-                    }
-                    break;
-                default:
-                    return false;
-                    break;
+                        break;
                 }
                 if ($breakflag) {
                     break;
@@ -1328,8 +1370,7 @@ class RecordedGame
     /**
      * Standard PlayerInfo block analysis. Used for HD.
      *
-     * @param int $num_player Amount of player blocks.
-     *
+     * @param  int  $num_player  Amount of player blocks.
      * @return void
      */
     protected function readPlayerInfoBlock($num_player)
@@ -1393,13 +1434,13 @@ class RecordedGame
             if (!$civilization) {
                 $civilization++;
             }
-            /* skip unknown9[3] */
+            // skip unknown9[3]
             $header->skip(3);
             $header->readChar($player_color);
 
             $player->civId = $civilization;
             $player->colorId = $player_color;
-            $player->initialState->position = array(round($init_camera_pos_x), round($init_camera_pos_y));
+            $player->initialState->position = [round($init_camera_pos_x), round($init_camera_pos_y)];
             $player->initialState->food = round($food);
             $player->initialState->wood = round($wood);
             $player->initialState->stone = round($stone);
@@ -1419,14 +1460,12 @@ class RecordedGame
 
     /**
      * Extracts post-game data (achievements etc) from the body stream.
-     *
      * Post-game data will be set on $this->postgameData.
      *
-     * @param Stream $stream Body stream to extract from.
-     *
+     * @param  Stream  $stream  Body stream to extract from.
      * @return void
      */
-    protected function readPostgameData($stream)
+    protected function readPostgameData(Stream $stream)
     {
         // Prize for ugliest, most boring method of the project goes to…
         $data = new \stdClass;
@@ -1454,13 +1493,13 @@ class RecordedGame
         $stream->readChar($data->lockSpeed);
         $stream->skip(1);
 
-        $players = array();
+        $players = [];
         for ($i = 0; $i < 8; $i++) {
             $playerStats = new \stdClass;
             $stream->read($playerName, 16);
             $playerStats->name = rtrim($playerName);
             $stream->readWord($playerStats->totalScore);
-            $totalScores = array();
+            $totalScores = [];
             for ($j = 0; $j < 8; $j++) {
                 $stream->readWord($totalScores[$j]);
             }
@@ -1546,7 +1585,7 @@ class RecordedGame
             // already built
             return;
         }
-        $teamsByIndex = array();
+        $teamsByIndex = [];
         foreach ($this->players as $player) {
             if ($player->team == 0) {
                 $found = false;
@@ -1621,8 +1660,9 @@ class RecordedGame
         }
 
         if (!empty($this->ingameChat)) {
-            $compareTime = function ($a, $b) { return $a->time - $b->time; };
-            usort($this->ingameChat, $compareTime);
+            usort($this->ingameChat, function ($a, $b) {
+                return $a->time - $b->time;
+            });
         }
 
         if (!empty($this->buildings)) {
@@ -1669,5 +1709,4 @@ class RecordedGame
     {
         return $this->analyzeTime;
     }
-
 }
