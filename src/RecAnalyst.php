@@ -444,9 +444,21 @@ class RecAnalyst
                 $gameInfo->gameSubVersion = '2.8';
             } else if ($subVersion === 11.96) {
                 $gameInfo->gameSubVersion = '3.0';
-            } else if ($subVersion === 12.34) {
-                // TODO Which other versions?
-                $gameInfo->gameSubVersion = '4.???';
+            } else if ($subVersion === 11.97) {
+                $gameInfo->gameSubVersion = '4.0';
+            } else if ($subVersion === 12.2) {
+                // TODO this is probably 4.3, are there other 4.3 $subVersions?
+                $gameInfo->gameSubVersion = '4.??';
+            } else if ($subVersion === 12.31 || $subVersion === 12.34 || $subVersion === 12.37) {
+                // TODO which versions are these?
+                $gameInfo->gameSubVersion = '4.??';
+            } else {
+                // TODO which other $subVersions exist?
+                throw new \Exception(
+                    'Unknown/Unsupported HD file version "' . $subVersion . '". ' .
+                    'Please file a bug at https://github.com/goto-bus-stop/recanalyst/issues ' .
+                    'and attach this recorded game file!'
+                );
             }
         } else if ($gameInfo->gameVersion === GameInfo::VERSION_UserPatch14) {
             if ($version === RecAnalystConst::VER_9A) {
@@ -535,8 +547,8 @@ class RecAnalyst
         $gameSettings->difficultyLevel = $difficulty;
         $gameSettings->lockDiplomacy = $lock_teams;
 
-        // TODO is this really versions ≥12?
-        if ($subVersion >= 12) {
+        // TODO is this really versions ≥12.3?
+        if ($subVersion >= 12.3) {
             // TODO is this always 16? what is in these 16 bytes?
             $header->skip(16);
         }
@@ -652,8 +664,8 @@ class RecAnalyst
             }
         }
 
-        // TODO is <12 the correct cutoff point?
-        if ($subVersion < 12) {
+        // TODO is <12.3 the correct cutoff point?
+        if ($subVersion < 12.3) {
             $header->skip(1);
         }
 
