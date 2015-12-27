@@ -2,7 +2,9 @@
 
 namespace RecAnalyst;
 
-class RecordedGame extends RecAnalyst
+use RecAnalyst\Analyzers\Analyzer;
+
+class RecordedGame
 {
     const MGX_EXT = 'mgx';
     const MGL_EXT = 'mgl';
@@ -166,6 +168,13 @@ class RecordedGame extends RecAnalyst
     public $config = null;
 
     /**
+     * Completed analyses.
+     *
+     * @var array
+     */
+    protected $analyses = [];
+
+    /**
      * File handle to the recorded game file.
      *
      * @var resource
@@ -261,10 +270,45 @@ class RecordedGame extends RecAnalyst
         $this->isMgz = false;
         $this->gaiaObjects = [];
         $this->playerObjects = [];
+        $this->analyses = [];
 
         $this->tributes = [];
         $this->_headerLen = 0;
         $this->_nextPos = 0;
+    }
+
+    /**
+     * Run an analysis on the current game.
+     *
+     * @param  Analyzer  $analyzer
+     * @return mixed
+     */
+    public function runAnalyzer(Analyzer $analyzer)
+    {
+        if (empty($this->header)) {
+            $this->extractStreams();
+        }
+        return $analyzer->analyze($this);
+    }
+
+    /**
+     * Get an analysis result for a specific analyzer, running it if necessary.
+     *
+     * @param  string  $analyzerName
+     * @return mixed
+     */
+    public function getAnalysis($analyzerName, $arg = null, $startAt = 0)
+    {
+        $key = $analyzerName . ':' . $startAt;
+        if (!array_key_exists($key, $this->analyses)) {
+            $analyzer = new $analyzerName($arg);
+            $analyzer->position = $startAt;
+            $result = new \StdClass;
+            $result->analysis = $this->runAnalyzer($analyzer);
+            $result->position = $analyzer->position;
+            $this->analyses[$key] = $result;
+        }
+        return $this->analyses[$key];
     }
 
     public function analyze()
