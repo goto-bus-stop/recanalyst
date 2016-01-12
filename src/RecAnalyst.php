@@ -444,14 +444,10 @@ class RecAnalyst
                 $gameInfo->gameSubVersion = '2.8';
             } else if ($subVersion === 11.96) {
                 $gameInfo->gameSubVersion = '3.0';
-            } else if ($subVersion === 11.97) {
-                $gameInfo->gameSubVersion = '4.0';
-            } else if ($subVersion === 12.2) {
-                // TODO this is probably 4.3, are there other 4.3 $subVersions?
-                $gameInfo->gameSubVersion = '4.??';
-            } else if ($subVersion === 12.31 || $subVersion === 12.34 || $subVersion === 12.37) {
-                // TODO which versions are these?
-                $gameInfo->gameSubVersion = '4.??';
+            } else if ($subVersion >= 11.97) {
+                $gameInfo->gameSubVersion = '3.x';
+            } else if ($subVersion >= 12.3) {
+                $gameInfo->gameSubVersion = '4.x';
             } else {
                 // TODO which other $subVersions exist?
                 throw new \Exception(
