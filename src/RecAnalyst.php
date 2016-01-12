@@ -47,6 +47,8 @@ class RecAnalyst
     const MGL_EXT = 'mgl';
     const MGZ_EXT = 'mgz';
     const MGX2_EXT = 'mgx2';
+    const MSX_EXT = 'msx';
+    const MSX2_EXT = 'msx2';
 
     /**
      * Internal stream containing header information.
@@ -299,6 +301,10 @@ class RecAnalyst
             $this->isMgx = true;
             $this->isMgl = false;
             $this->isMgz = false;
+        } elseif ($ext === self::MSX_EXT || $ext === self::MSX2_EXT) {
+            $this->isMgx = true;
+            $this->isMgl = false;
+            $this->isMgz = false;
         } else {
             throw new RecAnalystException(
                 'Wrong file extension, file format is not supported',
@@ -438,6 +444,17 @@ class RecAnalyst
                 $gameInfo->gameSubVersion = '2.8';
             } else if ($subVersion === 11.96) {
                 $gameInfo->gameSubVersion = '3.0';
+            } else if ($subVersion >= 11.97) {
+                $gameInfo->gameSubVersion = '3.x';
+            } else if ($subVersion >= 12.3) {
+                $gameInfo->gameSubVersion = '4.x';
+            } else {
+                // TODO which other $subVersions exist?
+                throw new \Exception(
+                    'Unknown/Unsupported HD file version "' . $subVersion . '". ' .
+                    'Please file a bug at https://github.com/goto-bus-stop/recanalyst/issues ' .
+                    'and attach this recorded game file!'
+                );
             }
         } else if ($gameInfo->gameVersion === GameInfo::VERSION_UserPatch14) {
             if ($version === RecAnalystConst::VER_9A) {
@@ -525,6 +542,13 @@ class RecAnalyst
 
         $gameSettings->difficultyLevel = $difficulty;
         $gameSettings->lockDiplomacy = $lock_teams;
+
+        // TODO is this really versions ≥12.3?
+        if ($subVersion >= 12.3) {
+            // TODO is this always 16? what is in these 16 bytes?
+            $header->skip(16);
+        }
+
 
         /* getting Player_info data */
         for ($i = 0; $i < 9; $i++) {
@@ -636,7 +660,11 @@ class RecAnalyst
             }
         }
 
-        $header->skip(1);  // always 1?
+        // TODO is <12.3 the correct cutoff point?
+        if ($subVersion < 12.3) {
+            $header->skip(1);
+        }
+
         $header->readInt($reveal_map);
         $header->skip(4);  // always 1?
         $header->readInt($map_size);
