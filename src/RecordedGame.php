@@ -331,6 +331,32 @@ class RecordedGame
     }
 
     /**
+     * Determine the header length if the Header Length field was not set in the
+     * file.
+     */
+    private function manuallyDetermineHeaderLength()
+    {
+        // This separator is part of the Start Game command, which is the very
+        // first command in the recorded game body. It's … reasonably accurate.
+        $separator = pack('c*', 0xF4, 0x01, 0x00, 0x00);
+        // We need to reset the file pointer when we're done
+        $initialBase = ftell($this->fd);
+
+        $base = $initialBase;
+        $buffer = '';
+        while (($buffer = fread($this->fd, 8192)) !== false) {
+            $index = strpos($buffer, $separator);
+            if ($index !== false) {
+                $this->_headerLen = $base + $index - 4;
+                fseek($this->fd, $initialBase);
+                return;
+            }
+            $base += strlen($buffer);
+        }
+        fseek($this->fd, $initialBase);
+    }
+
+    /**
      * Extracts header and body streams from recorded game.
      *
      * @return void
@@ -356,6 +382,9 @@ class RecordedGame
         }
         $unpacked_data = unpack('V', $packed_data);
         $this->_headerLen = $unpacked_data[1];
+        if (!$this->_headerLen) {
+            $this->manuallyDetermineHeaderLength();
+        }
         if (!$this->_headerLen) {
             throw new RecAnalystException(
                 'Header length is zero',
