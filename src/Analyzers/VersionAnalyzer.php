@@ -90,6 +90,7 @@ class VersionAnalyzer extends Analyzer
             // UserPatch 1.4 RC 2
             case 'VER 9.B':
             case 'VER 9.C':
+            case 'VER 9.D':
                 return GameInfo::VERSION_UserPatch14;
             default:
                 return $version;
