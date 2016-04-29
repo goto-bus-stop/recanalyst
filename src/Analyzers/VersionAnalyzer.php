@@ -33,6 +33,10 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOC10C,
     ];
 
+    public $hdVersions = [
+        GameInfo::VERSION_HD
+    ];
+
     /**
      * Read recorded game version metadata.
      *
@@ -56,9 +60,11 @@ class VersionAnalyzer extends Analyzer
 
         $analysis->isTrial = in_array($version, $this->trialVersions);
         $analysis->isAoK = in_array($version, $this->aokVersions);
-        $analysis->isAoC = in_array($version, array_merge($this->aocVersions, $this->userpatchVersions));
+        $analysis->isAoC = in_array($version, array_merge($this->aocVersions, $this->userpatchVersions, $this->hdVersions));
         $analysis->isUserPatch = in_array($version, $this->userpatchVersions);
+        $analysis->isHDEdition = in_array($version, $this->hdVersions);
 
+        $analysis->isMgz = $analysis->isUserPatch;
         $analysis->isMgx = $analysis->isAoC;
         $analysis->isMgl = $analysis->isAoK;
 
@@ -73,9 +79,7 @@ class VersionAnalyzer extends Analyzer
             case 'VER 9.3':
                 return GameInfo::VERSION_AOK;
             case 'VER 9.4':
-                if ($this->isMgz) {
-                    return GameInfo::VERSION_UserPatch11;
-                } else if ($subVersion > 11.76) {
+                if ($subVersion > 11.76) {
                     return GameInfo::VERSION_HD;
                 }
                 return GameInfo::VERSION_AOC;
