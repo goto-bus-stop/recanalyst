@@ -121,18 +121,22 @@ class GameSettings
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($attrs = [])
     {
-        $this->gameType = self::TYPE_RANDOMMAP;
-        $this->mapStyle = self::MAPSTYLE_STANDARD;
         $this->difficultyLevel = self::LEVEL_HARDEST;
         $this->gameSpeed = self::SPEED_NORMAL;
         $this->revealMap = self::REVEAL_NORMAL;
-        $this->mapSize = self::SIZE_TINY;
-        $this->map = '';
-        $this->mapId = $this->popLimit = 0;
-        $this->lockDiplomacy = false;
+        $this->gameType = isset($attrs['gameType']) ? $attrs['gameType'] : self::TYPE_RANDOMMAP;
+        $this->mapStyle = isset($attrs['mapStyle']) ? $attrs['mapStyle'] : self::MAPSTYLE_STANDARD;
+        $this->mapSize = isset($attrs['mapSize']) ? $attrs['mapSize'] : self::SIZE_TINY;
+        $this->mapName = isset($attrs['mapName']) ? $attrs['mapName'] : '';
+        $this->mapId = isset($attrs['mapId']) ? $attrs['mapId'] : 0;
+        $this->popLimit = isset($attrs['popLimit']) ? $attrs['popLimit'] : 0;
+        $this->lockDiplomacy = isset($attrs['lockDiplomacy']) ? $attrs['lockDiplomacy'] : false;
         $this->victory = new VictorySettings();
+
+        // Compatibility
+        $this->map = $this->mapName;
     }
 
     /**
