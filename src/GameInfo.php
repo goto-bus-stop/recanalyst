@@ -71,7 +71,7 @@ class GameInfo
      *
      * @return void
      */
-    public function __construct(RecAnalyst $recanalyst)
+    public function __construct(RecordedGame $recanalyst)
     {
         $this->owner = $recanalyst;
         $this->gameVersion = self::VERSION_UNKNOWN;
@@ -99,7 +99,7 @@ class GameInfo
     {
         // players
         $idx = 0;
-        $team_ary = array(0, 0, 0, 0, 0, 0, 0, 0);
+        $team_ary = [0, 0, 0, 0, 0, 0, 0, 0];
         foreach ($this->owner->teams as $team) {
             foreach ($team->players as $player) {
                 if (!$player->isCooping) {
@@ -108,13 +108,11 @@ class GameInfo
             }
             $idx++;
         }
-        $team_ary = array_diff($team_ary, array(0));
-        if (array_sum($team_ary) === count($this->owner->teams)
-            && count($this->owner->teams) > 2
-        ) {
+        $team_ary = array_diff($team_ary, [0]);
+        if (array_sum($team_ary) === count($this->owner->teams) && count($this->owner->teams) > 2) {
             return 'FFA';
         } else {
-            return implode($team_ary, 'v');
+            return implode('v', $team_ary);
         }
     }
 
@@ -151,7 +149,7 @@ class GameInfo
             return '';
         }
 
-        $names = array();
+        $names = [];
         foreach ($this->owner->players as $player) {
             if ($player === $owner) {
                 continue;
