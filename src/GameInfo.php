@@ -20,10 +20,10 @@ class GameInfo
     const VERSION_AOC10C      = 8;
     // AoConquerors + UserPatch (derp. Weird numbers because I suck.)
     const VERSION_AOFE21      = 10;
-    const VERSION_UserPatch11 = 9;
-    const VERSION_UserPatch12 = 12;
-    const VERSION_UserPatch13 = 13;
-    const VERSION_UserPatch14 = 11;
+    const VERSION_USERPATCH11 = 9;
+    const VERSION_USERPATCH12 = 12;
+    const VERSION_USERPATCH13 = 13;
+    const VERSION_USERPATCH14 = 11;
     // HD Edition
     const VERSION_HD = 14;
 

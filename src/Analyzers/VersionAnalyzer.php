@@ -12,10 +12,10 @@ class VersionAnalyzer extends Analyzer
     ];
 
     public $userpatchVersions = [
-        GameInfo::VERSION_UserPatch11,
-        GameInfo::VERSION_UserPatch12,
-        GameInfo::VERSION_UserPatch13,
-        GameInfo::VERSION_UserPatch14,
+        GameInfo::VERSION_USERPATCH11,
+        GameInfo::VERSION_USERPATCH12,
+        GameInfo::VERSION_USERPATCH13,
+        GameInfo::VERSION_USERPATCH14,
         GameInfo::VERSION_AOFE21,
     ];
 
@@ -86,16 +86,16 @@ class VersionAnalyzer extends Analyzer
             case 'VER 9.5':
                 return GameInfo::VERSION_AOFE21;
             case 'VER 9.8':
-                return GameInfo::VERSION_UserPatch12;
+                return GameInfo::VERSION_USERPATCH12;
             case 'VER 9.9':
-                return GameInfo::VERSION_UserPatch13;
+                return GameInfo::VERSION_USERPATCH13;
             // UserPatch 1.4 RC 1
             case 'VER 9.A':
             // UserPatch 1.4 RC 2
             case 'VER 9.B':
             case 'VER 9.C':
             case 'VER 9.D':
-                return GameInfo::VERSION_UserPatch14;
+                return GameInfo::VERSION_USERPATCH14;
             default:
                 return $version;
         }

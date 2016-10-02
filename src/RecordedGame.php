@@ -490,7 +490,7 @@ class RecordedGame
                 break;
             case RecAnalystConst::VER_94:
                 if ($this->isMgz) {
-                    $gameInfo->gameVersion = GameInfo::VERSION_UserPatch11;
+                    $gameInfo->gameVersion = GameInfo::VERSION_USERPATCH11;
                 } else if ($subVersion > 11.76) {
                     $gameInfo->gameVersion = GameInfo::VERSION_HD;
                 } else {
@@ -501,25 +501,25 @@ class RecordedGame
                 $gameInfo->gameVersion = GameInfo::VERSION_AOFE21;
                 break;
             case RecAnalystConst::VER_98:
-                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch12;
+                $gameInfo->gameVersion = GameInfo::VERSION_USERPATCH12;
                 break;
             case RecAnalystConst::VER_99:
-                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch13;
+                $gameInfo->gameVersion = GameInfo::VERSION_USERPATCH13;
                 break;
             // UserPatch 1.4 RC 1
             case RecAnalystConst::VER_9A:
             // UserPatch 1.4 RC 2
             case RecAnalystConst::VER_9B:
             case RecAnalystConst::VER_9C:
-                $gameInfo->gameVersion = GameInfo::VERSION_UserPatch14;
+                $gameInfo->gameVersion = GameInfo::VERSION_USERPATCH14;
                 break;
             default:
                 $gameInfo->gameVersion = $version;
                 break;
         }
 
-        $gameInfo->isUserPatch = $gameInfo->gameVersion >= GameInfo::VERSION_UserPatch11 &&
-                                 $gameInfo->gameVersion <= GameInfo::VERSION_UserPatch14;
+        $gameInfo->isUserPatch = $gameInfo->gameVersion >= GameInfo::VERSION_USERPATCH11 &&
+                                 $gameInfo->gameVersion <= GameInfo::VERSION_USERPATCH14;
 
         if ($gameInfo->gameVersion === GameInfo::VERSION_HD) {
             if ($subVersion === 11.80) {
@@ -547,7 +547,7 @@ class RecordedGame
                 // TODO which other $subVersions exist?
                 throw new \Exception('Unknown HD file version "' . $subVersion . '".');
             }
-        } else if ($gameInfo->gameVersion === GameInfo::VERSION_UserPatch14) {
+        } else if ($gameInfo->gameVersion === GameInfo::VERSION_USERPATCH14) {
             if ($version === RecAnalystConst::VER_9A) {
                 $gameInfo->gameSubVersion = 'RC1';
             } else if ($version === RecAnalystConst::VER_9B) {
@@ -568,10 +568,10 @@ class RecordedGame
                 $this->isMgl = false;
                 $this->isMgz = false;
                 break;
-            case GameInfo::VERSION_UserPatch11:
-            case GameInfo::VERSION_UserPatch12:
-            case GameInfo::VERSION_UserPatch13:
-            case GameInfo::VERSION_UserPatch14:
+            case GameInfo::VERSION_USERPATCH11:
+            case GameInfo::VERSION_USERPATCH12:
+            case GameInfo::VERSION_USERPATCH13:
+            case GameInfo::VERSION_USERPATCH14:
             case GameInfo::VERSION_AOFE21:
                 $this->isMgx = true;
                 $this->isMgl = false;
