@@ -19,5 +19,12 @@
       "email": "me@idlebeaver.ninja",
       "homepage": "http://idlebeaver.ninja"
     }
-  ]
+  ],
+  "require": {
+    "phpunit/phpunit": "^5.5",
+    "webmozart/path-util": "^2.3"
+  },
+  "scripts": {
+    "test": "phpunit test/*Test.php"
+  }
 }
