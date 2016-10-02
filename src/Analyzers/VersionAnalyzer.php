@@ -63,6 +63,7 @@ class VersionAnalyzer extends Analyzer
         $analysis->isAoC = in_array($version, array_merge($this->aocVersions, $this->userpatchVersions, $this->hdVersions));
         $analysis->isUserPatch = in_array($version, $this->userpatchVersions);
         $analysis->isHDEdition = in_array($version, $this->hdVersions);
+        $analysis->isAoe2Record = $subVersion >= 12.36;
 
         $analysis->isMgz = $analysis->isUserPatch;
         $analysis->isMgx = $analysis->isAoC;

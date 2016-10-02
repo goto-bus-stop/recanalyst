@@ -536,6 +536,8 @@ class RecordedGame
             } else if ($subVersion === 12.34) {
                 // TODO is this correct?
                 $gameInfo->gameSubVersion = '4.6';
+            } else if ($subVersion === 12.36) {
+                $gameInfo->gameSubVersion = '4.6';
             } else {
                 // TODO which other $subVersions exist?
                 throw new \Exception('Unknown HD file version "' . $subVersion . '".');
