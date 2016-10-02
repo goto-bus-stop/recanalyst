@@ -161,13 +161,6 @@ class RecordedGame
     public $tributes;
 
     /**
-     * Configuration object.
-     *
-     * @var Config
-     */
-    public $config = null;
-
-    /**
      * Completed analyses.
      *
      * @var array
