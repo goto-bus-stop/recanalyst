@@ -14,6 +14,8 @@ abstract class Analyzer
         $this->rec = $game;
         $this->header = $game->getHeaderContents();
         $this->body = $game->getBodyContents();
+        $this->headerSize = strlen($this->header);
+        $this->bodySize = strlen($this->body);
 
         return $this->run();
     }
@@ -32,6 +34,9 @@ abstract class Analyzer
 
     protected function readHeader($type, $size)
     {
+        if ($this->position + $size > $this->headerSize) {
+            throw new \Exception('Can\'t read ' . $size . ' bytes');
+        }
         $data = unpack($type, substr($this->header, $this->position, $size));
         $this->position += $size;
         return $data[1];
@@ -39,6 +44,9 @@ abstract class Analyzer
 
     protected function readHeaderRaw($size)
     {
+        if ($this->position + $size > $this->headerSize) {
+            throw new \Exception('Can\'t read ' . $size . ' bytes');
+        }
         $data = substr($this->header, $this->position, $size);
         $this->position += $size;
         return $data;
