@@ -160,6 +160,8 @@ class HeaderAnalyzer extends Analyzer
             $mapData[$y] = [];
             for ($x = 0; $x < $mapSizeX; $x += 1) {
                 $mapData[$y][$x] = new Tile(
+                    $x,
+                    $y,
                     /* terrainId */ ord($this->header[$this->position]),
                     /* elevation */ ord($this->header[$this->position + 1])
                 );
