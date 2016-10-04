@@ -4,7 +4,6 @@ namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Map;
 use RecAnalyst\Tile;
-use RecAnalyst\Player;
 use RecAnalyst\GameInfo;
 use RecAnalyst\ChatMessage;
 use RecAnalyst\GameSettings;
@@ -43,13 +42,8 @@ class HeaderAnalyzer extends Analyzer
         $difficulty = $this->readHeader('l', 4);
         $lockTeams = $this->readHeader('L', 4);
 
-        $players = [];
-        for ($i = 0; $i <= 8; $i += 1) {
-            $player = $this->readPlayerMeta();
-            if ($player->humanRaw === 0 || $player->humanRaw === 1) {
-                continue;
-            }
-            $players[] = $player;
+        $players = $this->read(PlayerMetaAnalyzer::class);
+        foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
         }
         $analysis->players = $players;
@@ -215,37 +209,6 @@ class HeaderAnalyzer extends Analyzer
         $analysis->playerInfo = $playerInfo;
 
         return $analysis;
-    }
-
-    /**
-     * Reads a player meta info block for a single player. This just includes
-     * their nickname, index and "human" status. More information about players
-     * is stored later on in the recorded game file and is read by the
-     * PlayerInfoBlockAnalyzer.
-     *
-     * Player meta structure:
-     *     int32 index;
-     *     int32 human; // indicates whether player is AI/human/spectator
-     *     uint32 nameLength;
-     *     char name[nameLength];
-     *
-     * @return \RecAnalyst\Player
-     */
-    protected function readPlayerMeta()
-    {
-        $player = new Player();
-        $player->index = $this->readHeader('l', 4);
-        $human = $this->readHeader('l', 4);
-        $length = $this->readHeader('L', 4);
-        if ($length) {
-            $player->name = $this->readHeaderRaw($length);
-        } else {
-            $player->name = '';
-        }
-        $player->humanRaw = $human;
-        $player->human = $human === 0x02;
-        $player->spectator = $human === 0x06;
-        return $player;
     }
 
     /**
