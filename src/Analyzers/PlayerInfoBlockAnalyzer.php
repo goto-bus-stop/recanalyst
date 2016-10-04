@@ -47,11 +47,17 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         foreach ($players as $p) {
             $playersByIndex[$p->index] = $p;
         }
-        for ($i = 0; $i < count($players); $i++) { // first is GAIA
+
+        // Add GAIA
+        $numPlayers = $this->analysis->numPlayers + 1;
+        $gaia = new Player;
+        $gaia->name = 'GAIA';
+
+        for ($i = -1; $i < count($players); $i++) { // first is GAIA
             // skip GAIA playername
-            $player = $players[$i];
+            $player = $i >= 0 ? $players[$i] : $gaia;
             // skip cooping player, they have no data in Player_info
-            $coopPlayer = $playersByIndex[$player->index];
+            $coopPlayer = $i >= 0 ? $playersByIndex[$player->index] : null;
 
             if ($coopPlayer && ($coopPlayer !== $player) && $coopPlayer->civId) {
                 $player->civId = $coopPlayer->civId;
@@ -63,7 +69,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             if ($version->isTrial) {
                 $this->position += 4;
             }
-            $this->position += $this->analysis->numPlayers + 43;
+            $this->position += $numPlayers + 43;
 
             // skip playername
             $playerNameLen = $this->readHeader('v', 2);
@@ -77,18 +83,26 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             // headroom = (house capacity - population)
             $headroom = $this->readHeader('f', 4);
             $this->position += 4;
-            // Starting Age. Note: PostImperial Age = Imperial Age here
-            $data6 = $this->readHeader('f', 4);
+            // Post-Imperial Age = Imperial Age here
+            $startingAge = $this->readHeader('f', 4);
             $this->position += 16;
             $population = $this->readHeader('f', 4);
             $this->position += 100;
             $civilianPop = $this->readHeader('f', 4);
             $this->position += 8;
             $militaryPop = $this->readHeader('f', 4);
-            $this->position += $version->isMgx ? 629 : 593;
+            if ($version->isMgx) {
+                $this->position += 629;
+            } else {
+                $this->position += 593;
+            }
             $initCameraX = $this->readHeader('f', 4);
             $initCameraY = $this->readHeader('f', 4);
-            $this->position += $version->isMgx ? 9 : 5;
+            if ($version->isMgx) {
+                $this->position += 9;
+            } else {
+                $this->position += 5;
+            }
             $civilization = ord($this->header[$this->position]);
             if (!$civilization) {
                 $civilization = 1;
@@ -104,7 +118,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             $player->initialState->wood = round($wood);
             $player->initialState->stone = round($stone);
             $player->initialState->gold = round($gold);
-            $player->initialState->startingAge = round($data6);
+            $player->initialState->startingAge = round($startingAge);
             $player->initialState->houseCapacity = round($headroom) + round($population);
             $player->initialState->population = round($population);
             $player->initialState->civilianPop = round($civilianPop);
@@ -116,7 +130,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             if ($version->isTrial) {
                 $this->position += 4;
             }
-            $this->position += $this->analysis->numPlayers + 70;
+            $this->position += $numPlayers + 70;
             $this->position += $version->isMgx ? 792 : 756;
             $this->position += $version->isMgx ? 41249 : 34277;
             $this->position += $mapSizeX * $mapSizeY;
