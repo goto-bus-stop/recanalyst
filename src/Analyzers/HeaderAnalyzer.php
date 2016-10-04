@@ -212,6 +212,7 @@ class HeaderAnalyzer extends Analyzer
         $analysis->mapData = $mapData;
         $analysis->gameSettings = new GameSettings($gameSettings);
         $analysis->gameInfo = $gameInfo;
+        $analysis->playerInfo = $playerInfo;
 
         return $analysis;
     }

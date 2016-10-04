@@ -158,7 +158,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             ];
             while (!$done) {
                 $objectType = ord($this->header[$this->position]);
-                $owner = ord($this->header[$this->position + 1]);
+
+                $owner = null;
+                $ownerId = null;
+                if ($objectType !== 0) {
+                    $ownerId = ord($this->header[$this->position + 1]);
+                    $owner = $ownerId === 0 ? $gaia : $playersByIndex[$ownerId];
+                }
+
                 $this->position += 2;
                 $unitId = $this->readHeader('v', 2);
 
