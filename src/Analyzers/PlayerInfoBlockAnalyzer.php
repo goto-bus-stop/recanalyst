@@ -182,6 +182,8 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position -= 27;
                         }
                         $this->position += 63 - 4;
+                        // TODO HD only?
+                        $this->position += 3;
                         if ($version->isMgl) {
                             $this->position += 1;
                         }
@@ -203,13 +205,16 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         if ($version->isMgx) {
                             $b = ord($this->header[$this->position + 59]);
                             $this->position += 204 - 4;
-                            if ($b == 2) {
+                            // TODO what is this? It's necessary for HD records,
+                            // is it a difference between HD and earlier versions?
+                            $this->position += 3;
+                            if ($b === 2) {
                                 $this->position += 17;
                             }
                         } else {
                             $b = ord($this->header[$this->position + 60]);
                             $this->position += 205 - 4;
-                            if ($b == 2) {
+                            if ($b === 2) {
                                 $this->position += 17;
                             }
                         }
