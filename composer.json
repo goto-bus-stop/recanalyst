@@ -26,6 +26,6 @@
     "intervention/image": "^2.3"
   },
   "scripts": {
-    "test": "phpunit test/*Test.php"
+    "test": "phpunit test"
   }
 }
