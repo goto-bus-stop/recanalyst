@@ -305,7 +305,13 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                 }
             }
         }
-        return true;
+
+        return (object) [
+            'gaia' => $players[0],
+            'players' => array_slice($players, 1),
+            'gaiaObjects' => $this->gaiaObjects,
+            'playerObjects' => $this->playerObjects,
+        ];
     }
 
     private function analyzeSimple($e = null)
