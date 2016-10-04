@@ -70,7 +70,11 @@ class HeaderAnalyzer extends Analyzer
         $this->position = $triggerInfoPos + 1;
         $this->skipTriggerInfo();
 
-        $teamIndices = array_map('ord', str_split($this->readHeaderRaw(8)));
+        $teamIndices = [];
+        for ($i = 0; $i < 8; $i += 1) {
+            $teamIndices[$i] = ord($this->header[$this->position + $i]);
+        }
+        $this->position += 8;
 
         foreach ($analysis->players as $i => $player) {
             $player->team = $teamIndices[$i] - 1;
@@ -183,24 +187,30 @@ class HeaderAnalyzer extends Analyzer
 
         $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
 
-        $gameSettings = new GameSettings([
+        $gameSettings = [
             'gameType' => $gameType,
             'gameSpeed' => $gameSpeed,
-            'mapId' => $mapId,
-            'mapName' => isset(RecAnalystConst::$MAPS[$mapId]) ? RecAnalystConst::$MAPS[$mapId] : null,
-            'mapStyle' => $this->getMapStyle($mapId),
             'mapSize' => $mapSize,
             // UserPatch stores the actual population limit divided by 25.
             'popLimit' => $version->isUserPatch ? $popLimit * 25 : $popLimit,
-            'lockDiplomacy' => $lockDiplomacy
-        ]);
+        ];
+
+        if (!$version->isAoK) {
+            $gameSettings = array_merge($gameSettings, [
+                'mapId' => $mapId,
+                'mapName' => isset(RecAnalystConst::$MAPS[$mapId]) ?
+                    RecAnalystConst::$MAPS[$mapId] : null,
+                'mapStyle' => $this->getMapStyle($mapId),
+                'lockDiplomacy' => $lockDiplomacy,
+            ]);
+        }
 
         $gameInfo = new GameInfo($this->rec);
         $gameInfo->gameVersion = $version->version;
         $gameInfo->gameSubVersion = $version->subVersion;
 
         $analysis->mapData = $mapData;
-        $analysis->gameSettings = $gameSettings;
+        $analysis->gameSettings = new GameSettings($gameSettings);
         $analysis->gameInfo = $gameInfo;
 
         return $analysis;

@@ -22,7 +22,8 @@
   ],
   "require": {
     "phpunit/phpunit": "^5.5",
-    "webmozart/path-util": "^2.3"
+    "webmozart/path-util": "^2.3",
+    "intervention/image": "^2.3"
   },
   "scripts": {
     "test": "phpunit test/*Test.php"

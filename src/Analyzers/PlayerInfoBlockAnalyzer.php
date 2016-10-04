@@ -10,6 +10,8 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 {
     private $analysis;
     private $version;
+    private $gaiaObjects = [];
+    private $playerObjects = [];
 
     public function __construct($analysis)
     {
@@ -138,12 +140,22 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             // getting exist_object_pos
             $existObjectPos = strpos($this->header, $existObjectSeparator, $this->position);
             if ($existObjectPos === false) {
-                return false;
+                throw new \Exception('Could not find existObjectSeparator');
             } else {
                 $this->position = $existObjectPos + strlen($existObjectSeparator);
             }
 
             $done = false;
+            $gaiaObjectTypes = [
+                Unit::GOLDMINE, Unit::STONEMINE, Unit::CLIFF1, Unit::CLIFF2,
+                Unit::CLIFF3, Unit::CLIFF4, Unit::CLIFF5, Unit::CLIFF6,
+                Unit::CLIFF7, Unit::CLIFF8, Unit::CLIFF9, Unit::CLIFF10,
+                Unit::FORAGEBUSH
+            ];
+            $herdableTypes = [
+                Unit::RELIC, Unit::DEER, Unit::BOAR,
+                Unit::JAVELINA, Unit::TURKEY, Unit::SHEEP
+            ];
             while (!$done) {
                 $objectType = ord($this->header[$this->position]);
                 $owner = ord($this->header[$this->position + 1]);
@@ -152,29 +164,15 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
                 switch ($objectType) {
                     case 10:
-                        switch ($unitId) {
-                            case Unit::GOLDMINE:
-                            case Unit::STONEMINE:
-                            case Unit::CLIFF1:
-                            case Unit::CLIFF2:
-                            case Unit::CLIFF3:
-                            case Unit::CLIFF4:
-                            case Unit::CLIFF5:
-                            case Unit::CLIFF6:
-                            case Unit::CLIFF7:
-                            case Unit::CLIFF8:
-                            case Unit::CLIFF9:
-                            case Unit::CLIFF10:
-                            case Unit::FORAGEBUSH:
-                                $this->position += 19;
-                                $posX = $this->readHeader('f', 4);
-                                $posY = $this->readHeader('f', 4);
-                                $go = new Unit();
-                                $go->id = $unitId;
-                                $go->position = [round($posX), round($posY)];
-                                $this->gaiaObjects[] = $go;
-                                $this->position -= 27;
-                                break;
+                        if (in_array($unitId, $gaiaObjectTypes)) {
+                            $this->position += 19;
+                            $posX = $this->readHeader('f', 4);
+                            $posY = $this->readHeader('f', 4);
+                            $go = new Unit();
+                            $go->id = $unitId;
+                            $go->position = [round($posX), round($posY)];
+                            $this->gaiaObjects[] = $go;
+                            $this->position -= 27;
                         }
                         $this->position += 63 - 4;
                         if ($version->isMgl) {
@@ -217,21 +215,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         }
                         break;
                     case 70:
-                        switch ($unitId) {
-                            case Unit::RELIC:
-                            case Unit::DEER:
-                            case Unit::BOAR:
-                            case Unit::JAVELINA:
-                            case Unit::TURKEY:
-                            case Unit::SHEEP:
-                                $this->position += 19;
-                                $posX = $this->readHeader('f', 4);
-                                $posY = $this->readHeader('f', 4);
-                                $go = new Unit();
-                                $go->id = $unitId;
-                                $go->position = [round($posX), round($posY)];
-                                $this->gaiaObjects[] = $go;
-                                break;
+                        if (in_array($unitId, $herdableTypes)) {
+                            $this->position += 19;
+                            $posX = $this->readHeader('f', 4);
+                            $posY = $this->readHeader('f', 4);
+                            $go = new Unit();
+                            $go->id = $unitId;
+                            $go->position = [round($posX), round($posY)];
+                            $this->gaiaObjects[] = $go;
                         }
                         if ($owner && $unitId != Unit::TURKEY && $unitId != Unit::SHEEP) {
                             // exclude convertable objects
@@ -252,7 +243,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position = $separatorPos + strlen($aokObjectEndSeparator);
                         }
                         if ($separatorPos == -1) {
-                            return false;
+                            throw new \Exception('Could not find object end separator');
                         }
                         break;
                     case 80:
@@ -274,7 +265,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position = $separatorPos + strlen($aokObjectEndSeparator);
                         }
                         if ($separatorPos == -1) {
-                            return false;
+                            throw new \Exception('Could not find object end separator');
                         }
                         $this->position += 126;
                         if ($version->isMgx) {
@@ -284,6 +275,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                     case 00:
                         $this->position -= 4;
                         $buff = $this->readHeaderRaw(strlen($playerInfoEndSeparator));
+
                         if ($buff === $playerInfoEndSeparator) {
                             $done = true;
                             break;
@@ -293,11 +285,11 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         if ($buff[0] === $objectsMidSeparatorGaia[0] && $buff[1] === $objectsMidSeparatorGaia[1]) {
                             $this->position += strlen($objectsMidSeparatorGaia);
                         } else {
-                            return false;
+                            throw new \Exception('Could not find GAIA object separator');
                         }
                         break;
                     default:
-                        return false;
+                        throw new \Exception(sprintf('Unknown object type %d', $objectType));
                 }
             }
         }
@@ -306,6 +298,6 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
     private function analyzeSimple($e = null)
     {
-        throw new \Exception('Unimplemented');
+        throw new \Exception('Unimplemented', 0, $e);
     }
 }
