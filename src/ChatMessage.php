@@ -1,19 +1,13 @@
 <?php
-/**
- * Defines ChatMessage class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * The ChatMessage class represents a single chat message in the game.
- *
- * @package RecAnalyst
+ * The ChatMessage class represents a single chat message sent before or during
+ * the game.
  */
-class ChatMessage {
-
+class ChatMessage
+{
     /**
      * Sent time in milliseconds since the start of the game.
      *
@@ -48,11 +42,11 @@ class ChatMessage {
     /**
      * Class constructor.
      *
-     * @param int    $time   When this message was sent, in milliseconds since the start of the game.
-     * @param Player $player Player that sent the message.
-     * @param string $msg    Message content.
-     * @param string $group  Group this message was directed to.
-     *
+     * @param int  $time  When this message was sent, in milliseconds since the
+     *     start of the game.
+     * @param Player  $player  Player that sent the message.
+     * @param string  $msg  Message content.
+     * @param string  $group  Group this message was directed to.
      * @return void
      */
     public function __construct($time = 0, Player $player = null, $msg = '', $group = '')
@@ -66,17 +60,17 @@ class ChatMessage {
     /**
      * Helper method to create a chat message from a chat string more easily.
      *
-     * Messages actually have the player name and sometimes a group specifier (<Team>, <Enemy>, etc)
-     * included in their message body which is lame. Sometimes players that don't end up in the
-     * player info blocks of the recorded games sent messages anyway (particularly pre-game chat by people
+     * Messages actually have the player name and sometimes a group specifier
+     * (<Team>, <Enemy>, etc) included in their message body which is lame.
+     * Sometimes players that don't end up in the player info blocks of the
+     * recorded games sent messages anyway (particularly pre-game chat by people
      * who joined the multiplayer lobby and then left) so we deal with that too.
      *
-     * @param int    $time   Time at which this message was sent in milliseconds since the start of the game.
-     * @param Player $player Message Sender.
-     * @param string $chat   Message contents.
-     *
+     * @param int  $time  Time at which this message was sent in milliseconds
+     *    since the start of the game.
+     * @param Player  $player  Message Sender.
+     * @param string  $chat  Message contents.
      * @return ChatMessage
-     * @static
      */
     public static function create($time, $player, $chat)
     {

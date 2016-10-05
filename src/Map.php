@@ -1,16 +1,9 @@
 <?php
-/**
- * Defines built-in Maps constant class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
  * Some map constants.
- *
- * @package RecAnalyst
  */
 class Map
 {

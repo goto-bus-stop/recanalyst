@@ -1,20 +1,12 @@
 <?php
-/**
- * Defines VictorySettings class.
- *
- * @package recAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * Class Victory.
- *
  * Victory implements game's victory settings.
- * @package recAnalyst
  */
-class VictorySettings {
-
+class VictorySettings
+{
     const STANDARD   = 0;
     const CONQUEST   = 1;
     const TIMELIMIT  = 2;
@@ -23,36 +15,43 @@ class VictorySettings {
 
     /**
      * Time limit.
+     *
      * @var int
      */
     public $_timeLimit;
 
     /**
      * Score limit.
+     *
      * @var int
      */
     public $_scoreLimit;
 
     /**
      * Victory condition.
+     *
      * @var int
      */
     public $_victoryCondition;
 
     /**
      * Class constructor.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->_timeLimit = $this->_scoreLimit = 0;
         $this->_victoryCondition = self::STANDARD;
     }
 
     /**
      * Returns victory string.
+     *
      * @return string
      */
-    public function getVictoryString() {
+    public function getVictoryString()
+    {
         if (!isset(RecAnalystConst::$VICTORY_CONDITIONS[$this->_victoryCondition])) {
             return '';
         }

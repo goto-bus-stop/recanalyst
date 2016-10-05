@@ -1,17 +1,10 @@
 <?php
-/**
- * Defines Archive class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * Class Archive.
  * Archive implements Zip archive containing recorded games.
  *
- * @package RecAnalyst
  * @todo rar extension support
  * @todo test for server zlib/zip extension support
  * @todo be useful (i.e. have analyze methods on this analyze all included recs etc)
@@ -21,18 +14,21 @@ class Archive
 
     /**
      * Contains entry details.
+     *
      * @var array
      */
     protected $stats;
 
     /**
      * Zip file archive.
+     *
      * @var ZipArchive
      */
     protected $zip;
 
     /**
      * Determines if the archive is open.
+     *
      * @var bool
      */
     protected $open;
@@ -49,7 +45,7 @@ class Archive
      */
     public function __construct()
     {
-        $this->stats = array();
+        $this->stats = [];
         $this->zip = new \ZipArchive();
         $this->open = false;
     }
@@ -57,8 +53,7 @@ class Archive
     /**
      * Opens a file archive.
      *
-     * @param string $filename The file name of the archive to open.
-     *
+     * @param  string  $filename The file name of the archive to open.
      * @return void
      * @throws Exception
      */
@@ -84,11 +79,10 @@ class Archive
     }
 
     /**
-     * Get a file handler to the entry defined by its name.
+     * Get a file handle to the entry defined by its name.
      *
-     * @param string $name The name of the entry to use.
-     *
-     * @return resource|bool File pointer (resource) on success or false on failure.
+     * @param string  $name  The name of the entry to use.
+     * @return resource|bool
      * @throws Exception
      */
     public function getFileHandler($name)
@@ -102,8 +96,7 @@ class Archive
     /**
      * Returns the entry contents using its name.
      *
-     * @param string $name The name of the entry.
-     *
+     * @param  string  $name  The name of the entry.
      * @return mixed The contents of the entry on success or false on failure.
      * @throws Exception
      */
@@ -119,7 +112,6 @@ class Archive
      * Get the details of the entries in the archive.
      *
      * @return void
-     *
      * @throws Exception
      */
     protected function getDetails()

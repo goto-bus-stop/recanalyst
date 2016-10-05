@@ -1,16 +1,9 @@
 <?php
-/**
- * Defines GameInfo class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
  * GameInfo holds metadata about the analyzed game.
- *
- * @package RecAnalyst
  */
 class GameInfo
 {
@@ -27,10 +20,10 @@ class GameInfo
     const VERSION_AOC10C      = 8;
     // AoConquerors + UserPatch (derp. Weird numbers because I suck.)
     const VERSION_AOFE21      = 10;
-    const VERSION_UserPatch11 = 9;
-    const VERSION_UserPatch12 = 12;
-    const VERSION_UserPatch13 = 13;
-    const VERSION_UserPatch14 = 11;
+    const VERSION_USERPATCH11 = 9;
+    const VERSION_USERPATCH12 = 12;
+    const VERSION_USERPATCH13 = 13;
+    const VERSION_USERPATCH14 = 11;
     // HD Edition
     const VERSION_HD = 14;
 
@@ -46,7 +39,7 @@ class GameInfo
      * @see Const\GameVersion
      */
     public $gameVersion;
-    
+
     /**
      * Game sub-version. E.g., Game version = HD, Game sub-version = 3.0.
      * @var int
@@ -78,7 +71,7 @@ class GameInfo
      *
      * @return void
      */
-    public function __construct(RecAnalyst $recanalyst)
+    public function __construct(RecordedGame $recanalyst)
     {
         $this->owner = $recanalyst;
         $this->gameVersion = self::VERSION_UNKNOWN;
@@ -106,7 +99,7 @@ class GameInfo
     {
         // players
         $idx = 0;
-        $team_ary = array(0, 0, 0, 0, 0, 0, 0, 0);
+        $team_ary = [0, 0, 0, 0, 0, 0, 0, 0];
         foreach ($this->owner->teams as $team) {
             foreach ($team->players as $player) {
                 if (!$player->isCooping) {
@@ -115,13 +108,11 @@ class GameInfo
             }
             $idx++;
         }
-        $team_ary = array_diff($team_ary, array(0));
-        if (array_sum($team_ary) === count($this->owner->teams)
-            && count($this->owner->teams) > 2
-        ) {
+        $team_ary = array_diff($team_ary, [0]);
+        if (array_sum($team_ary) === count($this->owner->teams) && count($this->owner->teams) > 2) {
             return 'FFA';
         } else {
-            return implode($team_ary, 'v');
+            return implode('v', $team_ary);
         }
     }
 
@@ -158,7 +149,7 @@ class GameInfo
             return '';
         }
 
-        $names = array();
+        $names = [];
         foreach ($this->owner->players as $player) {
             if ($player === $owner) {
                 continue;

@@ -1,22 +1,13 @@
 <?php
-/**
- * Defines InitialState class.
- *
- * @package RecAnalyst
- */
 
 namespace RecAnalyst;
 
 /**
- * Class InitialState.
- *
- * InitialState implements initial state of a player.
- *
- * @package RecAnalyst
+ * InitialState represents the initial state of a player, including resources
+ * and population.
  */
 class InitialState
 {
-
     const DARKAGE         = 0;
     const FEUDALAGE       = 1;
     const CASTLEAGE       = 2;
@@ -24,67 +15,78 @@ class InitialState
     const POSTIMPERIALAGE = 4;
 
     /**
-     * Initial food.
+     * Initial food
+     *
      * @var int
      */
     public $food;
 
     /**
      * Initial wood
+     *
      * @var int
      */
     public $wood;
 
     /**
      * Initial stone.
+     *
      * @var int
      */
     public $stone;
 
     /**
      * Initial gold.
+     *
      * @var int
      */
     public $gold;
 
     /**
      * Starting age.
+     *
      * @var int
      */
     public $startingAge;
 
     /**
      * Initial house capacity.
+     *
      * @var int
      */
     public $houseCapacity;
 
     /**
      * Initial population.
+     *
      * @var int
      */
     public $population;
 
     /**
      * Initial civilian population.
+     *
      * @var int
      */
     public $civilianPop;
 
     /**
      * Initial military population.
+     *
      * @var int
      */
     public $militaryPop;
 
     /**
      * Initial extra population.
+     *
      * @var int
      */
     public $extraPop;
 
     /**
      * Initial position.
+     *
      * @var array
      */
     public $position;
@@ -100,7 +102,7 @@ class InitialState
         $this->startingAge = self::DARKAGE;
         $this->houseCapacity = 0;
         $this->population = $this->civilianPop = $this->militaryPop = $this->extraPop = 0;
-        $this->position = array(0, 0);
+        $this->position = [0, 0];
     }
 
     /**
