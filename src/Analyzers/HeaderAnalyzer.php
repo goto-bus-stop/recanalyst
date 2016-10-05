@@ -3,6 +3,7 @@
 namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Map;
+use RecAnalyst\Team;
 use RecAnalyst\Tile;
 use RecAnalyst\GameInfo;
 use RecAnalyst\ChatMessage;
@@ -181,6 +182,8 @@ class HeaderAnalyzer extends Analyzer
 
         $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
 
+        $analysis->teams = $this->buildTeams($players);
+
         $gameSettings = [
             'gameType' => $gameType,
             'gameSpeed' => $gameSpeed,
@@ -306,5 +309,58 @@ class HeaderAnalyzer extends Analyzer
         }
         // TODO add case for the "Special" maps in the HD expansion packs
         return GameSettings::MAPSTYLE_STANDARD;
+    }
+
+    /**
+     * Group players into teams.
+     *
+     * @param \RecAnalyst\Player[]  $players  Array of players.
+     *
+     * @return \RecAnalyst\Team[]
+     */
+    protected function buildTeams($players)
+    {
+        $teams = [];
+        $teamsByIndex = [];
+        foreach ($players as $player) {
+            /**
+             * Team = 0 can mean two things: either this player has no team,
+             * i.e. is in a team on their own, or this player is cooping with
+             * another player who _is_ part of a team.
+             */
+            if ($player->team == 0) {
+                $found = false;
+                foreach ($this->teams as $team) {
+                    if ($team->getIndex() != $player->team) {
+                        continue;
+                    }
+                    foreach ($team->players as $coopPlayer) {
+                        if ($coopPlayer->index == $player->index) {
+                            $team->addPlayer($player);
+                            $found = true;
+                            break;
+                        }
+                    }
+                }
+                // Not a cooping player, so add them to their own team.
+                if (!$found) {
+                    $team = new Team();
+                    $team->addPlayer($player);
+                    $teams[] = $team;
+                    $teamsByIndex[$player->team] = $team;
+                }
+            } else {
+                if (array_key_exists($player->team, $teamsByIndex)) {
+                    $teamsByIndex[$player->team]->addPlayer($player);
+                } else {
+                    $team = new Team();
+                    $team ->addPlayer($player);
+                    $teams[] = $team;
+                    $teamsByIndex[$player->team] = $team;
+                }
+            }
+        }
+
+        return $teams;
     }
 }
