@@ -330,7 +330,7 @@ class HeaderAnalyzer extends Analyzer
              */
             if ($player->team == 0) {
                 $found = false;
-                foreach ($this->teams as $team) {
+                foreach ($teams as $team) {
                     if ($team->getIndex() != $player->team) {
                         continue;
                     }
