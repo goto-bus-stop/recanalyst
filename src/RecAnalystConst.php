@@ -271,22 +271,6 @@ class RecAnalystConst
     ];
 
     /**
-     * Player colours.
-     *
-     * @var array
-     */
-    public static $COLORS = [
-        0x00 => '#0000ff',
-        0x01 => '#ff0000',
-        0x02 => '#00ff00',
-        0x03 => '#ffff00',
-        0x04 => '#00ffff',
-        0x05 => '#ff00ff',
-        0x06 => '#b9b9b9',
-        0x07 => '#ff8201',
-    ];
-
-    /**
      * Resource names.
      *
      * @var array
@@ -659,98 +643,6 @@ class RecAnalystConst
     ];
 
     /**
-     * Terrain colours.
-     *
-     * @var array
-     */
-    public static $TERRAIN_COLORS = [
-        [0x33, 0x97, 0x27],
-        [0x30, 0x5d, 0xb6],
-        [0xe8, 0xb4, 0x78],
-        [0xe4, 0xa2, 0x52],
-        [0x54, 0x92, 0xb0],
-        [0x33, 0x97, 0x27],
-        [0xe4, 0xa2, 0x52],
-        [0x82, 0x88, 0x4d],//
-        [0x82, 0x88, 0x4d],//
-        [0x33, 0x97, 0x27],
-        [0x15, 0x76, 0x15],
-        [0xe4, 0xa2, 0x52],
-        [0x33, 0x97, 0x27],
-        [0x15, 0x76, 0x15],
-        [0xe8, 0xb4, 0x78],
-        [0x30, 0x5d, 0xb6],//
-        [0x33, 0x97, 0x27],//
-        [0x15, 0x76, 0x15],
-        [0x15, 0x76, 0x15],
-        [0x15, 0x76, 0x15],
-        [0x15, 0x76, 0x15],
-        [0x15, 0x76, 0x15],
-        [0x00, 0x4a, 0xa1],
-        [0x00, 0x4a, 0xbb],
-        [0xe4, 0xa2, 0x52],
-        [0xe4, 0xa2, 0x52],
-        [0xff, 0xec, 0x49],//
-        [0xe4, 0xa2, 0x52],
-        [0x30, 0x5d, 0xb6],//
-        [0x82, 0x88, 0x4d],//
-        [0x82, 0x88, 0x4d],//
-        [0x82, 0x88, 0x4d],//
-        [0xc8, 0xd8, 0xff],
-        [0xc8, 0xd8, 0xff],
-        [0xc8, 0xd8, 0xff],
-        [0x98, 0xc0, 0xf0],
-        [0xc8, 0xd8, 0xff],//
-        [0x98, 0xc0, 0xf0],
-        [0xc8, 0xd8, 0xff],
-        [0xc8, 0xd8, 0xff],
-        [0xe4, 0xa2, 0x52],
-    ];
-
-    /**
-     * Gaia Object colours.
-     *
-     * @var array
-     */
-    public static $OBJECT_COLORS = [
-        Unit::GOLDMINE   => [0xff, 0xc7, 0x00],
-        Unit::STONEMINE  => [0x91, 0x91, 0x91],
-        Unit::CLIFF1     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF2     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF3     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF4     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF5     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF6     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF7     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF8     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF9     => [0x71, 0x4b, 0x33],
-        Unit::CLIFF10    => [0x71, 0x4b, 0x33],
-        Unit::RELIC      => [0xff, 0xff, 0xff],
-        Unit::TURKEY     => [0xa5, 0xc4, 0x6c],
-        Unit::SHEEP      => [0xa5, 0xc4, 0x6c],
-        Unit::DEER       => [0xa5, 0xc4, 0x6c],
-        Unit::BOAR       => [0xa5, 0xc4, 0x6c],
-        Unit::JAVELINA   => [0xa5, 0xc4, 0x6c],
-        Unit::FORAGEBUSH => [0xa5, 0xc4, 0x6c],
-    ];
-
-    /**
-     * Player colours as [R,G,B] arrays.
-     *
-     * @var array
-     */
-    public static $PLAYER_COLORS = [
-        0 => [0x00, 0x00, 0xff],
-        1 => [0xff, 0x00, 0x00],
-        2 => [0x00, 0xff, 0x00],
-        3 => [0xff, 0xff, 0x00],
-        4 => [0x00, 0xff, 0xff],
-        5 => [0xff, 0x00, 0xff],
-        6 => [0xb9, 0xb9, 0xb9],
-        7 => [0xff, 0x82, 0x01],
-    ];
-
-    /**
      * Real world map IDs.
      *
      * @var array
@@ -766,47 +658,5 @@ class RecAnalystConst
         Map::NORSELANDS,
         Map::SEAOFJAPAN,
         Map::BYZANTINUM,
-    ];
-
-    /**
-     * Cliff unit IDs.
-     *
-     * @var array
-     */
-    public static $CLIFF_UNITS = [
-        Unit::CLIFF1,
-        Unit::CLIFF2,
-        Unit::CLIFF3,
-        Unit::CLIFF4,
-        Unit::CLIFF5,
-        Unit::CLIFF6,
-        Unit::CLIFF7,
-        Unit::CLIFF8,
-        Unit::CLIFF9,
-        Unit::CLIFF10,
-    ];
-
-    /**
-     * Gate unit IDs.
-     *
-     * @var array
-     */
-    public static $GATE_UNITS = [
-        Unit::GATE,
-        Unit::GATE2,
-        Unit::GATE3,
-        Unit::GATE4,
-    ];
-
-    /**
-     * Palisade gate unit IDs.
-     *
-     * @var array
-     */
-    public static $PALISADE_GATE_UNITS = [
-        Unit::PALISADE_GATE,
-        Unit::PALISADE_GATE2,
-        Unit::PALISADE_GATE3,
-        Unit::PALISADE_GATE4,
     ];
 }
