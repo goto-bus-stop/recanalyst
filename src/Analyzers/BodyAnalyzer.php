@@ -60,6 +60,7 @@ class BodyAnalyzer extends Analyzer
     private $chatMessages = [];
     private $units = [];
     private $buildings = [];
+    private $postGameData = null;
 
     protected function run()
     {
@@ -240,6 +241,7 @@ class BodyAnalyzer extends Analyzer
         $analysis->chatMessages = $this->chatMessages;
         $analysis->units = $this->units;
         $analysis->buildings = $this->buildings;
+        $analysis->postGameData = $this->postGameData;
 
         return $analysis;
     }

@@ -204,6 +204,7 @@ class HeaderAnalyzer extends Analyzer
         $gameInfo->gameSubVersion = $version->subVersion;
 
         $analysis->mapData = $mapData;
+        $analysis->pregameChat = $pregameChat;
         $analysis->gameSettings = new GameSettings($gameSettings);
         $analysis->gameInfo = $gameInfo;
         $analysis->playerInfo = $playerInfo;
