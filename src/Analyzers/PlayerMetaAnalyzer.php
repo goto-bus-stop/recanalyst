@@ -61,7 +61,7 @@ class PlayerMetaAnalyzer extends Analyzer
 
     private function seek()
     {
-        $version = $this->get(VersionAnalyzer::class)->analysis;
+        $version = $this->get(VersionAnalyzer::class);
 
         $constant2 = pack('c*', 0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0xF9, 0x3F);
         $separator = pack('c*', 0x9D, 0xFF, 0xFF, 0xFF);

@@ -64,10 +64,10 @@ class BodyAnalyzer extends Analyzer
 
     protected function run()
     {
-        $this->version = $this->get(VersionAnalyzer::class)->analysis;
+        $this->version = $this->get(VersionAnalyzer::class);
         $version = $this->version;
 
-        $players = $this->get(PlayerMetaAnalyzer::class)->analysis;
+        $players = $this->get(PlayerMetaAnalyzer::class);
         $playersByIndex = [];
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;

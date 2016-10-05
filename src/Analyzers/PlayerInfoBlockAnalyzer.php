@@ -20,7 +20,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
     protected function run()
     {
-        $this->version = $this->get(VersionAnalyzer::class)->analysis;
+        $this->version = $this->get(VersionAnalyzer::class);
         try {
             return $this->analyzeExtended();
         } catch (Exception $e) {

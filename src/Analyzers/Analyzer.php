@@ -22,7 +22,7 @@ abstract class Analyzer
 
     protected function get($analyzer, $arg = null)
     {
-        return $this->rec->getAnalysis($analyzer, $arg);
+        return $this->rec->getAnalysis($analyzer, $arg)->analysis;
     }
 
     protected function read($analyzer, $arg = null)
