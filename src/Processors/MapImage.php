@@ -190,8 +190,11 @@ class MapImage
         }
 
         foreach ($header->playerInfo->gaiaObjects as $obj) {
-            $c = $this->gaiaColors[$obj->id];
-            $image->pixel($c, $obj->position[0], $obj->position[1]);
+            $color = $this->gaiaColors[$obj->id];
+            list ($x, $y) = $obj->position;
+            $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
+                $shape->background($color);
+            });
         }
 
         if ($this->showPositions) {
