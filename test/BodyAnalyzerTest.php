@@ -24,7 +24,7 @@ class BodyAnalyzerTest extends TestCase
             ['./recs/versions/aok.mgl'],
             ['./recs/versions/HD_test.mgx'],
             ['./recs/versions/HD-FE.mgx2'],
-            ['./recs/up1.4.mgz'],
+            ['./recs/versions/up1.4.mgz'],
         ];
     }
 }
