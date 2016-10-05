@@ -36,6 +36,16 @@ class HeaderAnalyzerTest extends TestCase
                 ['team' => 2, 'name' => 'JJEL'],
                 ['team' => 2, 'name' => 'SudsNDeath'],
             ]],
+            ['./recs/versions/aok.mgl', [
+                ['team' => 1, 'name' => 'AoE2_K_Master'],
+                ['team' => 2, 'name' => 'Elsakar'],
+                ['team' => 1, 'name' => 'AOKH_Washizu'],
+                ['team' => 2, 'name' => 'Baked_potato_'],
+            ]],
+            ['./recs/versions/up1.4.mgz', [
+                ['name' => 'Zuppi'],
+                ['name' => 'JorDan_23'],
+            ]],
         ];
     }
 }
