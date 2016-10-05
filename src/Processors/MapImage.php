@@ -189,7 +189,9 @@ class MapImage
             }
         }
 
-        foreach ($header->playerInfo->gaiaObjects as $obj) {
+        $gaiaObjects = $this->sortObjects($header->playerInfo->gaiaObjects);
+
+        foreach ($gaiaObjects as $obj) {
             $color = $this->gaiaColors[$obj->id];
             list ($x, $y) = $obj->position;
             $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
@@ -225,5 +227,46 @@ class MapImage
         }
 
         return $image->rotate(45, [0, 0, 0, 0]);
+    }
+
+    /**
+     * Sort GAIA objects for a good draw order. Relics are important, and show
+     * on top of everything else; cliffs are lines (so interruptions are OK) and
+     * show below everything else.
+     */
+    private function sortObjects($objects)
+    {
+        static $CLIFF_UNITS = [
+            Unit::CLIFF1,
+            Unit::CLIFF2,
+            Unit::CLIFF3,
+            Unit::CLIFF4,
+            Unit::CLIFF5,
+            Unit::CLIFF6,
+            Unit::CLIFF7,
+            Unit::CLIFF8,
+            Unit::CLIFF9,
+            Unit::CLIFF10,
+        ];
+
+        usort($objects, function ($item1, $item2) use (&$CLIFF_UNITS) {
+            // relics show on top of everything else
+            if ($item1->id === Unit::RELIC && $item2->id !== Unit::RELIC) {
+                return 1;
+            }
+            // cliffs show below everything else
+            if (in_array($item1->id, $CLIFF_UNITS) && !in_array($item2->id, $CLIFF_UNITS)) {
+                return -1;
+            }
+            if ($item2->id === Unit::RELIC && $item1->id !== Unit::RELIC) {
+                return -1;
+            }
+            if (in_array($item2->id, $CLIFF_UNITS) && !in_array($item1->id, $CLIFF_UNITS)) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return $objects;
     }
 }
