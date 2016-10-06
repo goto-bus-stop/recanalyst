@@ -4,9 +4,18 @@ namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Player;
 
+/**
+ * Analyze the small player metadata block. Can be composed or run
+ * independently.
+ */
 class PlayerMetaAnalyzer extends Analyzer
 {
-    public function run()
+    /**
+     * Run the analysis.
+     *
+     * @return \RecAnalyst\Player[] Players.
+     */
+    protected function run()
     {
         $isComposed = $this->position > 0;
         if (!$isComposed) {
@@ -59,6 +68,9 @@ class PlayerMetaAnalyzer extends Analyzer
         return $player;
     }
 
+    /**
+     * Find the position of the small player metadata block.
+     */
     private function seek()
     {
         $version = $this->get(VersionAnalyzer::class);

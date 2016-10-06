@@ -9,8 +9,6 @@ namespace RecAnalyst;
  */
 class Civilization
 {
-    const NONE       = 0;
-
     /**
      * Not instantiable.
      *

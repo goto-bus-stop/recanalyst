@@ -9,111 +9,52 @@ namespace RecAnalyst;
  */
 class Player
 {
-    /**
-     * Player's name.
-     *
-     * @var string
-     */
+    /** @var string Player's name. */
     public $name;
 
-    /**
-     * Player's index.
-     *
-     * @var int
-     */
+    /** @var int Player's index. */
     public $index;
 
-    /**
-     * Defines if the player is a human.
-     *
-     * @var bool
-     */
+    /** @var bool Defines if the player is a human. */
     public $human;
 
-    /**
-     * Defines if the player is a spectator.
-     *
-     * @var bool
-     */
+    /** @var bool Defines if the player is a spectator. */
     public $spectator;
 
-    /**
-     * Defines player's team index (0 = no team).
-     *
-     * @var int
-     */
+    /** @var int Defines player's team index (0 = no team). */
     public $team;
 
-    /**
-     * Defines if player is an owner of the game.
-     *
-     * @var bool
-     */
+    /** @var bool Defines if player is an owner of the game. */
     public $owner;
 
-    /**
-     * Id of player's civilization.
-     *
-     * @var int
-     * @see Civilization
-     */
+    /** @var int ID of player's civilization. */
     public $civId;
 
-    /**
-     * Id of player's color.
-     *
-     * @var int
-     */
+    /** @var int Player color ID. */
     public $colorId;
 
-    /**
-     * Indicates if the player is cooping in the game.
-     *
-     * @var bool true if player coops, otherwise false
-     */
+    /** @var bool Indicates if the player is cooping in the game. */
     public $isCooping;
 
-    /**
-     * Player's feudal time (in ms, 0 if hasn't been reached).
-     *
-     * @var int
-     */
+    /** @var int Player's feudal time (in ms, 0 if hasn't been reached). */
     public $feudalTime;
 
-    /**
-     * Player's castle time (in ms).
-     *
-     * @var int
-     */
+    /** @var int Player's castle time (in ms). */
     public $castleTime;
 
-    /**
-     * Player's imperial time (in ms).
-     *
-     * @var int
-     */
+    /** @var int Player's imperial time (in ms). */
     public $imperialTime;
 
-    /**
-     * Player's resign time (in ms) or 0 if player hasn't been resigned.
-     *
-     * @var int
-     */
+    /** @var int Player's resign time (in ms) or 0 if player hasn't been resigned. */
     public $resignTime;
 
     /**
-     * An array of player's researches.
-     * An associative array containing "research id - time of research" pairs.
-     *
-     * @var array
+     * @var array An array of player's researches containing "research id =>
+     *     time of research" pairs.
      */
     public $researches;
 
-    /**
-     * Player's initial state.
-     *
-     * @var InitialState
-     */
+    /** @var \RecAnalyst\InitialState Player's initial state. */
     public $initialState;
 
     /**

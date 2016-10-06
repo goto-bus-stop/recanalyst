@@ -8,35 +8,21 @@ namespace RecAnalyst;
  */
 class ChatMessage
 {
-    /**
-     * Sent time in milliseconds since the start of the game.
-     *
-     * @var int
-     */
+    /** @var int Sent time in milliseconds since the start of the game. */
     public $time;
 
     /**
-     * Player who sent this message.
+     * @var \RecAnalyst\Player Player who sent this message.
      * This might be a player that is not actually in the game, if they joined
      * the lobby but left before the game started. In that case the Player
      * object will be empty except for `$name`.
-     *
-     * @var Player
      */
     public $player;
 
-    /**
-     * Message text.
-     *
-     * @var string
-     */
+    /** @var string Message text. */
     public $msg;
 
-    /**
-     * Group at which this chat is directed (<Team>, <Enemy>, <All>), if any.
-     *
-     * @var string
-     */
+    /** @var string Group at which this chat is directed (<Team>, <Enemy>, <All>), if any. */
     public $group;
 
     /**

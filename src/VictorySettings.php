@@ -13,25 +13,13 @@ class VictorySettings
     const SCORELIMIT = 3;
     const CUSTOM     = 4;
 
-    /**
-     * Time limit.
-     *
-     * @var int
-     */
+    /** @var int Time limit. */
     public $_timeLimit;
 
-    /**
-     * Score limit.
-     *
-     * @var int
-     */
+    /** @var int Score limit. */
     public $_scoreLimit;
 
-    /**
-     * Victory condition.
-     *
-     * @var int
-     */
+    /** @var int Victory condition. */
     public $_victoryCondition;
 
     /**

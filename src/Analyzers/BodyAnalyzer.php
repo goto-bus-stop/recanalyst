@@ -8,6 +8,9 @@ use RecAnalyst\ChatMessage;
 use RecAnalyst\RecordedGame;
 use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
 
+/**
+ * Analyzer for most things in a recorded game file body.
+ */
 class BodyAnalyzer extends Analyzer
 {
     const OP_COMMAND = 0x01;
@@ -30,14 +33,26 @@ class BodyAnalyzer extends Analyzer
     const RESEARCH_CASTLE = 102;
     const RESEARCH_IMPERIAL = 103;
 
+    /** @var object Game version information. */
     private $version = null;
+    /** @var int Current game time in ms. */
     private $currentTime = 0;
+    /** @var Tribute[] Tributes sent during the game. */
     private $tributes = [];
+    /** @var ChatMessage[] Chat messages sent during the game. */
     private $chatMessages = [];
+    /** @var array Amount of units of each type built during the game. */
     private $units = [];
+    /** @var array Amount of buildings of each type built during the game. */
     private $buildings = [];
+    /** @var object|null Post-game data, such as achievements. */
     private $postGameData = null;
 
+    /**
+     * Run the analysis.
+     *
+     * @return object
+     */
     protected function run()
     {
         $pack = $this->rec->getResourcePack();
@@ -219,6 +234,9 @@ class BodyAnalyzer extends Analyzer
         return $analysis;
     }
 
+    /**
+     * Process the game start data. Not much here right now.
+     */
     private function processGameStart()
     {
         if ($this->version->isMgl) {
@@ -230,6 +248,9 @@ class BodyAnalyzer extends Analyzer
         }
     }
 
+    /**
+     * Read a chat message.
+     */
     private function processChatMessage()
     {
         $length = $this->readBody('l', 4);
@@ -259,6 +280,9 @@ class BodyAnalyzer extends Analyzer
         }
     }
 
+    /**
+     * Read a Sync packet.
+     */
     private function processSync()
     {
         $this->currentTime += $this->readBody('l', 4);

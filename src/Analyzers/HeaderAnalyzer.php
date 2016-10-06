@@ -10,9 +10,17 @@ use RecAnalyst\ChatMessage;
 use RecAnalyst\GameSettings;
 use RecAnalyst\RecAnalystConst;
 
+/**
+ * Analyzer for most things in a recorded game file header.
+ */
 class HeaderAnalyzer extends Analyzer
 {
-    public function run()
+    /**
+     * Run the analysis.
+     *
+     * @return object
+     */
+    protected function run()
     {
         $constant2 = pack('c*', 0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0xF9, 0x3F);
         $separator = pack('c*', 0x9D, 0xFF, 0xFF, 0xFF);

@@ -6,18 +6,34 @@ use RecAnalyst\Player;
 use RecAnalyst\Unit;
 use RecAnalyst\GameInfo;
 
+/**
+ * Analyze extended player information blocks. Should only be composed with the
+ * HeaderAnalyzer for now.
+ */
 class PlayerInfoBlockAnalyzer extends Analyzer
 {
+    /** @var object Parent analysis. */
     private $analysis;
+    /** @var object Game version information. */
     private $version;
+    /** @var \RecAnalyst\Unit[] Units owned by GAIA at the start of the game. */
     private $gaiaObjects = [];
+    /** @var \RecAnalyst\Unit[] Units owned by players at the start of the game. */
     private $playerObjects = [];
 
+    /**
+     * @param object  $analysis  Current state of the HeaderAnalyzer.
+     */
     public function __construct($analysis)
     {
         $this->analysis = $analysis;
     }
 
+    /**
+     * Run the analysis.
+     *
+     * @return object
+     */
     protected function run()
     {
         $this->version = $this->get(VersionAnalyzer::class);
@@ -28,6 +44,11 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         }
     }
 
+    /**
+     * Analyze an extended player info block, including unit data.
+     *
+     * @return object
+     */
     private function analyzeExtended()
     {
         $existObjectSeparator = pack('c*', 0x0B, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00);
@@ -303,6 +324,11 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         ];
     }
 
+    /**
+     * Analyze a simple player info block, in case the extended analysis fails.
+     *
+     * (Does nothing at the moment.)
+     */
     private function analyzeSimple($e = null)
     {
         throw new \Exception('Unimplemented', 0, $e);

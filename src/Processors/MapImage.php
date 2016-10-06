@@ -7,15 +7,22 @@ use RecAnalyst\RecordedGame;
 use RecAnalyst\Analyzers\HeaderAnalyzer;
 use RecAnalyst\ResourcePacks\AgeOfEmpires\Unit;
 
+/**
+ * Generate a top-down map image that shows the starting state of the game.
+ */
 class MapImage
 {
     /**
-     * @var RecAnalyst\RecordedGame
+     * Recorded game file to use.
+     *
+     * @var \RecAnalyst\RecordedGame
      */
     private $rec;
 
     /**
-     * @var Intervention\Image\ImageManager
+     * Image manager to use.
+     *
+     * @var \Intervention\Image\ImageManager
      */
     private $imageManager;
 
@@ -137,6 +144,9 @@ class MapImage
      * Sort GAIA objects for a good draw order. Relics are important, and show
      * on top of everything else; cliffs are lines (so interruptions are OK) and
      * show below everything else.
+     *
+     * @param array  $objects  Unsorted GAIA objects.
+     * @return array Sorted GAIA objects.
      */
     private function sortObjects($objects)
     {

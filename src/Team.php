@@ -7,16 +7,10 @@ namespace RecAnalyst;
  */
 class Team
 {
-    /**
-     * Team's index.
-     *
-     * @var int
-     */
+    /** @var int Team's index. */
     private $index;
 
-    /**
-     * @var array
-     */
+    /** @var array Players in this team. */
     public $players;
 
     /**

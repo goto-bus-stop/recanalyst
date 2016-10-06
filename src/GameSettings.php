@@ -38,82 +38,37 @@ class GameSettings
     const MODE_SINGLEPLAYER = 0;
     const MODE_MULTIPLAYER = 1;
 
-    /**
-     * Game type.
-     *
-     * @var int
-     */
+    /** @var int Game type. */
     public $gameType;
 
-    /**
-     * Map style.
-     *
-     * @var int
-     */
+    /** @var int Map style. */
     public $mapStyle;
 
-    /**
-     * Difficulty level.
-     *
-     * @var int
-     */
+    /** @var int Difficulty level. */
     public $difficultyLevel;
 
-    /**
-     * Game speed.
-     *
-     * @var int
-     */
+    /** @var int Game speed. */
     public $gameSpeed;
 
-    /**
-     * Reveal Map setting.
-     *
-     * @var int
-     */
+    /** @var int Reveal Map setting. */
     public $revealMap;
 
-    /**
-     * Map size.
-     *
-     * @var int
-     */
+    /** @var int Map size. */
     public $mapSize;
 
-    /**
-     * Map id.
-     *
-     * @var int
-     * @see Map
-     */
+    /** @var int Map ID. */
     public $mapId;
 
-    /**
-     * Map.
-     *
-     * @var string
-     */
+    /** @var string Map name. */
     public $map;
 
-    /**
-     * Population limit.
-     *
-     * @var int
-     */
+    /** @var int Population limit. */
     public $popLimit;
 
-    /**
-     * Diplomacy lock status.
-     *
-     * @var bool
-     */
+    /** @var bool Diplomacy lock status. */
     public $lockDiplomacy;
 
-    /**
-     * Victory settings.
-     *
-     * @var Victory
-     */
+    /** @var \RecAnalyst\VictorySettings Victory settings. */
     public $victory;
 
     /**

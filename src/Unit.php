@@ -6,27 +6,21 @@ namespace RecAnalyst;
  */
 class Unit
 {
-    /**
-     * Id of the player who owns this unit. Zero if GAIA.
-     *
-     * @var int
-     */
+    /** @var int ID of the player who owns this unit. Zero if GAIA. */
     public $owner = 0;
 
-    /**
-     * Unit type ID.
-     *
-     * @var int
-     */
+    /** @var int Unit type ID. */
     public $id = 0;
 
-    /**
-     * Unit location.
-     *
-     * @var array
-     */
+    /** @var array Unit location, `[$x, $y]`. */
     public $position = [0, 0];
 
+    /**
+     * Create a new Unit.
+     *
+     * @param int  $id  Unit type ID.
+     * @param int[]  $position  Position as `[$x, $y]` coordinates.
+     */
     public function __construct($id, $position = [0, 0])
     {
         $this->id = $id;

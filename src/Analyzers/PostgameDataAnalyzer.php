@@ -6,15 +6,11 @@ use RecAnalyst\Player;
 use RecAnalyst\Unit;
 use RecAnalyst\GameInfo;
 
+/**
+ * Analyze a UserPatch post-game data block, containing achievements.
+ */
 class PostgameDataAnalyzer extends Analyzer
 {
-    private $analysis;
-
-    public function __construct($analysis)
-    {
-        $this->analysis = $analysis;
-    }
-
     protected function run()
     {
         // Prize for ugliest, most boring method of the project goes to…

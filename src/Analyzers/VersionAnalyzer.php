@@ -4,13 +4,18 @@ namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\GameInfo;
 
+/**
+ * Determine the game version that created the recorded game file.
+ */
 class VersionAnalyzer extends Analyzer
 {
+    /** @var int[] Trial game version IDs. */
     public $trialVersions = [
         GameInfo::VERSION_AOKTRIAL,
         GameInfo::VERSION_AOCTRIAL,
     ];
 
+    /** @var int[] UserPatch game version IDs. */
     public $userpatchVersions = [
         GameInfo::VERSION_USERPATCH11,
         GameInfo::VERSION_USERPATCH12,
@@ -19,6 +24,7 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOFE21,
     ];
 
+    /** @var int[] Age of Kings game version IDs. */
     public $aokVersions = [
         GameInfo::VERSION_AOK,
         GameInfo::VERSION_AOKTRIAL,
@@ -26,6 +32,7 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOK20A,
     ];
 
+    /** @var int[] Age of Conquerors expansion game version IDs. */
     public $aocVersions = [
         GameInfo::VERSION_AOC,
         GameInfo::VERSION_AOCTRIAL,
@@ -33,6 +40,7 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOC10C,
     ];
 
+    /** @var int[] HD Edition game version IDs. */
     public $hdVersions = [
         GameInfo::VERSION_HD
     ];
@@ -46,7 +54,7 @@ class VersionAnalyzer extends Analyzer
      *
      * @return object
      */
-    public function run()
+    protected function run()
     {
         $versionString = rtrim($this->readHeaderRaw(8));
         $subVersion = round($this->readHeader('f', 4), 2);
@@ -72,7 +80,15 @@ class VersionAnalyzer extends Analyzer
         return $analysis;
     }
 
-    public function getVersion($version, $subVersion)
+    /**
+     * Get the version ID from a version string and sub-version number.
+     *
+     * @param string  $version  Version string, found at the start of the file
+     *     header.
+     * @param float  $subVersion  Sub-version number.
+     * @return int Game version ID.
+     */
+    private function getVersion($version, $subVersion)
     {
         switch ($version) {
             case 'TRL 9.3':

@@ -5,117 +5,27 @@ namespace RecAnalyst;
 use RecAnalyst\Analyzers\Analyzer;
 use RecAnalyst\ResourcePacks\ResourcePack;
 
+/**
+ * Represents a recorded game file.
+ */
 class RecordedGame
 {
-    /**
-     * List of teams in the game.
-     *
-     * @var TeamList
-     */
-    public $teams;
-
-    /**
-     * Chat messages sent during the game.
-     *
-     * @var array
-     */
-    public $ingameChat;
-
-    /**
-     * An associative array containing "unit_type_id - unit_num" pairs.
-     *
-     * @var array
-     */
-    public $units;
-
-    /**
-     * An associative multi-dimensional array containing building_type_id → building_num
-     * pairs for each player.
-     *
-     * @var array
-     */
-    public $buildings;
-
-    /**
-     * Elapsed time for analyzing in milliseconds.
-     *
-     * @var int
-     */
+    /** @var int Elapsed time for analyzing in milliseconds. */
     protected $analyzeTime;
 
-    /**
-     * Whether the file being analyzed is an mgx file (AOC).
-     *
-     * @var bool
-     */
-    protected $isMgx;
-
-    /**
-     * Whether the file being analyzed is an mgl file (AOK).
-     *
-     * @var bool
-     */
-    protected $isMgl;
-
-    /**
-     * Whether the file being analyzed is an mgz file (UserPatch).
-     *
-     * @var bool
-     */
-    protected $isMgz;
-
-    /**
-     * List of GAIA objects.
-     *
-     * @var array
-     */
-    protected $gaiaObjects;
-
-    /**
-     * List of any player objects.
-     *
-     * @var array
-     */
-    protected $playerObjects;
-
-    /**
-     * List of tributes.
-     *
-     * @var array
-     */
-    public $tributes;
-
-    /**
-     * Completed analyses.
-     *
-     * @var array
-     */
+    /** @var array Completed analyses. */
     protected $analyses = [];
 
-    /**
-     * File handle to the recorded game file.
-     *
-     * @var resource
-     */
+    /** @var resource File handle to the recorded game file. */
     private $fd;
 
-    /**
-     * Size of the compressed header block.
-     *
-     * @var int
-     */
-    private $_headerLen;
+    /** @var int Size of the compressed header block. */
+    private $headerLen;
 
-    /**
-     * [Add documentation]
-     *
-     * @var int
-     */
-    private $_nextPos;
+    /** @var int Something with saved chapters? ¯\_(ツ)_/¯ */
+    private $nextPos;
 
-    /**
-     * @var \RecAnalyst\ResourcePacks\ResourcePack
-     */
+    /** @var \RecAnalyst\ResourcePacks\ResourcePack Current resource pack. */
     private $resourcePack = null;
 
     /**
@@ -170,26 +80,18 @@ class RecordedGame
      */
     public function reset()
     {
-        $this->gameInfo = new GameInfo($this);
-        $this->teams = [];
-        $this->ingameChat = [];
-        $this->units = [];
-        $this->buildings = [];
         $this->analyzeTime = 0;
-        $this->isMgx = false;
-        $this->isMgl = false;
-        $this->isMgz = false;
-        $this->gaiaObjects = [];
-        $this->playerObjects = [];
         $this->analyses = [];
 
-        $this->tributes = [];
-        $this->_headerLen = 0;
-        $this->_nextPos = 0;
+        $this->headerLen = 0;
+        $this->nextPos = 0;
 
         $this->resourcePack = new ResourcePacks\AgeOfEmpires();
     }
 
+    /**
+     * Get the current resource pack.
+     */
     public function getResourcePack()
     {
         return $this->resourcePack;
@@ -212,7 +114,9 @@ class RecordedGame
     /**
      * Get an analysis result for a specific analyzer, running it if necessary.
      *
-     * @param  string  $analyzerName
+     * @param string  $analyzerName  Fully qualified name of the analyzer class.
+     * @param mixed  $arg  Optional argument to the analyzer.
+     * @param int  $startAt  Position to start at.
      * @return mixed
      */
     public function getAnalysis($analyzerName, $arg = null, $startAt = 0)
@@ -229,6 +133,12 @@ class RecordedGame
         return $this->analyses[$key];
     }
 
+    /**
+     * Run a v3.x-style analysis.
+     *
+     * @deprecated Probably not so useful anymore? Should provide different
+     *     accessors that run what they need, instead.
+     */
     public function analyze()
     {
         $starttime = microtime(true);
@@ -265,7 +175,7 @@ class RecordedGame
         while (($buffer = fread($this->fd, 8192)) !== false) {
             $index = strpos($buffer, $separator);
             if ($index !== false) {
-                $this->_headerLen = $base + $index - 4;
+                $this->headerLen = $base + $index - 4;
                 fseek($this->fd, $initialBase);
                 return;
             }
@@ -280,7 +190,7 @@ class RecordedGame
      * @return void
      * @throws RecAnalystException
      */
-    protected function extractStreams($a = null, $b = null)
+    protected function extractStreams()
     {
         if (empty($this->filename)) {
             throw new RecAnalystException(
@@ -292,44 +202,41 @@ class RecordedGame
             $this->open();
         }
         $fp = $this->fd;
-        $packed_data = fread($fp, 4);
-        if ($packed_data === false || strlen($packed_data) < 4) {
+        $rawRead = fread($fp, 4);
+        if ($rawRead === false || strlen($rawRead) < 4) {
             throw new RecAnalystException(
                 'Unable to read the header length',
                 RecAnalystException::HEADERLEN_READERROR
             );
         }
-        $unpacked_data = unpack('V', $packed_data);
-        $this->_headerLen = $unpacked_data[1];
-        if (!$this->_headerLen) {
+        list (, $this->headerLen) = unpack('V', $rawRead);
+        if (!$this->headerLen) {
             $this->manuallyDetermineHeaderLength();
         }
-        if (!$this->_headerLen) {
+        if (!$this->headerLen) {
             throw new RecAnalystException(
                 'Header length is zero',
                 RecAnalystException::EMPTY_HEADER
             );
         }
-        $packed_data = fread($fp, 4);
-        if ($packed_data === false || strlen($packed_data) < 4) {
-            $this->_nextPos = 0;
+        $rawRead = fread($fp, 4);
+        if ($rawRead === false || strlen($rawRead) < 4) {
+            $this->nextPos = 0;
         } else {
-            $unpacked_data = unpack('V', $packed_data);
-            $this->_nextPos = $unpacked_data[1];
+            list (, $this->nextPos) = unpack('V', $rawRead);
         }
 
         // Version detection heuristic
         // TODO find something more accurate?
-        $this->isMgx = $this->_nextPos < filesize($this->filename);
-        $this->isMgl = !$this->isMgx;
+        $isMgx = $this->nextPos < filesize($this->filename);
 
-        $this->_headerLen -= $this->isMgx ? 8 : 4;
-        if ($this->isMgl) {
+        $this->headerLen -= $isMgx ? 8 : 4;
+        if (!$isMgx) {
             fseek($fp, -4, SEEK_CUR);
         }
         $read = 0;
         $bindata = '';
-        while ($read < $this->_headerLen && ($buff = fread($fp, $this->_headerLen - $read))) {
+        while ($read < $this->headerLen && ($buff = fread($fp, $this->headerLen - $read))) {
             $read += strlen($buff);
             $bindata .= $buff;
         }

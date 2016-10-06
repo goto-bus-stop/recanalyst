@@ -3,7 +3,7 @@
 namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 
 /**
- * Unit represents a unit object in the game.
+ * Utilities for working with Age of Empires unit types.
  */
 class Unit
 {
@@ -38,6 +38,12 @@ class Unit
     const PALISADE_GATE3 = 800;
     const PALISADE_GATE4 = 804;
 
+    /**
+     * Checks whether a unit type ID is a Gate unit.
+     *
+     * @param int  $id  Unit type ID.
+     * @return bool True if the unit type is a gate, false otherwise.
+     */
     public static function isGateUnit($id)
     {
         return in_array($id, [
@@ -48,6 +54,12 @@ class Unit
         ]);
     }
 
+    /**
+     * Checks whether a unit type ID is a Palisade Gate unit.
+     *
+     * @param int  $id  Unit type ID.
+     * @return bool True if the unit type is a palisade gate, false otherwise.
+     */
     public static function isPalisadeGateUnit($id)
     {
         return in_array($id, [
@@ -58,6 +70,12 @@ class Unit
         ]);
     }
 
+    /**
+     * Checks whether a unit type ID is a cliff. (Yes! Cliffs are units!)
+     *
+     * @param int  $id  Unit type ID.
+     * @return bool True if the unit type is a cliff, false otherwise.
+     */
     public static function isCliffUnit($id)
     {
         return in_array($id, [
@@ -74,6 +92,13 @@ class Unit
         ]);
     }
 
+    /**
+     * Checks whether a unit type ID is a GAIA object type. Used to determine
+     * which objects to draw on a map.
+     *
+     * @param int  $id  Unit type ID.
+     * @return bool True if the unit type is a GAIA object, false otherwise.
+     */
     public static function isGaiaObject($id)
     {
         return self::isCliffUnit($id) || in_array($id, [
@@ -83,6 +108,13 @@ class Unit
         ]);
     }
 
+    /**
+     * Checks whether a unit type ID is a GAIA unit. Used to determine which
+     * units to draw on a map as not belonging to any player.
+     *
+     * @param int  $id  Unit type ID.
+     * @return bool True if the unit type is a GAIA unit, false otherwise.
+     */
     public static function isGaiaUnit($id)
     {
         return in_array($id, [
@@ -95,6 +127,13 @@ class Unit
         ]);
     }
 
+    /**
+     * Normalize a unit type ID. Turns some groups of unit IDs (such as gates in
+     * four directions) into a single unit ID, so it's easier to work with.
+     *
+     * @param int  $id  Unit type ID.
+     * @return int Normalized unit type ID.
+     */
     public static function normalizeUnit($id)
     {
         if (self::isGateUnit($id)) {

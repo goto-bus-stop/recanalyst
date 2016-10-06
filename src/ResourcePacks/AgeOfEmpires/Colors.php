@@ -2,6 +2,9 @@
 
 namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 
+/**
+ * Utilities for colors of things in Age of Empires.
+ */
 class Colors
 {
     /**
@@ -96,16 +99,38 @@ class Colors
         7 => '#ff8201',
     ];
 
+    /**
+     * Get the color for a terrain type.
+     *
+     * @param int  $id  Terrain type ID.
+     * @return string Hexadecimal representation of the terrain color,
+     *    eg. "#004abb".
+     */
     public static function getTerrainColor($id)
     {
         return self::$TERRAIN_COLORS[$id];
     }
 
+    /**
+     * Get the color for a unit or object type, such as sheep or boar or
+     * cliffs(!).
+     *
+     * @param int  $id  Unit type ID.
+     * @return string Hexadecimal representation of the unit color,
+     *    eg. "#714b33".
+     */
     public static function getUnitColor($id)
     {
         return self::$GAIA_COLORS[$id];
     }
 
+    /**
+     * Get the color for a player.
+     *
+     * @param int  $id  Player color ID (0-7).
+     * @return string Hexadecimal representation of the player color,
+     *    eg. "#ff00ff".
+     */
     public static function getPlayerColor($id)
     {
         return self::$PLAYER_COLORS[$id];

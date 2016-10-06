@@ -85,11 +85,24 @@ class Map
         self::BLINDRANDOM    => 'Blind Random',
     ];
 
+    /**
+     * Get the in-game name of a builtin map.
+     *
+     * @param int  $id  Map ID of a builtin map.
+     * @return string|null Map name.
+     */
     public static function getMapName($id)
     {
         return self::$MAP_NAMES[$id];
     }
 
+    /**
+     * Check whether a builtin map is a "Real World" map, such as Byzantinum or
+     * Texas.
+     *
+     * @param int  $id  Map ID of a builtin map.
+     * @return bool True if the map is a "Real World" map, false otherwise.
+     */
     public static function isRealWorldMap($id)
     {
         return in_array($id, [
@@ -99,11 +112,27 @@ class Map
         ]);
     }
 
+    /**
+     * Check whether a map ID denotes a custom map (i.e., not a builtin one).
+     *
+     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires::isStandardMap
+     *     For the inverse.
+     * @param int  $id  Map ID.
+     * @return bool True if the map is a custom map, false if it is builtin.
+     */
     public static function isCustomMap($id)
     {
         return $id === self::CUSTOM;
     }
 
+    /**
+     * Check whether a map ID denotes a builtin map.
+     *
+     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires::isCustomMap
+     *     For the inverse.
+     * @param int  $id  Map ID.
+     * @return bool True if the map is builtin, false otherwise.
+     */
     public static function isStandardMap($id)
     {
         return in_array($id, [
