@@ -2,11 +2,11 @@
 
 namespace RecAnalyst\Analyzers;
 
-use RecAnalyst\ChatMessage;
-use RecAnalyst\Civilization;
-use RecAnalyst\GameInfo;
-use RecAnalyst\RecordedGame;
 use RecAnalyst\Unit;
+use RecAnalyst\GameInfo;
+use RecAnalyst\ChatMessage;
+use RecAnalyst\RecordedGame;
+use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
 
 class BodyAnalyzer extends Analyzer
 {
@@ -30,30 +30,6 @@ class BodyAnalyzer extends Analyzer
     const RESEARCH_CASTLE = 102;
     const RESEARCH_IMPERIAL = 103;
 
-    /**
-     * Gate unit IDs.
-     *
-     * @var array
-     */
-    public static $GATE_UNITS = [
-        Unit::GATE,
-        Unit::GATE2,
-        Unit::GATE3,
-        Unit::GATE4,
-    ];
-
-    /**
-     * Palisade gate unit IDs.
-     *
-     * @var array
-     */
-    public static $PALISADE_GATE_UNITS = [
-        Unit::PALISADE_GATE,
-        Unit::PALISADE_GATE2,
-        Unit::PALISADE_GATE3,
-        Unit::PALISADE_GATE4,
-    ];
-
     private $version = null;
     private $currentTime = 0;
     private $tributes = [];
@@ -64,6 +40,7 @@ class BodyAnalyzer extends Analyzer
 
     protected function run()
     {
+        $pack = $this->rec->getResourcePack();
         $this->version = $this->get(VersionAnalyzer::class);
         $version = $this->version;
 
@@ -175,11 +152,7 @@ class BodyAnalyzer extends Analyzer
                         $this->position += 8;
                         $buildingType = $this->readBody('v', 2);
 
-                        if (in_array($buildingType, self::$GATE_UNITS)) {
-                            $buildingType = Unit::GATE;
-                        } elseif (in_array($buildingType, self::$PALISADE_GATE_UNITS)) {
-                            $buildingType = Unit::PALISADE_GATE;
-                        }
+                        $buildingType = $pack->normalizeUnit($buildingType);
 
                         if (!isset($this->buildings[$playerId][$buildingType])) {
                             $this->buildings[$playerId][$buildingType] = 1;

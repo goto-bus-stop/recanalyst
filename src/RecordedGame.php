@@ -3,14 +3,10 @@
 namespace RecAnalyst;
 
 use RecAnalyst\Analyzers\Analyzer;
+use RecAnalyst\ResourcePacks\ResourcePack;
 
 class RecordedGame
 {
-    const MGX_EXT = 'mgx';
-    const MGL_EXT = 'mgl';
-    const MGZ_EXT = 'mgz';
-    const MGX2_EXT = 'mgx2';
-
     /**
      * List of teams in the game.
      *
@@ -118,6 +114,11 @@ class RecordedGame
     private $_nextPos;
 
     /**
+     * @var \RecAnalyst\ResourcePacks\ResourcePack
+     */
+    private $resourcePack = null;
+
+    /**
      * Create a recorded game analyser.
      *
      * @param  string  $filename  Path to the recorded game file.
@@ -126,9 +127,6 @@ class RecordedGame
     public function __construct($filename = null)
     {
         $this->filename = $filename;
-        if (!is_null($filename)) {
-            $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
-        }
         $this->reset();
     }
 
@@ -143,7 +141,6 @@ class RecordedGame
     public function load($filename, $input)
     {
         $this->filename = $filename;
-        $this->ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
         if (is_string($input)) {
             // Create file stream from input string
             $this->fd = fopen('php://memory', 'r+');
@@ -189,6 +186,13 @@ class RecordedGame
         $this->tributes = [];
         $this->_headerLen = 0;
         $this->_nextPos = 0;
+
+        $this->resourcePack = new ResourcePacks\AgeOfEmpires();
+    }
+
+    public function getResourcePack()
+    {
+        return $this->resourcePack;
     }
 
     /**

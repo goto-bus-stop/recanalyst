@@ -4,8 +4,8 @@ namespace RecAnalyst\Processors;
 use Intervention\Image\ImageManager;
 use Intervention\Image\ImageManagerStatic;
 use RecAnalyst\RecordedGame;
-use RecAnalyst\Unit;
 use RecAnalyst\Analyzers\HeaderAnalyzer;
+use RecAnalyst\ResourcePacks\AgeOfEmpires\Unit;
 
 class MapImage
 {
@@ -18,101 +18,6 @@ class MapImage
      * @var Intervention\Image\ImageManager
      */
     private $imageManager;
-
-    /**
-     * @var array
-     */
-    private $terrainColors;
-
-    /**
-     * Default terrain colors, indexed by ID.
-     * @var array
-     */
-    public static $TERRAIN_COLORS = [
-        '#339727',
-        '#305db6',
-        '#e8b478',
-        '#e4a252',
-        '#5492b0',
-        '#339727',
-        '#e4a252',
-        '#82884d',
-        '#82884d',
-        '#339727',
-        '#157615',
-        '#e4a252',
-        '#339727',
-        '#157615',
-        '#e8b478',
-        '#305db6',
-        '#339727',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#004aa1',
-        '#004abb',
-        '#e4a252',
-        '#e4a252',
-        '#ffec49',
-        '#e4a252',
-        '#305db6',
-        '#82884d',
-        '#82884d',
-        '#82884d',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#98c0f0',
-        '#c8d8ff',
-        '#98c0f0',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#e4a252',
-    ];
-
-    /**
-     * Default colors of GAIA-owned objects, indexed by unit ID.
-     * @var array
-     */
-    public static $GAIA_COLORS = [
-        Unit::GOLDMINE   => '#ffc700',
-        Unit::STONEMINE  => '#919191',
-        Unit::CLIFF1     => '#714b33',
-        Unit::CLIFF2     => '#714b33',
-        Unit::CLIFF3     => '#714b33',
-        Unit::CLIFF4     => '#714b33',
-        Unit::CLIFF5     => '#714b33',
-        Unit::CLIFF6     => '#714b33',
-        Unit::CLIFF7     => '#714b33',
-        Unit::CLIFF8     => '#714b33',
-        Unit::CLIFF9     => '#714b33',
-        Unit::CLIFF10    => '#714b33',
-        Unit::RELIC      => '#ffffff',
-        Unit::TURKEY     => '#a5c46c',
-        Unit::SHEEP      => '#a5c46c',
-        Unit::DEER       => '#a5c46c',
-        Unit::BOAR       => '#a5c46c',
-        Unit::JAVELINA   => '#a5c46c',
-        Unit::FORAGEBUSH => '#a5c46c',
-    ];
-
-    /**
-     * Default player colors.
-     *
-     * @var array
-     */
-    public static $PLAYER_COLORS = [
-        0 => '#0000ff',
-        1 => '#ff0000',
-        2 => '#00ff00',
-        3 => '#ffff00',
-        4 => '#00ffff',
-        5 => '#ff00ff',
-        6 => '#b9b9b9',
-        7 => '#ff8201',
-    ];
 
     /**
      * Configure the Intervention image manager. See:
@@ -162,9 +67,6 @@ class MapImage
         $this->imageManager = $options['manager'] ?: static::defaultManager();
         $this->showPositions = $options['showPositions'];
         $this->showPlayerUnits = $options['showPlayerUnits'];
-        $this->terrainColors = static::$TERRAIN_COLORS;
-        $this->gaiaColors = static::$GAIA_COLORS;
-        $this->playerColors = static::$PLAYER_COLORS;
     }
 
     /**
@@ -178,11 +80,13 @@ class MapImage
         $mapData = $header->mapData;
         $mapSize = count($mapData);
         $image = $this->imageManager->canvas($mapSize, $mapSize);
+        $p = $this->rec->getResourcePack();
 
         foreach ($mapData as $x => $row) {
             foreach ($row as $y => $tile) {
-                if (array_key_exists($tile->terrain, $this->terrainColors)) {
-                    $image->pixel($this->terrainColors[$tile->terrain], $x, $y);
+                $color = $p->getTerrainColor($tile->terrain);
+                if (!is_null($color)) {
+                    $image->pixel($color, $x, $y);
                 } else {
                     throw new \Exception(sprintf('Unknown terrain ID \'%d\'', $tile->terrain));
                 }
@@ -192,7 +96,7 @@ class MapImage
         $gaiaObjects = $this->sortObjects($header->playerInfo->gaiaObjects);
 
         foreach ($gaiaObjects as $obj) {
-            $color = $this->gaiaColors[$obj->id];
+            $color = $p->getUnitColor($obj->id);
             list ($x, $y) = $obj->position;
             $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
                 $shape->background($color);
@@ -205,7 +109,7 @@ class MapImage
                     continue;
                 }
 
-                $color = $this->playerColors[$player->colorId];
+                $color = $p->getPlayerColor($player->colorId);
                 list ($x, $y) = $player->initialState->position;
                 $image->circle(18, $x, $y, function ($shape) use ($color) {
                     $shape->border(1, $color);
@@ -218,7 +122,7 @@ class MapImage
 
         if ($this->showPlayerUnits) {
             foreach ($header->playerInfo->playerObjects as $object) {
-                $color = $this->playerColors[$object->owner->colorId];
+                $color = $p->getPlayerColor($object->owner->colorId);
                 list ($x, $y) = $object->position;
                 $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
                     $shape->background($color);
@@ -236,32 +140,21 @@ class MapImage
      */
     private function sortObjects($objects)
     {
-        static $CLIFF_UNITS = [
-            Unit::CLIFF1,
-            Unit::CLIFF2,
-            Unit::CLIFF3,
-            Unit::CLIFF4,
-            Unit::CLIFF5,
-            Unit::CLIFF6,
-            Unit::CLIFF7,
-            Unit::CLIFF8,
-            Unit::CLIFF9,
-            Unit::CLIFF10,
-        ];
+        $p = $this->rec->getResourcePack();
 
-        usort($objects, function ($item1, $item2) use (&$CLIFF_UNITS) {
+        usort($objects, function ($item1, $item2) use (&$p) {
             // relics show on top of everything else
             if ($item1->id === Unit::RELIC && $item2->id !== Unit::RELIC) {
                 return 1;
             }
             // cliffs show below everything else
-            if (in_array($item1->id, $CLIFF_UNITS) && !in_array($item2->id, $CLIFF_UNITS)) {
+            if ($p->isCliffUnit($item1->id) && !$p->isCliffUnit($item2->id)) {
                 return -1;
             }
             if ($item2->id === Unit::RELIC && $item1->id !== Unit::RELIC) {
                 return -1;
             }
-            if (in_array($item2->id, $CLIFF_UNITS) && !in_array($item1->id, $CLIFF_UNITS)) {
+            if ($p->isCliffUnit($item2->id) && !$p->isCliffUnit($item1->id)) {
                 return 1;
             }
             return 0;

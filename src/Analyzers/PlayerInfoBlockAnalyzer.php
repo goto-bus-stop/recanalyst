@@ -41,6 +41,8 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         $playerInfoEndSeparator = pack('c*', 0x00, 0x0B, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0B);
         $objectsMidSeparatorGaia = pack('c*', 0x00, 0x0B, 0x00, 0x40, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00);
 
+        $pack = $this->rec->getResourcePack();
+
         list ($mapSizeX, $mapSizeY) = $this->analysis->mapSize;
 
         $version = $this->version;
@@ -146,16 +148,6 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             }
 
             $done = false;
-            $gaiaObjectTypes = [
-                Unit::GOLDMINE, Unit::STONEMINE, Unit::CLIFF1, Unit::CLIFF2,
-                Unit::CLIFF3, Unit::CLIFF4, Unit::CLIFF5, Unit::CLIFF6,
-                Unit::CLIFF7, Unit::CLIFF8, Unit::CLIFF9, Unit::CLIFF10,
-                Unit::FORAGEBUSH
-            ];
-            $herdableTypes = [
-                Unit::RELIC, Unit::DEER, Unit::BOAR,
-                Unit::JAVELINA, Unit::TURKEY, Unit::SHEEP
-            ];
             while (!$done) {
                 $objectType = ord($this->header[$this->position]);
 
@@ -171,13 +163,11 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
                 switch ($objectType) {
                     case 10:
-                        if (in_array($unitId, $gaiaObjectTypes)) {
+                        if ($pack->isGaiaObject($unitId)) {
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $go = new Unit();
-                            $go->id = $unitId;
-                            $go->position = [round($posX), round($posY)];
+                            $go = new Unit($unitId, [round($posX), round($posY)]);
                             $this->gaiaObjects[] = $go;
                             $this->position -= 27;
                         }
@@ -233,24 +223,19 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         }
                         break;
                     case 70:
-                        if (in_array($unitId, $herdableTypes)) {
+                        if ($pack->isGaiaUnit($unitId)) {
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $go = new Unit();
-                            $go->id = $unitId;
-                            $go->position = [round($posX), round($posY)];
+                            $go = new Unit($unitId, [round($posX), round($posY)]);
                             $this->gaiaObjects[] = $go;
-                        }
-                        if ($owner && $unitId != Unit::TURKEY && $unitId != Unit::SHEEP) {
-                            // exclude convertable objects
+                        } else if ($owner) {
+                            // These units belong to someone!
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $uo = new Unit();
-                            $uo->id = $unitId;
+                            $uo = new Unit($unitId, [round($posX), round($posY)]);
                             $uo->owner = $owner;
-                            $uo->position = [round($posX), round($posY)];
                             $this->playerObjects[] = $uo;
                         }
                         if ($version->isMgx) {
@@ -269,10 +254,8 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $uo = new Unit();
-                            $uo->id = $unitId;
+                            $uo = new Unit($unitId, [round($posX), round($posY)]);
                             $uo->owner = $owner;
-                            $uo->position = [round($posX), round($posY)];
                             $this->playerObjects[] = $uo;
                         }
                         if ($version->isMgx) {
