@@ -31,12 +31,19 @@ class RecordedGame
     /**
      * Create a recorded game analyser.
      *
-     * @param  string  $filename  Path to the recorded game file.
+     * @param  resource|string|\SplFileInfo  $filename  Path or handle to the recorded game file.
      * @return void
      */
     public function __construct($filename = null)
     {
-        $this->filename = $filename;
+        if (is_resource($filename)) {
+            $this->fd = $filename;
+            $this->filename = '';
+        } else if (is_object($filename) && $filename instanceof \SplFileInfo) {
+            $this->filename = $filename->getRealPath();
+        } else {
+            $this->filename = $filename;
+        }
         $this->reset();
     }
 
