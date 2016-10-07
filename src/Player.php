@@ -67,10 +67,10 @@ class Player
          $this->name = '';
          $this->index = $this->team = $this->colorId = -1;
          $this->human = $this->owner = $this->isCooping = false;
-         $this->civId = Civilization::NONE;
+         $this->civId = 0;
          $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
          $this->resignTime = 0;
-         $this->researches = array();
+         $this->researches = [];
          $this->initialState = new InitialState();
     }
 
