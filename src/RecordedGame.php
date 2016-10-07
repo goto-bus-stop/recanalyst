@@ -301,55 +301,6 @@ class RecordedGame
     }
 
     /**
-     * Builds teams.
-     *
-     * @return void
-     */
-    public function buildTeams()
-    {
-        if (count($this->teams)) {
-            // already built
-            return;
-        }
-        $teamsByIndex = [];
-        foreach ($this->players as $player) {
-            if ($player->team == 0) {
-                $found = false;
-                foreach ($this->teams as $team) {
-                    if ($team->getIndex() != $player->team) {
-                        continue;
-                    }
-                    foreach ($team->players as $player_) {
-                        if ($player_->index == $player->index) {
-                            $team->addPlayer($player);
-                            $found = true;
-                            break;
-                        }
-                    }
-                    if ($found) {
-                        break;
-                    }
-                }
-                if (!$found) {
-                    $team = new Team();
-                    $team->addPlayer($player);
-                    $this->teams[] = $team;
-                    $teamsByIndex[$player->team] = $team;
-                }
-            } else {
-                if (array_key_exists($player->team, $teamsByIndex)) {
-                    $teamsByIndex[$player->team]->addPlayer($player);
-                } else {
-                    $team = new Team();
-                    $team ->addPlayer($player);
-                    $this->teams[] = $team;
-                    $teamsByIndex[$player->team] = $team;
-                }
-            }
-        }
-    }
-
-    /**
      * Returns analyze time (in ms).
      *
      * @return int
