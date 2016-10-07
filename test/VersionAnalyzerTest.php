@@ -36,23 +36,47 @@ class VersionAnalyzerTest extends TestCase
     {
         return [
             ['./recs/versions/aok.mgl', GameInfo::VERSION_AOK, [
+                'isMgl' => true,
+                'isMgx' => false,
+                'isMgz' => false,
+                'isMsx' => false,
                 'isAoK' => true,
                 'isAoC' => false,
-                'isMgl' => true,
+                'isAoe2Record' => false,
+                'isHDEdition' => false,
             ]],
             ['./recs/versions/HD_test.mgx', GameInfo::VERSION_HD, [
                 'isAoC' => true,
                 'isHDEdition' => true,
                 'isHDPatch4' => false,
+                'isMsx' => false,
+                'isAoe2Record' => false,
             ]],
             ['./recs/versions/HD-FE.mgx2', GameInfo::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => false,
+                'isMsx' => false,
+                'isAoe2Record' => false,
             ]],
             ['./recs/versions/mgx2_simple.mgx2', GameInfo::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
+                'isMsx' => false,
+                'isAoe2Record' => false,
             ]],
+            ['./recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx', GameInfo::VERSION_HD, [
+                'isHDEdition' => true,
+                'isHDPatch4' => true,
+                'isAoe2Record' => false,
+                'isMsx' => true,
+            ]],
+            ['./recs/versions/MP_Replay_v4.msx2', GameInfo::VERSION_HD, [
+                'isHDEdition' => true,
+                'isHDPatch4' => true,
+                'isAoe2Record' => false,
+                'isMsx' => true,
+            ]],
+
         ];
     }
 }

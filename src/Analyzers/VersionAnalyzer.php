@@ -68,15 +68,24 @@ class VersionAnalyzer extends Analyzer
 
         $analysis->isTrial = in_array($version, $this->trialVersions);
         $analysis->isAoK = in_array($version, $this->aokVersions);
-        $analysis->isAoC = in_array($version, array_merge($this->aocVersions, $this->userpatchVersions, $this->hdVersions));
         $analysis->isUserPatch = in_array($version, $this->userpatchVersions);
         $analysis->isHDEdition = in_array($version, $this->hdVersions);
         $analysis->isHDPatch4 = $analysis->isHDEdition && $subVersion >= 12.00;
-        $analysis->isAoe2Record = $subVersion >= 12.36;
+        $analysis->isAoC = $analysis->isUserPatch || $analysis->isHDEdition ||
+            in_array($version, $this->aocVersions);
 
-        $analysis->isMgz = $analysis->isUserPatch;
-        $analysis->isMgx = $analysis->isAoC;
         $analysis->isMgl = $analysis->isAoK;
+        $analysis->isMgx = $analysis->isAoC;
+        $analysis->isMgz = $analysis->isUserPatch;
+        // FIXME Not sure if this is the correct cutoff point.
+        //
+        // test/recs/versions/mgx2_simple.mgx2
+        //    has subVersion == 12.31
+        // test/recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx
+        //    has subVersion == 12.34
+        // So it's somewhere between those two.
+        $analysis->isMsx = $subVersion >= 12.32;
+        $analysis->isAoe2Record = $subVersion >= 12.36;
 
         return $analysis;
     }

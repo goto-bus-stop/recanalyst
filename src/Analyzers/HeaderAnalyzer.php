@@ -51,6 +51,10 @@ class HeaderAnalyzer extends Analyzer
         $difficulty = $this->readHeader('l', 4);
         $lockTeams = $this->readHeader('L', 4);
 
+        if ($version->isMsx) {
+            $this->position += 16;
+        }
+
         $players = $this->read(PlayerMetaAnalyzer::class);
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
