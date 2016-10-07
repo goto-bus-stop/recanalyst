@@ -9,6 +9,18 @@ use RecAnalyst\Analyzers\HeaderAnalyzer;
 class HeaderAnalyzerTest extends TestCase
 {
     /**
+     * @dataProvider hdForgottenProvider
+     */
+    public function testHDForgotten($file)
+    {
+        $rec = new RecordedGame($file);
+        // Just make sure it doesn't crash!
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+
+        $this->assertNotNull($analysis);
+    }
+
+    /**
      * @dataProvider playersProvider
      */
     public function testPlayers($file, $expected)
@@ -21,6 +33,16 @@ class HeaderAnalyzerTest extends TestCase
                 $this->assertAttributeEquals($value, $prop, $analysis->players[$index]);
             }
         }
+    }
+
+    public function hdForgottenProvider()
+    {
+        return array_map(function ($path) {
+            return [$path];
+        }, glob(Path::makeRelative(
+            Path::join(__DIR__, './recs/forgotten/*'),
+            getcwd()
+        )));
     }
 
     public function playersProvider()

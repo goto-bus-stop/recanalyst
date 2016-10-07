@@ -9,6 +9,18 @@ use RecAnalyst\Analyzers\BodyAnalyzer;
 class BodyAnalyzerTest extends TestCase
 {
     /**
+     * @dataProvider hdForgottenProvider
+     */
+    public function testHDForgotten($file)
+    {
+        $rec = new RecordedGame($file);
+        // Just make sure it doesn't crash!
+        $analysis = $rec->runAnalyzer(new BodyAnalyzer);
+
+        $this->assertNotNull($analysis);
+    }
+
+    /**
      * @dataProvider recordsProvider
      */
     public function testParse($file)
@@ -26,5 +38,15 @@ class BodyAnalyzerTest extends TestCase
             ['./recs/versions/HD-FE.mgx2'],
             ['./recs/versions/up1.4.mgz'],
         ];
+    }
+
+    public function hdForgottenProvider()
+    {
+        return array_map(function ($path) {
+            return [$path];
+        }, glob(Path::makeRelative(
+            Path::join(__DIR__, './recs/forgotten/*'),
+            getcwd()
+        )));
     }
 }
