@@ -216,29 +216,29 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         }
                         break;
                     case 30:
-                        if ($version->isMgx) {
-                            $b = ord($this->header[$this->position + 59]);
-                            $this->position += 204 - 4;
+                        // TODO what's this?
+                        if ($version->isHDEdition) {
+                            $this->position += 3;
+                        }
+                        if (!$version->isMgx) {
+                            $this->position += 1;
+                        }
 
-                            // TODO what's this?
-                            if ($version->isHDEdition) {
-                                $this->position += 3;
-                            }
+                        $isExtended = ord($this->header[$this->position + 59]);
+                        if ($isExtended === 2) {
+                            $this->position += 17;
+                        }
 
-                            if ($b === 2) {
-                                $this->position += 17;
-                            }
-                        } else {
-                            $b = ord($this->header[$this->position + 60]);
-                            $this->position += 205 - 4;
-                            if ($b === 2) {
-                                $this->position += 17;
-                            }
+                        $this->position += 204 - 4;
+
+                        if ($version->isHDPatch4) {
+                            $this->position += 1;
                         }
                         break;
                     case 60:
                         $b = ord($this->header[$this->position + 204]);
                         $this->position += 233 - 4;
+
                         if ($b) {
                             $this->position += 67;
                         }
@@ -279,6 +279,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $uo->owner = $owner;
                             $this->playerObjects[] = $uo;
                         }
+
                         if ($version->isMgx) {
                             $separatorPos = strpos($this->header, $objectEndSeparator, $this->position);
                             $this->position = $separatorPos + strlen($objectEndSeparator);
@@ -289,9 +290,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                         if ($separatorPos == -1) {
                             throw new \Exception('Could not find object end separator');
                         }
+
                         $this->position += 126;
                         if ($version->isMgx) {
                             $this->position += 1;
+                        }
+
+                        if ($version->isHDPatch4) {
+                            $this->position -= 4;
                         }
                         break;
                     case 00:

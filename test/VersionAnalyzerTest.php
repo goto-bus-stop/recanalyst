@@ -43,9 +43,15 @@ class VersionAnalyzerTest extends TestCase
             ['./recs/versions/HD_test.mgx', GameInfo::VERSION_HD, [
                 'isAoC' => true,
                 'isHDEdition' => true,
+                'isHDPatch4' => false,
             ]],
             ['./recs/versions/HD-FE.mgx2', GameInfo::VERSION_HD, [
                 'isHDEdition' => true,
+                'isHDPatch4' => false,
+            ]],
+            ['./recs/versions/mgx2_simple.mgx2', GameInfo::VERSION_HD, [
+                'isHDEdition' => true,
+                'isHDPatch4' => true,
             ]],
         ];
     }
