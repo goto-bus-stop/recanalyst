@@ -3,6 +3,7 @@
 namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Unit;
+use RecAnalyst\Tribute;
 use RecAnalyst\GameInfo;
 use RecAnalyst\ChatMessage;
 use RecAnalyst\RecordedGame;
