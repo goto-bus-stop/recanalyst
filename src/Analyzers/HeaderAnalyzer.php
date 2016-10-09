@@ -45,14 +45,20 @@ class HeaderAnalyzer extends Analyzer
         $scenarioHeaderPos = strrpos($this->header, $scenarioSeparator, -($size - $gameSettingsPos));
 
         $this->position = $gameSettingsPos + 8;
+
         if (!$version->isAoK) {
             $mapId = $this->readHeader('l', 4);
         }
         $difficulty = $this->readHeader('l', 4);
         $lockTeams = $this->readHeader('L', 4);
 
-        if ($version->isMsx) {
-            $this->position += 16;
+        // TODO what are theeeese?
+        if ($version->isHDPatch4) {
+            $this->position += 12;
+            // TODO Is 12.3 the correct cutoff point?
+            if ($version->subVersion >= 12.3) {
+                $this->position += 4;
+            }
         }
 
         $players = $this->read(PlayerMetaAnalyzer::class);
@@ -119,7 +125,8 @@ class HeaderAnalyzer extends Analyzer
             $numAiStrings = $this->readHeader('v', 2);
             $this->position += 4;
             for ($i = 0; $i < $numAiStrings; $i += 1) {
-                $this->position += $this->readHeader('l', 4);
+                $length = $this->readHeader('l', 4);
+                $this->position += $length;
             }
             $this->position += 6;
             for ($i = 0; $i < 8; $i += 1) {
@@ -131,14 +138,19 @@ class HeaderAnalyzer extends Analyzer
             if ($version->subVersion >= 11.96) {
                 $this->position += 1280;
             }
+            // In mgx2 records...
+            if ($version->subVersion >= 12) {
+                // TODO Is this constant? (Probably not!)
+                $this->position += 477700;
+            }
         }
 
         $this->position += 4;
         $gameSpeed = $this->readHeader('l', 4);
         $this->position += 37;
         $recPlayerRef = $this->readHeader('v', 2);
-        $owner = $playersByIndex[$recPlayerRef];
-        if ($owner) {
+        if (array_key_exists($recPlayerRef, $playersByIndex)) {
+            $owner = $playersByIndex[$recPlayerRef];
             $owner->owner = true;
         }
         $numPlayers = ord($this->header[$this->position]);

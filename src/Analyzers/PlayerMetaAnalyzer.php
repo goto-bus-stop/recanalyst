@@ -93,5 +93,12 @@ class PlayerMetaAnalyzer extends Analyzer
         }
         // Skip difficulty & diplomacy lock.
         $this->position += 8;
+
+        if ($version->isHDPatch4) {
+            $this->position += 12;
+            if ($version->subVersion >= 12.3) {
+                $this->position += 4;
+            }
+        }
     }
 }

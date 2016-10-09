@@ -72,6 +72,10 @@ class HeaderAnalyzerTest extends TestCase
                 ['name' => 'Zuppi'],
                 ['name' => 'JorDan_23'],
             ]],
+            ['./recs/ai/Lobsth_15-pop-scouts_ai.mgx', [
+                ['name' => 'Eternal Lobster'],
+                ['name' => 'Ernak the Hun'],
+            ]],
         ];
     }
 }
