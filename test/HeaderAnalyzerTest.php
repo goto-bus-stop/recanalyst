@@ -9,9 +9,9 @@ use RecAnalyst\Analyzers\HeaderAnalyzer;
 class HeaderAnalyzerTest extends TestCase
 {
     /**
-     * @dataProvider hdForgottenProvider
+     * @dataProvider gamesProvider
      */
-    public function testHDForgotten($file)
+    public function testBasic($file)
     {
         $rec = new RecordedGame($file);
         // Just make sure it doesn't crash!
@@ -35,14 +35,18 @@ class HeaderAnalyzerTest extends TestCase
         }
     }
 
-    public function hdForgottenProvider()
+    public function gamesProvider()
     {
-        return array_map(function ($path) {
-            return [$path];
-        }, glob(Path::makeRelative(
-            Path::join(__DIR__, './recs/forgotten/*'),
+        $files = glob(Path::makeRelative(
+            Path::join(__DIR__, './recs/{forgotten,versions,ai}/*'),
             getcwd()
-        )));
+        ), GLOB_BRACE);
+
+        $provides = [];
+        foreach ($files as $path) {
+            $provides[$path] = [$path];
+        }
+        return $provides;
     }
 
     public function playersProvider()
