@@ -46,6 +46,29 @@ class VersionAnalyzer extends Analyzer
     ];
 
     /**
+     * Game version names.
+     * @var array
+     */
+    public $versionNames = [
+        'Unknown',
+        'AOK',
+        'AOK Trial',
+        'AOK 2.0',
+        'AOK 2.0a',
+        'AOC',
+        'AOC Trial',
+        'AOC 1.0',
+        'AOC 1.0c',
+        'AOC 1.1',
+        'AOFE 2.1',
+        'AOC (UP 1.4)',
+        'Unknown',
+        'Unknown',
+        'HD'
+    ];
+
+
+    /**
      * Read recorded game version metadata.
      *
      * Recorded game version information is encoded as:
@@ -86,6 +109,8 @@ class VersionAnalyzer extends Analyzer
         // So it's somewhere between those two.
         $analysis->isMsx = $subVersion >= 12.32;
         $analysis->isAoe2Record = $subVersion >= 12.36;
+
+        $analysis->name = $this->versionNames[$version];
 
         return $analysis;
     }
