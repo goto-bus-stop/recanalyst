@@ -9,6 +9,9 @@ namespace RecAnalyst;
  */
 class Player
 {
+    /** @var \RecAnalyst\RecordedGame */
+    private $rec;
+
     /** @var string Player's name. */
     public $name;
 
@@ -60,18 +63,20 @@ class Player
     /**
      * Class constructor.
      *
+     * @param \RecAnalyst\RecordedGame|null  $rec  Recorded game instance.
      * @return void
      */
-    public function __construct()
+    public function __construct($rec = null)
     {
-         $this->name = '';
-         $this->index = $this->team = $this->colorId = -1;
-         $this->human = $this->owner = $this->isCooping = false;
-         $this->civId = 0;
-         $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
-         $this->resignTime = 0;
-         $this->researches = [];
-         $this->initialState = new InitialState();
+        $this->rec = $rec;
+        $this->name = '';
+        $this->index = $this->team = $this->colorId = -1;
+        $this->human = $this->owner = $this->isCooping = false;
+        $this->civId = 0;
+        $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
+        $this->resignTime = 0;
+        $this->researches = [];
+        $this->initialState = new InitialState();
     }
 
     /**
@@ -168,5 +173,19 @@ class Player
     public function getResignTime()
     {
         return $this->resignTime;
+    }
+
+    /**
+     * Get the hex color of this player.
+     *
+     * @return string Hexadecimal representation of this player's color.
+     */
+    public function color()
+    {
+        if (is_null($this->rec)) {
+            return null;
+        }
+        $resourcePack = $this->rec->getResourcePack();
+        return $resourcePack->getPlayerColor($this->colorId);
     }
 }

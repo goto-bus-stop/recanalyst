@@ -75,7 +75,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
         // Add GAIA
         $numPlayers = $this->analysis->numPlayers + 1;
-        $gaia = new Player;
+        $gaia = new Player($this->rec);
         $gaia->name = 'GAIA';
 
         for ($i = -1; $i < count($players); $i++) { // first is GAIA

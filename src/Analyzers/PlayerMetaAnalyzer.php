@@ -53,7 +53,7 @@ class PlayerMetaAnalyzer extends Analyzer
      */
     protected function readPlayerMeta()
     {
-        $player = new Player();
+        $player = new Player($this->rec);
         $player->index = $this->readHeader('l', 4);
         $human = $this->readHeader('l', 4);
         $length = $this->readHeader('L', 4);
