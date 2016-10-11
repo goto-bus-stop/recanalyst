@@ -2,6 +2,8 @@
 
 namespace RecAnalyst;
 
+use RecAnalyst\Model\Research;
+
 /**
  * The Player class represents a player in the game. This includes co-op players.
  * It does not include players who joined the lobby but didn't launch into
@@ -187,5 +189,42 @@ class Player
         }
         $resourcePack = $this->rec->getResourcePack();
         return $resourcePack->getPlayerColor($this->colorId);
+    }
+
+    /**
+     * @return \StdClass|null
+     */
+    public function achievements()
+    {
+        if (is_null($this->rec)) {
+            return null;
+        }
+        $achievements = $this->rec->achievements();
+        if (is_null($achievements)) {
+            return null;
+        }
+        return $achievements[$this->index];
+    }
+
+    /**
+     * @return Research[]
+     */
+    public function researches()
+    {
+        $researches = [];
+        foreach ($this->researches as $id => $time) {
+            $researches[] = new Research($this->rec, $id, $time);
+        }
+        return $researches;
+    }
+
+    /**
+     * Get the name of this player's civilization.
+     *
+     * @return string
+     */
+    public function civName()
+    {
+        return 'Civ #' . $this->civId;
     }
 }
