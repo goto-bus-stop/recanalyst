@@ -31,10 +31,11 @@ class MapImage
      *
      *   http://image.intervention.io/getting_started/configuration
      *
-     * @param \Intervention\ImageManager|array  $manager  Image manager or array of image
-     *    manager options to use.
+     * @param \Intervention\Image\ImageManager|array  $manager
+     *     Image manager or array of image manager options to use.
      *
-     * @return \Intervention\ImageManager The current default image manager.
+     * @return \Intervention\Image\ImageManager
+     *     The current default image manager.
      */
     public static function defaultManager($manager = null)
     {
@@ -79,7 +80,7 @@ class MapImage
     /**
      * Generate a map!
      *
-     * @return \Intervention\Image
+     * @return \Intervention\Image\Image
      */
     public function run()
     {
@@ -93,7 +94,7 @@ class MapImage
             foreach ($row as $y => $tile) {
                 $color = $p->getTerrainColor($tile->terrain);
                 if (!is_null($color)) {
-                    $image->pixel($color, $x, $y);
+                    $this->fastPixel($image, $x, $y, $color);
                 } else {
                     throw new \Exception(sprintf('Unknown terrain ID \'%d\'', $tile->terrain));
                 }
@@ -138,6 +139,33 @@ class MapImage
         }
 
         return $image->rotate(45, [0, 0, 0, 0]);
+    }
+
+    /**
+     * Optimisation: Fast way to set pixels, without some of
+     * \Intervention\Image's abstraction and niceness.
+     *
+     * @param \Intervention\Image\Image  $image
+     * @param int  $x
+     * @param int  $y
+     * @param string  $color
+     */
+    private function fastPixel($image, $x, $y, $color)
+    {
+        $driver = $this->imageManager->config['driver'];
+        if ($driver === 'imagick') {
+            $core = $image->getCore();
+            $draw = new \ImagickDraw();
+            $draw->setFillColor(new \ImagickPixel($color));
+            $draw->point($x, $y);
+            $core->drawImage($draw);
+        } else if ($driver === 'gd') {
+            $core = $image->getCore();
+            sscanf($color, '#%02x%02x%02x', $red, $green, $blue);
+            imagesetpixel($core, $x, $y, imagecolorallocate($core, $red, $green, $blue));
+        } else {
+            $image->pixel($color, $x, $y);
+        }
     }
 
     /**
