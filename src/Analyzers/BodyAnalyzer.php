@@ -110,8 +110,8 @@ class BodyAnalyzer extends Analyzer
                     case self::COMMAND_RESEARCH:
                         $this->position += 3;
                         $buildingId = $this->readBody('l', 4);
-                        $playerId = $this->readBody('v', 4);
-                        $researchId = $this->readBody('v', 4);
+                        $playerId = $this->readBody('v', 2);
+                        $researchId = $this->readBody('v', 2);
                         $player = $playersByIndex[$playerId];
                         if (!$player) {
                             break;
