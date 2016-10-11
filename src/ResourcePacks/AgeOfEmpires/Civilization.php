@@ -32,6 +32,46 @@ class Civilization
     const MAGYARS    = 22;
     const SLAVS      = 23;
 
+    public static $CIV_NAMES = [
+        self::NONE => '',
+        self::BRITONS => 'Britons',
+        self::FRANKS => 'Franks',
+        self::GOTHS => 'Goths',
+        self::TEUTONS => 'Teutons',
+        self::JAPANESE => 'Japanese',
+        self::CHINESE => 'Chinese',
+        self::BYZANTINES => 'Byzantines',
+        self::PERSIANS => 'Persians',
+        self::SARACENS => 'Saracens',
+        self::TURKS => 'Turks',
+        self::VIKINGS => 'Vikings',
+        self::MONGOLS => 'Mongols',
+        self::CELTS => 'Celts',
+        self::SPANISH => 'Spanish',
+        self::AZTECS => 'Aztecs',
+        self::MAYANS => 'Mayans',
+        self::HUNS => 'Huns',
+        self::KOREANS => 'Koreans',
+        self::ITALIANS => 'Italians',
+        self::INDIANS => 'Indians',
+        self::INCAS => 'Incas',
+        self::MAGYARS => 'Magyars',
+        self::SLAVS => 'Slavs',
+    ];
+
+    /**
+     * Get the in-game name of a civilization.
+     *
+     * @param int  $id  Civilization ID.
+     * @return string|null Civilization name.
+     */
+    public static function getCivName($id)
+    {
+        if (array_key_exists($id, self::$CIV_NAMES)) {
+            return self::$CIV_NAMES[$id];
+        }
+    }
+
     /**
      * Checks if a civilization is included in the Age of Kings base game.
      *

@@ -82,17 +82,6 @@ class Player
     }
 
     /**
-     * Returns civilization string.
-     *
-     * @return string This player's Civilization name.
-     */
-    public function getCivString()
-    {
-        return isset(RecAnalystConst::$CIVS[$this->civId][0]) ?
-            RecAnalystConst::$CIVS[$this->civId][0] : '';
-    }
-
-    /**
      * Returns whether the player is a human player.
      *
      * @return boolean True if human, false if AI.
@@ -225,6 +214,10 @@ class Player
      */
     public function civName()
     {
+        if (!is_null($this->rec)) {
+            $resourcePack = $this->rec->getResourcePack();
+            return $resourcePack->getCivName($this->civId);
+        }
         return 'Civ #' . $this->civId;
     }
 }

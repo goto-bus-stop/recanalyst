@@ -162,38 +162,6 @@ class RecAnalystConst
     ];
 
     /**
-     * Civilization names.
-     *
-     * @var array
-     */
-    public static $CIVS = [
-        '',
-        'Britons',
-        'Franks',
-        'Goths',
-        'Teutons',
-        'Japanese',
-        'Chinese',
-        'Byzantines',
-        'Persians',
-        'Saracens',
-        'Turks',
-        'Vikings',
-        'Mongols',
-        'Celts',
-        'Spanish',
-        'Aztecs',
-        'Mayans',
-        'Huns',
-        'Koreans',
-        'Italians',
-        'Indians',
-        'Incas',
-        'Magyars',
-        'Slavs',
-    ];
-
-    /**
      * Short Civilization names.
      *
      * @var array

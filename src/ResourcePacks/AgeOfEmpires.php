@@ -13,6 +13,13 @@ use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
  */
 class AgeOfEmpires extends ResourcePack
 {
+    const NAME = 'ageofempires';
+
+    public function getCivName($id)
+    {
+        return Civilization::getCivName($id);
+    }
+
     /**
      * Checks if a civilization is included in the Age of Kings base game.
      *
