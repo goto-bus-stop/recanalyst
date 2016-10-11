@@ -83,7 +83,7 @@ class MapImage
      */
     public function run()
     {
-        $header = $this->rec->getAnalysis(HeaderAnalyzer::class)->analysis;
+        $header = $this->rec->header();
         $mapData = $header->mapData;
         $mapSize = count($mapData);
         $image = $this->imageManager->canvas($mapSize, $mapSize);

@@ -3,6 +3,8 @@
 namespace RecAnalyst;
 
 use RecAnalyst\Analyzers\Analyzer;
+use RecAnalyst\Processors\MapImage;
+use RecAnalyst\Processors\Achievements;
 use RecAnalyst\ResourcePacks\ResourcePack;
 
 /**
@@ -152,10 +154,10 @@ class RecordedGame
         if (empty($this->header)) {
             $this->extractStreams();
         }
-        if (!$this->analyzeHeader()) {
+        if (!$this->header()) {
             return false;
         }
-        if (!$this->analyzeBody()) {
+        if (!$this->body()) {
             return false;
         }
 
@@ -273,6 +275,9 @@ class RecordedGame
      */
     public function getHeaderContents()
     {
+        if (empty($this->header)) {
+            $this->extractStreams();
+        }
         return $this->header;
     }
 
@@ -283,28 +288,94 @@ class RecordedGame
      */
     public function getBodyContents()
     {
+        if (empty($this->body)) {
+            $this->extractStreams();
+        }
         return $this->body;
     }
 
     /**
-     * Analyzes header stream.
+     * Get the game version.
      *
-     * @return bool
+     * @return \StdClass
      */
-    protected function analyzeHeader()
+    public function version()
     {
-        $version = $this->getAnalysis(Analyzers\VersionAnalyzer::class);
-        return $this->getAnalysis(Analyzers\HeaderAnalyzer::class);
+        return $this->getAnalysis(Analyzers\VersionAnalyzer::class)->analysis;
     }
 
     /**
-     * Analyzes the body stream.
+     * Get the result of analysis of the recorded game header.
      *
-     * @return bool
+     * @return \StdClass
      */
-    protected function analyzeBody()
+    public function header()
     {
-        return $this->getAnalysis(Analyzers\BodyAnalyzer::class);
+        return $this->getAnalysis(Analyzers\HeaderAnalyzer::class)->analysis;
+    }
+
+    /**
+     * Get the game settings used to play this recorded game.
+     *
+     * @return \RecAnalyst\GameSettings
+     */
+    public function gameSettings()
+    {
+        return $this->header()->gameSettings;
+    }
+
+    /**
+     * Get the result of analysis of the recorded game body.
+     *
+     * @return \StdClass
+     */
+    public function body()
+    {
+        return $this->getAnalysis(Analyzers\BodyAnalyzer::class)->analysis;
+    }
+
+    /**
+     * Render a map image.
+     *
+     * @see \RecAnalyst\Processors\MapImage
+     * @param array  $options  Rendering options.
+     * @return \Intervention\Image Rendered image.
+     */
+    public function mapImage(array $options = [])
+    {
+        $proc = new MapImage($this, $options);
+        return $proc->run();
+    }
+
+    /**
+     * Get the teams that played in this recorded game.
+     *
+     * @return \RecAnalyst\Team[] Teams.
+     */
+    public function teams()
+    {
+        return $this->header()->teams;
+    }
+
+    /**
+     * Get the players that played in this recorded game.
+     *
+     * @return \RecAnalyst\Player[] Players.
+     */
+    public function players()
+    {
+        return $this->header()->players;
+    }
+
+    /**
+     * Get the player achievements.
+     *
+     * return \StdClass[] Achievements for each player.
+     */
+    public function achievements(array $options = [])
+    {
+        $proc = new Achievements($this, $options);
+        return $proc->run();
     }
 
     /**

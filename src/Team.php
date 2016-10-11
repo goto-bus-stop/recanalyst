@@ -8,7 +8,7 @@ namespace RecAnalyst;
 class Team
 {
     /** @var int Team's index. */
-    private $index;
+    public $index;
 
     /** @var array Players in this team. */
     public $players;
@@ -57,5 +57,10 @@ class Team
     public function getIndex()
     {
         return $this->index;
+    }
+
+    public function players()
+    {
+        return $this->players;
     }
 }
