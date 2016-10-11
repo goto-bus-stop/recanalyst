@@ -38,11 +38,11 @@ class GameSettings
     const MODE_SINGLEPLAYER = 0;
     const MODE_MULTIPLAYER = 1;
 
+    /** @var \RecAnalyst\RecordedGame */
+    private $rec;
+
     /** @var int Game type. */
     public $gameType;
-
-    /** @var int Map style. */
-    public $mapStyle;
 
     /** @var int Difficulty level. */
     public $difficultyLevel;
@@ -59,9 +59,6 @@ class GameSettings
     /** @var int Map ID. */
     public $mapId;
 
-    /** @var string Map name. */
-    public $map;
-
     /** @var int Population limit. */
     public $popLimit;
 
@@ -76,22 +73,18 @@ class GameSettings
      *
      * @return void
      */
-    public function __construct($attrs = [])
+    public function __construct(RecordedGame $rec, $attrs = [])
     {
+        $this->rec = $rec;
         $this->difficultyLevel = self::LEVEL_HARDEST;
         $this->gameSpeed = self::SPEED_NORMAL;
         $this->revealMap = self::REVEAL_NORMAL;
         $this->gameType = isset($attrs['gameType']) ? $attrs['gameType'] : self::TYPE_RANDOMMAP;
-        $this->mapStyle = isset($attrs['mapStyle']) ? $attrs['mapStyle'] : self::MAPSTYLE_STANDARD;
         $this->mapSize = isset($attrs['mapSize']) ? $attrs['mapSize'] : self::SIZE_TINY;
-        $this->mapName = isset($attrs['mapName']) ? $attrs['mapName'] : '';
         $this->mapId = isset($attrs['mapId']) ? $attrs['mapId'] : 0;
         $this->popLimit = isset($attrs['popLimit']) ? $attrs['popLimit'] : 0;
         $this->lockDiplomacy = isset($attrs['lockDiplomacy']) ? $attrs['lockDiplomacy'] : false;
         $this->victory = new VictorySettings();
-
-        // Compatibility
-        $this->map = $this->mapName;
     }
 
     /**
@@ -163,16 +156,6 @@ class GameSettings
     }
 
     /**
-     * Returns map name.
-     *
-     * @return string
-     */
-    public function getMapName()
-    {
-        return $this->map;
-    }
-
-    /**
      * Returns population limit.
      *
      * @return int
@@ -211,4 +194,71 @@ class GameSettings
     {
         return $this->gameType == GameSettings::TYPE_SCENARIO;
     }
+
+    /**
+     * Get the map name.
+     *
+     * @return string Map name.
+     */
+    public function mapName()
+    {
+        $resourcePack = $this->rec->getResourcePack();
+        // TODO Localise.
+        return $resourcePack->getMapName($this->mapId);
+    }
+
+    /**
+     * Get the map style for a map ID. Age of Empires categorises the builtin
+     * maps into several styles in the Start Game menu, but that information
+     * is not stored in the recorded game file (after all, only the map itself
+     * is necessary to replay the game).
+     *
+     * @return integer
+     */
+    public function mapStyle()
+    {
+        $resourcePack = $this->rec->getResourcePack();
+        if ($resourcePack->isCustomMap($this->mapId)) {
+            return GameSettings::MAPSTYLE_CUSTOM;
+        } else if ($resourcePack->isRealWorldMap($this->mapId)) {
+            return GameSettings::MAPSTYLE_REALWORLD;
+        }
+        // TODO add case for the "Special" maps in the HD expansion packs
+        return GameSettings::MAPSTYLE_STANDARD;
+    }
+
+    /**
+     * Check whether the game was played on a "Real World" map, such as
+     * Byzantinum or Texas.
+     *
+     * @return bool True if the map is a "Real World" map, false otherwise.
+     */
+    public function isRealWorldMap()
+    {
+        $resourcePack = $this->rec->getResourcePack();
+        return $resourcePack->isRealWorldMap($this->mapId);
+    }
+
+    /**
+     * Check whether the game was played on a custom map.
+     *
+     * @return bool True if the map is a custom map, false if it is builtin.
+     */
+    public function isCustomMap()
+    {
+        $resourcePack = $this->rec->getResourcePack();
+        return $resourcePack->isCustomMap($this->mapId);
+    }
+
+    /**
+     * Check whether the game was played on a builtin map.
+     *
+     * @return bool True if the map is builtin, false otherwise.
+     */
+    public function isStandardMap()
+    {
+        $resourcePack = $this->rec->getResourcePack();
+        return $resourcePack->isStandardMap($this->mapId);
+    }
+
 }

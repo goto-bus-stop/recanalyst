@@ -219,9 +219,6 @@ class HeaderAnalyzer extends Analyzer
         if (!$version->isAoK) {
             $gameSettings = array_merge($gameSettings, [
                 'mapId' => $mapId,
-                'mapName' => isset(RecAnalystConst::$MAPS[$mapId]) ?
-                    RecAnalystConst::$MAPS[$mapId] : null,
-                'mapStyle' => $this->getMapStyle($mapId),
                 'lockDiplomacy' => $lockDiplomacy,
             ]);
         }
@@ -232,7 +229,7 @@ class HeaderAnalyzer extends Analyzer
 
         $analysis->mapData = $mapData;
         $analysis->pregameChat = $pregameChat;
-        $analysis->gameSettings = new GameSettings($gameSettings);
+        $analysis->gameSettings = new GameSettings($this->rec, $gameSettings);
         $analysis->gameInfo = $gameInfo;
         $analysis->playerInfo = $playerInfo;
 
@@ -313,26 +310,6 @@ class HeaderAnalyzer extends Analyzer
             $this->position += $numTriggers * 8;
             // type = scen
         }
-    }
-
-    /**
-     * Get the map style for a map ID. Age of Empires categorises the builtin
-     * maps into several styles in the Start Game menu, but that information
-     * is not stored in the recorded game file (after all, only the map itself
-     * is necessary to replay the game).
-     *
-     * @param  integer  $mapId
-     * @return integer
-     */
-    protected function getMapStyle($mapId)
-    {
-        if ($mapId == Map::CUSTOM) {
-            return GameSettings::MAPSTYLE_CUSTOM;
-        } else if (in_array($mapId, RecAnalystConst::$REAL_WORLD_MAPS)) {
-            return GameSettings::MAPSTYLE_REALWORLD;
-        }
-        // TODO add case for the "Special" maps in the HD expansion packs
-        return GameSettings::MAPSTYLE_STANDARD;
     }
 
     /**

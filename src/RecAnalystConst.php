@@ -24,51 +24,6 @@ class RecAnalystConst
     const IMG_EXT = '.gif';
 
     /**
-     * Map names.
-     *
-     * @var array
-     */
-    public static $MAPS = [
-        Map::ARABIA         => 'Arabia',
-        Map::ARCHIPELAGO    => 'Archipelago',
-        Map::BALTIC         => 'Baltic',
-        Map::BLACKFOREST    => 'Black Forest',
-        Map::COASTAL        => 'Coastal',
-        Map::CONTINENTAL    => 'Continental',
-        Map::CRATERLAKE     => 'Crater Lake',
-        Map::FORTRESS       => 'Fortress',
-        Map::GOLDRUSH       => 'Gold Rush',
-        Map::HIGHLAND       => 'Highland',
-        Map::ISLANDS        => 'Islands',
-        Map::MEDITERRANEAN  => 'Mediterranean',
-        Map::MIGRATION      => 'Migration',
-        Map::RIVERS         => 'Rivers',
-        Map::TEAMISLANDS    => 'Team Islands',
-        Map::RANDOM         => 'Random',
-        Map::SCANDINAVIA    => 'Scandinavia',
-        Map::MONGOLIA       => 'Mongolia',
-        Map::YUCATAN        => 'Yucatan',
-        Map::SALTMARSH      => 'Salt Marsh',
-        Map::ARENA          => 'Arena',
-        Map::KINGOFTHEHILL  => 'King of the Hill',
-        Map::OASIS          => 'Oasis',
-        Map::GHOSTLAKE      => 'Ghost Lake',
-        Map::NOMAD          => 'Nomad',
-        Map::IBERIA         => 'Iberia',
-        Map::BRITAIN        => 'Britain',
-        Map::MIDEAST        => 'Mideast',
-        Map::TEXAS          => 'Texas',
-        Map::ITALY          => 'Italy',
-        Map::CENTRALAMERICA => 'Central America',
-        Map::FRANCE         => 'France',
-        Map::NORSELANDS     => 'Norse Lands',
-        Map::SEAOFJAPAN     => 'Sea of Japan (East Sea)',
-        Map::BYZANTINUM     => 'Byzantinum',
-        Map::CUSTOM         => 'Custom',
-        Map::BLINDRANDOM    => 'Blind Random',
-    ];
-
-    /**
      * Game version names.
      * @var array
      */
