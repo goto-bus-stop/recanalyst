@@ -564,22 +564,4 @@ class RecAnalystConst
         800 => ['Palisade Gate',   'palisade_gate'],
         804 => ['Palisade Gate',   'palisade_gate'],
     ];
-
-    /**
-     * Real world map IDs.
-     *
-     * @var array
-     */
-    public static $REAL_WORLD_MAPS = [
-        Map::IBERIA,
-        Map::BRITAIN,
-        Map::MIDEAST,
-        Map::TEXAS,
-        Map::ITALY,
-        Map::CENTRALAMERICA,
-        Map::FRANCE,
-        Map::NORSELANDS,
-        Map::SEAOFJAPAN,
-        Map::BYZANTINUM,
-    ];
 }
