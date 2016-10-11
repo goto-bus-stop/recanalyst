@@ -32,6 +32,10 @@ class Achievements
     public function run()
     {
         $postGameData = $this->rec->body()->postGameData;
+        if (!$postGameData) {
+            return null;
+        }
+
         $achievements = [];
 
         foreach ($postGameData->players as $i => $player) {
