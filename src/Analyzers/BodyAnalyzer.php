@@ -65,6 +65,7 @@ class BodyAnalyzer extends Analyzer
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
         }
+        $this->playersByIndex = $playersByIndex;
 
         $size = strlen($this->body);
         $this->position = 0;
@@ -267,8 +268,8 @@ class BodyAnalyzer extends Analyzer
             if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
                 // Skip messages like "--Warning: You are under attack... --"
                 return;
-            } else if (!empty($this->players[$chat[2]])) {
-                $player = $this->players[$chat[2]];
+            } else if (!empty($this->playersByIndex[$chat[2]])) {
+                $player = $this->playersByIndex[$chat[2]];
             } else {
                 // This player left before the game started.
                 $player = null;
