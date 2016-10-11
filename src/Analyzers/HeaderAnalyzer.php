@@ -148,9 +148,9 @@ class HeaderAnalyzer extends Analyzer
         $this->position += 4;
         $gameSpeed = $this->readHeader('l', 4);
         $this->position += 37;
-        $recPlayerRef = $this->readHeader('v', 2);
-        if (array_key_exists($recPlayerRef, $playersByIndex)) {
-            $owner = $playersByIndex[$recPlayerRef];
+        $pov = $this->readHeader('v', 2);
+        if (array_key_exists($pov, $playersByIndex)) {
+            $owner = $playersByIndex[$pov];
             $owner->owner = true;
         }
         $numPlayers = ord($this->header[$this->position]);
