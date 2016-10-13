@@ -2,6 +2,11 @@
     "require": {
         "twig/twig": "~1.0"
     },
+    "autoload": {
+        "files": [
+            "../../vendor/autoload.php"
+        ]
+    },
     "scripts": {
         "serve": "php -S localhost:6047"
     }

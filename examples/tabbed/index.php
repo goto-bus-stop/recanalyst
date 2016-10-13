@@ -1,9 +1,6 @@
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
-// Also use the autoloader for RecAnalyst itself. In a real app this is
-// not necessary.
-require __DIR__ . '/../../vendor/autoload.php';
 
 use Intervention\Image\ImageManagerStatic;
 use RecAnalyst\RecAnalystConst;
@@ -13,7 +10,7 @@ use Twig_Environment;
 use Twig_Loader_Array;
 
 // Read a recorded game from a file path.
-$rec = new RecordedGame(__DIR__ . '/../../test/recs/HD_test.mgx');
+$rec = new RecordedGame(__DIR__ . '/../../test/recs/versions/HD_test.mgx');
 
 // Determine the POV of this recorded game.
 $pov = null;
