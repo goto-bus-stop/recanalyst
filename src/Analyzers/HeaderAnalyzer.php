@@ -52,13 +52,10 @@ class HeaderAnalyzer extends Analyzer
         $difficulty = $this->readHeader('l', 4);
         $lockTeams = $this->readHeader('L', 4);
 
-        // TODO what are theeeese?
-        if ($version->isHDPatch4) {
-            $this->position += 12;
-            // TODO Is 12.3 the correct cutoff point?
-            if ($version->subVersion >= 12.3) {
-                $this->position += 4;
-            }
+        // TODO Is 12.3 the correct cutoff point?
+        if ($version->subVersion >= 12.3) {
+            // TODO what are theeeese?
+            $this->position += 16;
         }
 
         $players = $this->read(PlayerMetaAnalyzer::class);

@@ -94,11 +94,10 @@ class PlayerMetaAnalyzer extends Analyzer
         // Skip difficulty & diplomacy lock.
         $this->position += 8;
 
-        if ($version->isHDPatch4) {
-            $this->position += 12;
-            if ($version->subVersion >= 12.3) {
-                $this->position += 4;
-            }
+        // TODO Is 12.3 the correct cutoff point?
+        if ($version->subVersion >= 12.3) {
+            // TODO what are theeeese?
+            $this->position += 16;
         }
     }
 }
