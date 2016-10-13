@@ -114,7 +114,7 @@ class RecordedGame
      */
     public function runAnalyzer(Analyzer $analyzer)
     {
-        if (empty($this->header)) {
+        if (empty($this->headerContents)) {
             $this->extractStreams();
         }
         return $analyzer->analyze($this);
@@ -151,9 +151,6 @@ class RecordedGame
     public function analyze()
     {
         $starttime = microtime(true);
-        if (empty($this->header)) {
-            $this->extractStreams();
-        }
         if (!$this->header()) {
             return false;
         }
@@ -251,16 +248,16 @@ class RecordedGame
         }
         unset($buff);
 
-        $this->body = '';
+        $this->bodyContents = '';
         while (!feof($fp)) {
-            $this->body .= fread($fp, 8192);
+            $this->bodyContents .= fread($fp, 8192);
         }
         fclose($fp);
 
-        $this->header = gzinflate($bindata, 8388608);  // 8MB
+        $this->headerContents = gzinflate($bindata, 8388608);  // 8MB
         unset($bindata);
 
-        if (!strlen($this->header)) {
+        if (!strlen($this->headerContents)) {
             throw new RecAnalystException(
                 'Cannot decompress header section',
                 RecAnalystException::HEADER_DECOMPRESSERROR
@@ -275,10 +272,10 @@ class RecordedGame
      */
     public function getHeaderContents()
     {
-        if (empty($this->header)) {
+        if (empty($this->headerContents)) {
             $this->extractStreams();
         }
-        return $this->header;
+        return $this->headerContents;
     }
 
     /**
@@ -288,10 +285,10 @@ class RecordedGame
      */
     public function getBodyContents()
     {
-        if (empty($this->body)) {
+        if (empty($this->bodyContents)) {
             $this->extractStreams();
         }
-        return $this->body;
+        return $this->bodyContents;
     }
 
     /**
