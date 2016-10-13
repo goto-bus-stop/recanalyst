@@ -1,0 +1,8 @@
+{
+    "require": {
+        "twig/twig": "~1.0"
+    },
+    "scripts": {
+        "serve": "php -S localhost:6047"
+    }
+}
