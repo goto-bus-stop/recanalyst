@@ -57,7 +57,7 @@ class Player
      * @var array An array of player's researches containing "research id =>
      *     time of research" pairs.
      */
-    public $researches;
+    private $researchesById;
 
     /** @var \RecAnalyst\InitialState Player's initial state. */
     public $initialState;
@@ -77,7 +77,7 @@ class Player
         $this->civId = 0;
         $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
         $this->resignTime = 0;
-        $this->researches = [];
+        $this->researchesById = [];
         $this->initialState = new InitialState();
     }
 
@@ -196,15 +196,22 @@ class Player
     }
 
     /**
+     * Add a research action.
+     *
+     * @param int  $id  Research ID.
+     * @param int  $time  Research completion time.
+     */
+    public function addResearch($id, $time)
+    {
+        $this->researchesById[$id] = new Research($this->rec, $id, $time);
+    }
+
+    /**
      * @return Research[]
      */
     public function researches()
     {
-        $researches = [];
-        foreach ($this->researches as $id => $time) {
-            $researches[] = new Research($this->rec, $id, $time);
-        }
-        return $researches;
+        return array_values($this->researchesById);
     }
 
     /**

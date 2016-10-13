@@ -137,7 +137,7 @@ class BodyAnalyzer extends Analyzer
                                 $player->imperialTime = $this->currentTime + round($researchDuration);
                                 break;
                         }
-                        $player->researches[$researchId] = $this->currentTime;
+                        $player->addResearch($researchId, $this->currentTime);
                         break;
                     // training unit
                     case self::COMMAND_TRAIN:
