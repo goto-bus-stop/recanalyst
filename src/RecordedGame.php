@@ -232,14 +232,18 @@ class RecordedGame
             list (, $this->nextPos) = unpack('V', $rawRead);
         }
 
-        // Version detection heuristic
-        // TODO find something more accurate?
-        $isMgx = $this->nextPos < filesize($this->filename);
+        // In MGL files, the header starts immediately after the header length
+        // bytes. In MGX files, another int32 is stored first, possibly indicating
+        // the position of possible further headers(? something for saved chapters,
+        // at least, or perhaps saved & restored games).
+        $headerStart = pack('c*', 0xEC, 0x7D, 0x09);
+        $hasNextPos = substr($rawRead, 0, 3) !== $headerStart;
 
-        $this->headerLen -= $isMgx ? 8 : 4;
-        if (!$isMgx) {
+        $this->headerLen -= $hasNextPos ? 8 : 4;
+        if (!$hasNextPos) {
             fseek($fp, -4, SEEK_CUR);
         }
+
         $read = 0;
         $bindata = '';
         while ($read < $this->headerLen && ($buff = fread($fp, $this->headerLen - $read))) {
