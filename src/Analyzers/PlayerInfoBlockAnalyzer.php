@@ -84,7 +84,12 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             // skip cooping player, they have no data in Player_info
             $coopPlayer = $i >= 0 ? $playersByIndex[$player->index] : null;
 
-            if ($coopPlayer && ($coopPlayer !== $player) && $coopPlayer->civId) {
+            if ($coopPlayer && ($coopPlayer !== $player)
+                // TODO is this necessary? Seems like order of player infos
+                // is not consistent, so we can't assume the other player
+                // has been read yet.
+                // && $coopPlayer->civId
+            ) {
                 $player->civId = $coopPlayer->civId;
                 $player->colorId = $coopPlayer->colorId;
                 $player->team = $coopPlayer->team;
