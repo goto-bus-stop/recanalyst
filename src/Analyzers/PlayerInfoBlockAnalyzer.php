@@ -229,10 +229,10 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                     case 20:
                         if ($version->isMgx) {
                             $this->position += 59;
-                            $b = ord($this->header[$this->position]);
+                            $isExtended = ord($this->header[$this->position]);
                             $this->position -= 59;
                             $this->position += 68 - 4;
-                            if ($b == 2) {
+                            if ($isExtended == 2) {
                                 $this->position += 34;
                             }
                         } else {
