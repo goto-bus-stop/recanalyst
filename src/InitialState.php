@@ -14,37 +14,81 @@ class InitialState
     const IMPERIALAGE     = 3;
     const POSTIMPERIALAGE = 4;
 
-    /** @var int Initial food. */
+    /**
+     * Initial food.
+     *
+     * @var int
+     */
     public $food;
 
-    /** @var int Initial wood. */
+    /**
+     * Initial wood.
+     *
+     * @var int
+     */
     public $wood;
 
-    /** @var int Initial stone. */
+    /**
+     * Initial stone.
+     *
+     * @var int
+     */
     public $stone;
 
-    /** @var int Initial gold. */
+    /**
+     * Initial gold.
+     *
+     * @var int
+     */
     public $gold;
 
-    /** @var int Starting age. */
+    /**
+     * Starting age.
+     *
+     * @var int
+     */
     public $startingAge;
 
-    /** @var int Initial house capacity. */
+    /**
+     * Initial house capacity.
+     *
+     * @var int
+     */
     public $houseCapacity;
 
-    /** @var int Initial population. */
+    /**
+     * Initial population.
+     *
+     * @var int
+     */
     public $population;
 
-    /** @var int Initial civilian population. */
+    /**
+     * Initial civilian population.
+     *
+     * @var int
+     */
     public $civilianPop;
 
-    /** @var int Initial military population. */
+    /**
+     * Initial military population.
+     *
+     * @var int
+     */
     public $militaryPop;
 
-    /** @var int Initial extra population. */
+    /**
+     * Initial extra population.
+     *
+     * @var int
+     */
     public $extraPop;
 
-    /** @var float[] Initial position, `[$x, $y]`. */
+    /**
+     * Initial position, `[$x, $y]`.
+     *
+     * @var float[]
+     */
     public $position;
 
     /**

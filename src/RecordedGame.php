@@ -12,22 +12,39 @@ use RecAnalyst\ResourcePacks\ResourcePack;
  */
 class RecordedGame
 {
-    /** @var int Elapsed time for analyzing in milliseconds. */
+    /**
+     * Elapsed time for analyzing in milliseconds.
+     *
+     * @var int
+     */
     protected $analyzeTime;
 
-    /** @var array Completed analyses. */
+    /**
+     * Completed analyses.
+     *
+     * @var array
+     */
     protected $analyses = [];
 
-    /** @var resource File handle to the recorded game file. */
+    /**
+     * File handle to the recorded game file.
+     *
+     * @var resource
+     */
     private $fd;
 
-    /** @var int Size of the compressed header block. */
+    /**
+     * Size of the compressed header block.
+     *
+     * @var int
+     */
     private $headerLen;
 
-    /** @var int Something with saved chapters? ¯\_(ツ)_/¯ */
-    private $nextPos;
-
-    /** @var \RecAnalyst\ResourcePacks\ResourcePack Current resource pack. */
+    /**
+     * Current resource pack.
+     *
+     * @var \RecAnalyst\ResourcePacks\ResourcePack
+     */
     private $resourcePack = null;
 
     /**
@@ -93,7 +110,6 @@ class RecordedGame
         $this->analyses = [];
 
         $this->headerLen = 0;
-        $this->nextPos = 0;
 
         $this->resourcePack = new ResourcePacks\AgeOfEmpires();
     }
@@ -226,11 +242,6 @@ class RecordedGame
             );
         }
         $rawRead = fread($fp, 4);
-        if ($rawRead === false || strlen($rawRead) < 4) {
-            $this->nextPos = 0;
-        } else {
-            list (, $this->nextPos) = unpack('V', $rawRead);
-        }
 
         // In MGL files, the header starts immediately after the header length
         // bytes. In MGX files, another int32 is stored first, possibly indicating

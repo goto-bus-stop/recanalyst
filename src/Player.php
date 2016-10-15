@@ -11,55 +11,120 @@ use RecAnalyst\Model\Research;
  */
 class Player
 {
-    /** @var \RecAnalyst\RecordedGame */
+    /**
+     * Recorded game that contains this player.
+     *
+     * @var \RecAnalyst\RecordedGame
+     */
     private $rec;
 
-    /** @var string Player's name. */
+    /**
+     * The player's name.
+     *
+     * @var string
+     */
     public $name;
 
-    /** @var int Player's index. */
+    /**
+     * The player's index.
+     *
+     * @var int
+     */
     public $index;
 
-    /** @var bool Defines if the player is a human. */
+    /**
+     * Defines if the player is a human.
+     *
+     * @var bool
+     * @api private
+     */
     public $human;
 
-    /** @var bool Defines if the player is a spectator. */
+    /**
+     * Defines if the player is a spectator.
+     *
+     * @var bool
+     * @api private
+     */
     public $spectator;
 
-    /** @var int Defines player's team index (0 = no team). */
+    /**
+     * Defines player's team index (0 = no team).
+     *
+     * @var int
+     */
     public $team;
 
-    /** @var bool Defines if player is an owner of the game. */
+    /**
+     * Defines if player is an owner of the game.
+     *
+     * @var bool
+     */
     public $owner;
 
-    /** @var int ID of player's civilization. */
+    /**
+     * ID of the player's civilization.
+     *
+     * @var int
+     */
     public $civId;
 
-    /** @var int Player color ID. */
+    /**
+     * Player color ID.
+     *
+     * @var int
+     */
     public $colorId;
 
-    /** @var bool Indicates if the player is cooping in the game. */
+    /**
+     * Indicates if the player is cooping in the game.
+     *
+     * @var bool
+     */
     public $isCooping;
 
-    /** @var int Player's feudal time (in ms, 0 if hasn't been reached). */
+    /**
+     * Player's feudal time (in ms, 0 if hasn't been reached).
+     *
+     * @var int
+     */
     public $feudalTime;
 
-    /** @var int Player's castle time (in ms). */
+    /**
+     * Player's castle time (in ms).
+     *
+     * @var int
+     */
     public $castleTime;
 
-    /** @var int Player's imperial time (in ms). */
+    /**
+     * Player's imperial time (in ms).
+     *
+     * @var int
+     */
     public $imperialTime;
 
-    /** @var int Player's resign time (in ms) or 0 if player hasn't been resigned. */
+    /**
+     * Player's resign time (in ms) or 0 if player hasn't been resigned.
+     *
+     * @var int
+     */
     public $resignTime;
 
     /**
-     * @var array An array of player's researches containing "research id =>
-     *     time of research" pairs.
+     * An array of player's researches containing
+     * "research id => \RecAnalyst\Research instance" pairs.
+     *
+     * @var array
      */
     private $researchesById;
 
-    /** @var \RecAnalyst\InitialState Player's initial state. */
+    /**
+     * Contains the player's initial state, such as starting resources
+     * and population.
+     *
+     * @var \RecAnalyst\InitialState
+     */
     public $initialState;
 
     /**

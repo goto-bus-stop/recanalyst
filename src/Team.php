@@ -7,10 +7,21 @@ namespace RecAnalyst;
  */
 class Team
 {
-    /** @var int Team's index. */
+    /**
+     * Team's index.
+     *
+     * For internal purposes only. Use Team#getIndex() instead.
+     *
+     * @var int
+     * @api private
+     */
     public $index;
 
-    /** @var array Players in this team. */
+    /**
+     * Players in this team.
+     *
+     * @var array
+     */
     public $players;
 
     /**
@@ -27,7 +38,7 @@ class Team
     /**
      * Adds a player to the team.
      *
-     * @param  Player  $player  The player we wish to add
+     * @param  \RecAnalyst\Player  $player  The player we wish to add
      * @return void
      */
     public function addPlayer(Player $player)
@@ -42,7 +53,7 @@ class Team
      * Returns a player at the specified offset.
      *
      * @param  int  An index of the player
-     * @return Player|null
+     * @return \RecAnalyst\Player|null
      */
     public function getPlayer($index)
     {
@@ -59,6 +70,11 @@ class Team
         return $this->index;
     }
 
+    /**
+     * Get the players in this team.
+     *
+     * @return \RecAnalyst\Player[]
+     */
     public function players()
     {
         return $this->players;

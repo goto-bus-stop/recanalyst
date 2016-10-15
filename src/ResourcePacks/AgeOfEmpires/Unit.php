@@ -4,6 +4,8 @@ namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 
 /**
  * Utilities for working with Age of Empires unit types.
+ *
+ * @api private
  */
 class Unit
 {

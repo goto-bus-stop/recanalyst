@@ -9,13 +9,26 @@ use RecAnalyst\RecordedGame;
  */
 class Research
 {
-    /** @var \RecAnalyst\RecordedGame */
+    /**
+     * Recorded game.
+     *
+     * @var \RecAnalyst\RecordedGame
+     */
     private $rec;
 
-    /** @var int */
+    /**
+     * Research ID that was researched by this action.
+     *
+     * @var int
+     */
     public $id;
 
-    /** @var int */
+    /**
+     * Time since the start of the game at which the research action occurred,
+     * in milliseconds.
+     *
+     * @var int
+     */
     public $time;
 
     /**

@@ -34,19 +34,53 @@ class BodyAnalyzer extends Analyzer
     const RESEARCH_CASTLE = 102;
     const RESEARCH_IMPERIAL = 103;
 
-    /** @var object Game version information. */
+    /**
+     * Game version information.
+     *
+     * @var object
+     */
     private $version = null;
-    /** @var int Current game time in ms. */
+
+    /**
+     * Current game time in ms.
+     *
+     * @var int
+     */
     private $currentTime = 0;
-    /** @var Tribute[] Tributes sent during the game. */
+
+    /**
+     * Tributes sent during the game.
+     *
+     * @var Tribute[]
+     */
     private $tributes = [];
-    /** @var ChatMessage[] Chat messages sent during the game. */
+
+    /**
+     * Chat messages sent during the game.
+     *
+     * @var ChatMessage[]
+     */
     private $chatMessages = [];
-    /** @var array Amount of units of each type built during the game. */
+
+    /**
+     * Amount of units of each type built during the game.
+     *
+     * @var array
+     */
     private $units = [];
-    /** @var array Amount of buildings of each type built during the game. */
+
+    /**
+     * Amount of buildings of each type built during the game.
+     *
+     * @var array
+     */
     private $buildings = [];
-    /** @var object|null Post-game data, such as achievements. */
+
+    /**
+     * Post-game data, such as achievements.
+     *
+     * @var object|null
+     */
     private $postGameData = null;
 
     /**

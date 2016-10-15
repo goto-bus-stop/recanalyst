@@ -28,38 +28,22 @@ class GameInfo
     const VERSION_HD = 14;
 
     /**
-     * RecAnalyst owner instance.
-     * @var RecAnalyst
+     * Recorded game instance.
+     *
+     * @var \RecAnalyst\RecordedGame
      */
-    protected $owner;
-
-    /**
-     * Game version.
-     * @var int
-     * @see Const\GameVersion
-     */
-    public $gameVersion;
-
-    /**
-     * Game sub-version. E.g., Game version = HD, Game sub-version = 3.0.
-     * @var int
-     */
-    public $gameSubVersion;
-
-    /**
-     * Game duration.
-     * @var int
-     */
-    public $playTime;
+    private $rec;
 
     /**
      * Objectives string.
+     *
      * @var string
      */
     public $objectivesString;
 
     /**
      * Original Scenario filename.
+     *
      * @var string
      */
     public $scFileName;
@@ -74,8 +58,6 @@ class GameInfo
     public function __construct(RecordedGame $recanalyst)
     {
         $this->owner = $recanalyst;
-        $this->gameVersion = self::VERSION_UNKNOWN;
-        $this->playTime = 0;
         $this->objectivesString = $this->scFileName = '';
     }
 

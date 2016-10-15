@@ -9,13 +9,21 @@ use RecAnalyst\GameInfo;
  */
 class VersionAnalyzer extends Analyzer
 {
-    /** @var int[] Trial game version IDs. */
+    /**
+     * Trial game version IDs.
+     *
+     * @var int[]
+     */
     public $trialVersions = [
         GameInfo::VERSION_AOKTRIAL,
         GameInfo::VERSION_AOCTRIAL,
     ];
 
-    /** @var int[] UserPatch game version IDs. */
+    /**
+     * UserPatch game version IDs.
+     *
+     * @var int[]
+     */
     public $userpatchVersions = [
         GameInfo::VERSION_USERPATCH11,
         GameInfo::VERSION_USERPATCH12,
@@ -24,7 +32,11 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOFE21,
     ];
 
-    /** @var int[] Age of Kings game version IDs. */
+    /**
+     * Age of Kings game version IDs.
+     *
+     * @var int[]
+     */
     public $aokVersions = [
         GameInfo::VERSION_AOK,
         GameInfo::VERSION_AOKTRIAL,
@@ -32,7 +44,11 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOK20A,
     ];
 
-    /** @var int[] Age of Conquerors expansion game version IDs. */
+    /**
+     * Age of Conquerors expansion game version IDs.
+     *
+     * @var int[]
+     */
     public $aocVersions = [
         GameInfo::VERSION_AOC,
         GameInfo::VERSION_AOCTRIAL,
@@ -40,13 +56,18 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_AOC10C,
     ];
 
-    /** @var int[] HD Edition game version IDs. */
+    /**
+     * HD Edition game version IDs.
+     *
+     * @var int[]
+     */
     public $hdVersions = [
         GameInfo::VERSION_HD
     ];
 
     /**
      * Game version names.
+     *
      * @var array
      */
     public $versionNames = [

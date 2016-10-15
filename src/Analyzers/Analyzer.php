@@ -10,12 +10,16 @@ use RecAnalyst\RecordedGame;
 abstract class Analyzer
 {
     /**
-     * @var \RecAnalyst\RecordedGame  Recorded game to run the analysis on.
+     * Recorded game to run the analysis on.
+     *
+     * @var \RecAnalyst\RecordedGame
      */
     protected $rec;
 
     /**
-     * @var int  Current position in the header or body streams.
+     * Current position in the header or body streams.
+     *
+     * @var int
      */
     public $position = 0;
 
@@ -124,4 +128,9 @@ abstract class Analyzer
         $this->position += $size;
         return $data;
     }
+
+    /**
+     *
+     */
+    abstract protected function run();
 }

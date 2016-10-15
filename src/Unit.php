@@ -6,13 +6,25 @@ namespace RecAnalyst;
  */
 class Unit
 {
-    /** @var int ID of the player who owns this unit. Zero if GAIA. */
-    public $owner = 0;
+    /**
+     * The player that owns this unit. NULL if GAIA.
+     *
+     * @var \RecAnalyst\Player
+     */
+    public $owner = null;
 
-    /** @var int Unit type ID. */
+    /**
+     * Unit type ID.
+     *
+     * @var int
+     */
     public $id = 0;
 
-    /** @var array Unit location, `[$x, $y]`. */
+    /**
+     * Unit location, `[$x, $y]`.
+     *
+     * @var float[]
+     */
     public $position = [0, 0];
 
     /**

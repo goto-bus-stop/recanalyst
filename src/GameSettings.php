@@ -38,34 +38,74 @@ class GameSettings
     const MODE_SINGLEPLAYER = 0;
     const MODE_MULTIPLAYER = 1;
 
-    /** @var \RecAnalyst\RecordedGame */
+    /**
+     * Recorded game instance.
+     *
+     * @var \RecAnalyst\RecordedGame
+     */
     private $rec;
 
-    /** @var int Game type. */
+    /**
+     * Game type.
+     *
+     * @var int
+     */
     public $gameType;
 
-    /** @var int Difficulty level. */
+    /**
+     * Difficulty level.
+     *
+     * @var int
+     */
     public $difficultyLevel;
 
-    /** @var int Game speed. */
+    /**
+     * Game speed.
+     *
+     * @var int
+     */
     public $gameSpeed;
 
-    /** @var int Reveal Map setting. */
+    /**
+     * Reveal Map setting.
+     *
+     * @var int
+     */
     public $revealMap;
 
-    /** @var int Map size. */
+    /**
+     * Map size.
+     *
+     * @var int
+     */
     public $mapSize;
 
-    /** @var int Map ID. */
+    /**
+     * Map ID.
+     *
+     * @var int
+     */
     public $mapId;
 
-    /** @var int Population limit. */
+    /**
+     * Population limit.
+     *
+     * @var int
+     */
     public $popLimit;
 
-    /** @var bool Diplomacy lock status. */
+    /**
+     * Diplomacy lock status.
+     *
+     * @var bool
+     */
     public $lockDiplomacy;
 
-    /** @var \RecAnalyst\VictorySettings Victory settings. */
+    /**
+     * Victory settings.
+     *
+     * @var \RecAnalyst\VictorySettings
+     */
     public $victory;
 
     /**
@@ -260,5 +300,4 @@ class GameSettings
         $resourcePack = $this->rec->getResourcePack();
         return $resourcePack->isStandardMap($this->mapId);
     }
-
 }

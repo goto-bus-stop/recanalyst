@@ -12,13 +12,32 @@ use RecAnalyst\GameInfo;
  */
 class PlayerInfoBlockAnalyzer extends Analyzer
 {
-    /** @var object Parent analysis. */
+    /**
+     * Parent analysis.
+     *
+     * @var object
+     */
     private $analysis;
-    /** @var object Game version information. */
+
+    /**
+     * Game version information.
+     *
+     * @var object
+     */
     private $version;
-    /** @var \RecAnalyst\Unit[] Units owned by GAIA at the start of the game. */
+
+    /**
+     * Units owned by GAIA at the start of the game.
+     *
+     * @var \RecAnalyst\Unit[]
+     */
     private $gaiaObjects = [];
-    /** @var \RecAnalyst\Unit[] Units owned by players at the start of the game. */
+
+    /**
+     * Units owned by players at the start of the game.
+     *
+     * @var \RecAnalyst\Unit[]
+     */
     private $playerObjects = [];
 
     /**

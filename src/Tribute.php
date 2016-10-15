@@ -12,22 +12,45 @@ class Tribute
     const STONE = 2;
     const GOLD  = 3;
 
-    /** @var int Time this tribute was sent. */
+    /**
+     * Time this tribute was sent.
+     *
+     * @var int
+     */
     public $time;
 
-    /** @var \RecAnalyst\Player Player this tribute was sent from. */
+    /**
+     * Player this tribute was sent from.
+     *
+     * @var \RecAnalyst\Player
+     */
     public $playerFrom;
 
-    /** @var \RecAnalyst\Player Player this tribute was sent to. */
+    /**
+     * Player this tribute was sent to.
+     *
+     * @var \RecAnalyst\Player
+     */
     public $playerTo;
 
-    /** @var int ID of the resource this tribute was sent. */
+    /**
+     * ID of the resource sent in this tribute.
+     *
+     * @var int
+     */
     public $resourceId;
 
-    /** @var int Amount of the resource. */
+    /**
+     * Amount of the resource.
+     *
+     * @var int
+     */
     public $amount;
 
-    /** @var float Market fee. */
+    /**
+     * Market fee.
+     *
+     * @var float */
     public $fee;
 
     /**

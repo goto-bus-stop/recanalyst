@@ -6,13 +6,32 @@ namespace RecAnalyst;
  */
 class Tile
 {
-    /** @var int X-coordinate. */
+    /**
+     * X-coordinate.
+     *
+     * @var int
+     */
     public $x;
-    /** @var int Y-coordinate. */
+
+    /**
+     * Y-coordinate.
+     *
+     * @var int
+     */
     public $y;
-    /** @var int Terrain type ID. */
+
+    /**
+     * Terrain type ID.
+     *
+     * @var int
+     */
     public $terrain;
-    /** @var int Elevation level (0-7). */
+
+    /**
+     * Elevation level (0-7).
+     *
+     * @var int
+     */
     public $elevation;
 
     /**

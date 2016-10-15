@@ -4,6 +4,8 @@ namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 
 /**
  * Utilities for dealing with Age of Empires civilizations.
+ *
+ * @api private
  */
 class Civilization
 {

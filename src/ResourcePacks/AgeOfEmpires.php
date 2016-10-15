@@ -15,6 +15,12 @@ class AgeOfEmpires extends ResourcePack
 {
     const NAME = 'ageofempires';
 
+    /**
+     * Get the English name for a civilization.
+     *
+     * @param int  $id  Civilization ID.
+     * @return string Civilization name.
+     */
     public function getCivName($id)
     {
         return Civilization::getCivName($id);
@@ -22,8 +28,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      * Checks if a civilization is included in the Age of Kings base game.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization::isAoKCiv
      *
      * @param int  $id  Civilization ID.
      * @return bool True if the given civilization exists in AoK, false
@@ -37,8 +41,6 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Checks if a civilization was added in the Age of Conquerors expansion.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization::isAoCCiv
-     *
      * @param int  $id  Civilization ID.
      * @return bool True if the given civilization is part of AoC, false
      *     otherwise.
@@ -50,8 +52,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      * Checks if a civilization was added in the Forgotten Empires expansion.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization::isForgottenCiv
      *
      * @param int  $id  Civilization ID.
      * @return bool True if the given civilization is part of The Forgotten,
@@ -65,8 +65,6 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Get the in-game name of a builtin map.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Map::getMapName
-     *
      * @param int  $id  Map ID of a builtin map.
      * @return string|null Map name.
      */
@@ -79,8 +77,6 @@ class AgeOfEmpires extends ResourcePack
      * Check whether a builtin map is a "Real World" map, such as Byzantinum or
      * Texas.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Map::isRealWorldMap
-     *
      * @param int  $id  Map ID of a builtin map.
      * @return bool True if the map is a "Real World" map, false otherwise.
      */
@@ -92,7 +88,6 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Check whether a map ID denotes a custom map (i.e., not a builtin one).
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Map::isCustomMap
      * @see \RecAnalyst\ResourcePacks\AgeOfEmpires::isStandardMap
      *     For the inverse.
      *
@@ -107,10 +102,9 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Check whether a map ID denotes a builtin map.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Map::isStandardMap
-     *
      * @see \RecAnalyst\ResourcePacks\AgeOfEmpires::isCustomMap
      *     For the inverse.
+     *
      * @param int  $id  Map ID.
      * @return bool True if the map is builtin, false otherwise.
      */
@@ -121,8 +115,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      * Checks whether a unit type ID is a Gate unit.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::isGateUnit
      *
      * @param int  $id  Unit type ID.
      * @return bool True if the unit type is a gate, false otherwise.
@@ -135,8 +127,6 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Checks whether a unit type ID is a Palisade Gate unit.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::isPalisadeGateUnit
-     *
      * @param int  $id  Unit type ID.
      * @return bool True if the unit type is a palisade gate, false otherwise.
      */
@@ -147,8 +137,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      * Checks whether a unit type ID is a cliff. (Yes! Cliffs are units!)
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::isCliffUnit
      *
      * @param int  $id  Unit type ID.
      * @return bool True if the unit type is a cliff, false otherwise.
@@ -162,8 +150,6 @@ class AgeOfEmpires extends ResourcePack
      * Checks whether a unit type ID is a GAIA object type. Used to determine
      * which objects to draw on a map.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::isGaiaObject
-     *
      * @param int  $id  Unit type ID.
      * @return bool True if the unit type is a GAIA object, false otherwise.
      */
@@ -175,8 +161,6 @@ class AgeOfEmpires extends ResourcePack
     /**
      * Checks whether a unit type ID is a GAIA unit. Used to determine which
      * units to draw on a map as not belonging to any player.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::isGaiaUnit
      *
      * @param int  $id  Unit type ID.
      * @return bool True if the unit type is a GAIA unit, false otherwise.
@@ -190,8 +174,6 @@ class AgeOfEmpires extends ResourcePack
      * Normalize a unit type ID. Turns some groups of unit IDs (such as gates in
      * four directions) into a single unit ID, so it's easier to work with.
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Unit::normalizeUnit
-     *
      * @param int  $id  Unit type ID.
      * @return int Normalized unit type ID.
      */
@@ -202,8 +184,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      *Get the color for a terrain type.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Colors::getTerrainColor
      *
      * @param int  $id  Terrain type ID.
      * @return string Hexadecimal representation of the terrain color,
@@ -218,8 +198,6 @@ class AgeOfEmpires extends ResourcePack
      * Get the color for a unit or object type, such as sheep or boar or
      * cliffs(!).
      *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Colors::getUnitColor
-     *
      * @param int  $id  Unit type ID.
      * @return string Hexadecimal representation of the unit color,
      *    eg. "#714b33".
@@ -231,8 +209,6 @@ class AgeOfEmpires extends ResourcePack
 
     /**
      * Get the color for a player.
-     *
-     * @see \RecAnalyst\ResourcePacks\AgeOfEmpires\Colors::getPlayerColor
      *
      * @param int  $id  Player color ID (0-7).
      * @return string Hexadecimal representation of the player color,

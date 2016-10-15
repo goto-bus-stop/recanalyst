@@ -4,6 +4,8 @@ namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 
 /**
  * Utilities for colors of things in Age of Empires.
+ *
+ * @api private
  */
 class Colors
 {
