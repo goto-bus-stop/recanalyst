@@ -198,7 +198,7 @@ class RecordedGame
      */
     protected function extractStreams()
     {
-        if (empty($this->filename)) {
+        if (empty($this->filename) && empty($this->fd)) {
             throw new RecAnalystException(
                 'No file has been specified for analyzing',
                 RecAnalystException::FILE_NOT_SPECIFIED
