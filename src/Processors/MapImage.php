@@ -90,8 +90,8 @@ class MapImage
         $image = $this->imageManager->canvas($mapSize, $mapSize);
         $p = $this->rec->getResourcePack();
 
-        foreach ($mapData as $x => $row) {
-            foreach ($row as $y => $tile) {
+        foreach ($mapData as $y => $row) {
+            foreach ($row as $x => $tile) {
                 $color = $p->getTerrainColor($tile->terrain);
                 if (!is_null($color)) {
                     $this->fastPixel($image, $x, $y, $color);
