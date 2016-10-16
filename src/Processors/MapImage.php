@@ -130,6 +130,9 @@ class MapImage
 
         if ($this->showPlayerUnits) {
             foreach ($header->playerInfo->playerObjects as $object) {
+                if ($object->owner->index < 0) {
+                    continue;
+                }
                 $color = $p->getPlayerColor($object->owner->colorId);
                 list ($x, $y) = $object->position;
                 $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
