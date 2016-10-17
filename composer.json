@@ -28,6 +28,8 @@
     "webmozart/path-util": "^2.3"
   },
   "scripts": {
-    "test": "phpunit test"
+    "test": "phpunit test",
+    "make-resources": "php tools/makeResources.php",
+    "clean": "rm -rf tools/openage"
   }
 }
