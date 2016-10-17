@@ -3,6 +3,7 @@
 namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\GameInfo;
+use RecAnalyst\Model\Version;
 
 /**
  * Determine the game version that created the recorded game file.
@@ -65,29 +66,6 @@ class VersionAnalyzer extends Analyzer
         GameInfo::VERSION_HD
     ];
 
-    /**
-     * Game version names.
-     *
-     * @var array
-     */
-    public $versionNames = [
-        'Unknown',
-        'AOK',
-        'AOK Trial',
-        'AOK 2.0',
-        'AOK 2.0a',
-        'AOC',
-        'AOC Trial',
-        'AOC 1.0',
-        'AOC 1.0c',
-        'AOC 1.1',
-        'AOFE 2.1',
-        'AOC (UP 1.4)',
-        'Unknown',
-        'Unknown',
-        'HD'
-    ];
-
 
     /**
      * Read recorded game version metadata.
@@ -105,10 +83,8 @@ class VersionAnalyzer extends Analyzer
 
         $version = $this->getVersion($versionString, $subVersion);
 
-        $analysis = new \StdClass;
-        $analysis->versionString = $versionString;
+        $analysis = new Version($this->rec, $versionString, $subVersion);
         $analysis->version = $version;
-        $analysis->subVersion = $subVersion;
 
         $analysis->isTrial = in_array($version, $this->trialVersions);
         $analysis->isAoK = in_array($version, $this->aokVersions);
@@ -130,8 +106,6 @@ class VersionAnalyzer extends Analyzer
         // So it's somewhere between those two.
         $analysis->isMsx = $subVersion >= 12.32;
         $analysis->isAoe2Record = $subVersion >= 12.36;
-
-        $analysis->name = $this->versionNames[$version];
 
         return $analysis;
     }

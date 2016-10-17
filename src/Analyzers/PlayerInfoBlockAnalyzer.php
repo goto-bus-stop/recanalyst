@@ -212,7 +212,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $go = new Unit($unitId, [round($posX), round($posY)]);
+                            $go = new Unit($this->rec, $unitId, [round($posX), round($posY)]);
                             $this->gaiaObjects[] = $go;
                             $this->position -= 27;
                         }
@@ -272,14 +272,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $go = new Unit($unitId, [round($posX), round($posY)]);
+                            $go = new Unit($this->rec, $unitId, [round($posX), round($posY)]);
                             $this->gaiaObjects[] = $go;
                         } else if ($owner) {
                             // These units belong to someone!
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $uo = new Unit($unitId, [round($posX), round($posY)]);
+                            $uo = new Unit($this->rec, $unitId, [round($posX), round($posY)]);
                             $uo->owner = $owner;
                             $this->playerObjects[] = $uo;
                         }
@@ -299,7 +299,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position += 19;
                             $posX = $this->readHeader('f', 4);
                             $posY = $this->readHeader('f', 4);
-                            $uo = new Unit($unitId, [round($posX), round($posY)]);
+                            $uo = new Unit($this->rec, $unitId, [round($posX), round($posY)]);
                             $uo->owner = $owner;
                             $this->playerObjects[] = $uo;
                         }

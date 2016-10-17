@@ -48,21 +48,47 @@ class RecordedGame
     private $resourcePack = null;
 
     /**
+     * @var bool
+     */
+    private $isLaravel = false;
+
+    /**
+     * RecAnalyst options.
+     */
+    private $options = [];
+
+    /**
      * Create a recorded game analyser.
      *
      * @param  resource|string|\SplFileInfo  $filename  Path or handle to the recorded game file.
+     * @param  array  $options
      * @return void
      */
-    public function __construct($filename = null)
+    public function __construct($filename = null, array $options = [])
     {
         if (is_resource($filename)) {
             $this->fd = $filename;
             $this->filename = '';
-        } else if (is_object($filename) && $filename instanceof \SplFileInfo) {
+        } else if (is_object($filename) && is_a($filename, 'SplFileInfo')) {
             $this->filename = $filename->getRealPath();
         } else {
             $this->filename = $filename;
         }
+
+        $this->isLaravel = function_exists('app') && is_a(app(), 'Illuminate\Foundation\Application');
+
+        $this->options = array_merge([
+            'translator' => null,
+        ], $options);
+
+        if (!$this->options['translator']) {
+            if ($this->isLaravel) {
+                $this->options['translator'] = app('translator');
+            } else {
+                $this->options['translator'] = new BasicTranslator();
+            }
+        }
+
         $this->reset();
     }
 
@@ -398,5 +424,42 @@ class RecordedGame
     public function getAnalyzeTime()
     {
         return $this->analyzeTime;
+    }
+
+    /**
+     * Get a translate key for use with Symfony or Laravel Translations.
+     *
+     * @return string A translation key.
+     */
+    private function getTranslateKey($args)
+    {
+        // Game version names are in their own file, not in with resource packs.
+        if ($args[0] === 'game_versions') {
+            $key = implode('.', $args);
+        } else {
+            $pack = get_class($this->resourcePack);
+            $key = $pack::NAME . '.' . implode('.', $args);
+        }
+        if ($this->isLaravel) {
+            return 'recanalyst::' . $key;
+        }
+        return $key;
+    }
+
+    /**
+     *
+     */
+    public function getTranslator()
+    {
+        return $this->options['translator'];
+    }
+
+    /**
+     * @return string
+     */
+    public function trans()
+    {
+        $key = $this->getTranslateKey(func_get_args());
+        return $this->getTranslator()->trans($key);
     }
 }

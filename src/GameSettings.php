@@ -132,10 +132,9 @@ class GameSettings
      *
      * @return string
      */
-    public function getGameTypeString()
+    public function gameTypeName()
     {
-        return isset(RecAnalystConst::$GAME_TYPES[$this->gameType]) ?
-            RecAnalystConst::$GAME_TYPES[$this->gameType] : '';
+        return $this->rec->trans('game_types', $this->gameType);
     }
 
     /**
@@ -143,10 +142,11 @@ class GameSettings
      *
      * @return string
      */
-    public function getMapStyleString()
+    public function mapStyleName()
     {
-        return isset(RecAnalystConst::$MAP_STYLES[$this->mapStyle]) ?
-            RecAnalystConst::$MAP_STYLES[$this->mapStyle] : '';
+        $mapStyle = $this->rec->getResourcePack()
+            ->getMapStyle($this->mapId);
+        return $this->rec->trans('map_styles', $mapStyle);
     }
 
     /**
@@ -154,9 +154,9 @@ class GameSettings
      *
      * @return string
      */
-    public function getDifficultyLevelString()
+    public function difficultyName()
     {
-        return RecAnalystConst::$DIFFICULTY_LEVELS[$this->difficultyLevel];
+        return $this->rec->trans('difficulties', $this->difficultyLevel);
     }
 
     /**
@@ -164,13 +164,9 @@ class GameSettings
      *
      * @return string
      */
-    public function getGameSpeedString()
+    public function gameSpeedName()
     {
-        if (isset(RecAnalystConst::$GAME_SPEEDS[$this->gameSpeed])) {
-            return RecAnalystConst::$GAME_SPEEDS[$this->gameSpeed];
-        } else {
-            return sprintf('(%.1f)', $this->gameSpeed / 10);
-        }
+        return $this->rec->trans('game_speeds', $this->gameSpeed);
     }
 
     /**
@@ -178,10 +174,9 @@ class GameSettings
      *
      * @return string
      */
-    public function getRevealMapString()
+    public function revealMapName()
     {
-        return isset(RecAnalystConst::$REVEAL_SETTINGS[$this->revealMap]) ?
-            RecAnalystConst::$REVEAL_SETTINGS[$this->revealMap] : '';
+        return $this->rec->trans('reveal_map', $this->revealMap);
     }
 
     /**
@@ -189,10 +184,9 @@ class GameSettings
      *
      * @return string
      */
-    public function getMapSizeString()
+    public function mapSizeName()
     {
-        return isset(RecAnalystConst::$MAP_SIZES[$this->mapSize]) ?
-            RecAnalystConst::$MAP_SIZES[$this->mapSize] : '';
+        return $this->rec->trans('map_sizes', $this->mapSize);
     }
 
     /**

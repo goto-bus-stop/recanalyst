@@ -40,4 +40,12 @@ class Research
         $this->id = $id;
         $this->time = $time;
     }
+
+    /**
+     *
+     */
+    public function name()
+    {
+        return $this->rec->trans('researches', $this->id);
+    }
 }

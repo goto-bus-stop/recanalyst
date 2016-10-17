@@ -62,17 +62,6 @@ class GameInfo
     }
 
     /**
-     * Returns game versions string.
-     *
-     * @return string
-     */
-    public function getGameVersionString()
-    {
-        return isset(RecAnalystConst::$GAME_VERSIONS[$this->gameVersion]) ?
-            RecAnalystConst::$GAME_VERSIONS[$this->gameVersion] : '';
-    }
-
-    /**
      * Returns the players string (1v1, FFA, etc.)
      *
      * @return string

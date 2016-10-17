@@ -287,9 +287,23 @@ class Player
     public function civName()
     {
         if (!is_null($this->rec)) {
-            $resourcePack = $this->rec->getResourcePack();
-            return $resourcePack->getCivName($this->civId);
+            return $this->rec->trans('civilizations', $this->civId);
         }
         return 'Civ #' . $this->civId;
+    }
+
+    /**
+     * Get the player's starting age.
+     *
+     * @see \RecAnalyst\InitialState::$startingAge
+     *
+     * @return string Name of the starting age.
+     */
+    public function startingAge()
+    {
+        if (!is_null($this->rec)) {
+            return $this->rec->trans('ages', $this->initialState->startingAge);
+        }
+        return null;
     }
 }

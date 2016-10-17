@@ -221,8 +221,6 @@ class HeaderAnalyzer extends Analyzer
         }
 
         $gameInfo = new GameInfo($this->rec);
-        $gameInfo->gameVersion = $version->version;
-        $gameInfo->gameSubVersion = $version->subVersion;
 
         $analysis->mapData = $mapData;
         $analysis->pregameChat = $pregameChat;
