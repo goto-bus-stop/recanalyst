@@ -26,7 +26,7 @@ function loadResearchAndUnitData($agedir)
 /**
  * Build language files for all available languages.
  */
-function generateLanguageFiles($agedir)
+function generateLanguageFiles($agedir, $data)
 {
     $stringIndices = [
         'ages' => range(4201, 4205),
@@ -55,9 +55,6 @@ function generateLanguageFiles($agedir)
         'difficulties' => range(11216, 11220),
     ];
 
-    echo "loading research and unit data from empires2.dat ...\n";
-    $data = loadResearchAndUnitData($agedir);
-    echo "done \n";
     printf("found %d units and %d researches\n", count($data['units']), count($data['researches']));
     $stringIndices['units'] = [];
     foreach ($data['units'] as $id => $unit) {
@@ -89,9 +86,6 @@ function generateLanguageFiles($agedir)
             }
         }
     }
-
-    echo "writing dictionary\n";
-    file_put_contents('/tmp/recanalyst.json', json_encode($dictionary));
 
     $output = [];
     foreach ($dictionary as $lang => $strings) {
@@ -141,8 +135,20 @@ That does not look like an Age of Empires 2 HD installation directory.
     die(1);
 }
 
-if (!is_dir(__DIR__ . '/openage')) {
-    downloadOpenage();
+if (is_file(__DIR__ . '/cache.php')) {
+    $data = require(__DIR__ . '/cache.php');
+} else {
+    if (!is_dir(__DIR__ . '/openage')) {
+        downloadOpenage();
+    }
+
+    echo "loading research and unit data from empires2.dat ...\n";
+    $data = loadResearchAndUnitData($agedir);
+    echo "done \n";
+
+    file_put_contents(__DIR__ . '/cache.php',
+        '<?php return ' . var_export($data, true) . ';'
+    );
 }
 
-generateLanguageFiles($agedir);
+generateLanguageFiles($agedir, $data);
