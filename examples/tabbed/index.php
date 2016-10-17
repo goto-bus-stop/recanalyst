@@ -5,7 +5,6 @@ require __DIR__ . '/vendor/autoload.php';
 use Intervention\Image\ImageManagerStatic;
 use RecAnalyst\RecAnalystConst;
 use RecAnalyst\RecordedGame;
-use RecAnalyst\Utils;
 use Twig_Environment;
 use Twig_Loader_Array;
 
@@ -30,12 +29,8 @@ $loader = new Twig_Loader_Array([
 $twig = new Twig_Environment($loader);
 
 // Add some Twig filters.
-$twig->addFilter(new Twig_SimpleFilter('formatGameTime', [Utils::class, 'formatGameTime']));
+$twig->addFilter(new Twig_SimpleFilter('formatGameTime', '\RecAnalyst\Utils::formatGameTime'));
 
-$twig->addFilter(new Twig_SimpleFilter('getResearchName', function ($research) {
-    $data = RecAnalystConst::$RESEARCHES[$research->id];
-    return $data[0];
-}));
 $twig->addFilter(new Twig_SimpleFilter('getResearchImage', function ($research) {
     $data = RecAnalystConst::$RESEARCHES[$research->id];
     $path = __DIR__ . '/../../resources/researches/' . $data[1] . '.png';
