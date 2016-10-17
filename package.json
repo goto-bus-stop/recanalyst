@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "devDependencies": {
+    "slp-render": "^2.0.0"
+  }
+}

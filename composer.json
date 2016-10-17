@@ -30,6 +30,6 @@
   "scripts": {
     "test": "phpunit test",
     "make-resources": "php tools/makeResources.php",
-    "clean": "rm -rf tools/openage"
+    "clean": "rm -rf tools/openage tools/tmp tools/cache.php"
   }
 }

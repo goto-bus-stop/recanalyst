@@ -21,7 +21,7 @@ for civ in empires.civs:
         for unit in unitsOfType:
             units[unit.id0] = {
                 'name': unit.language_dll_name,
-                'graphic': unit.graphic_standing0,
+                'graphic': unit.icon_id,
             }
 
 out = {
