@@ -2,7 +2,6 @@
 
 namespace RecAnalyst\Analyzers;
 
-use RecAnalyst\GameInfo;
 use RecAnalyst\Model\Version;
 
 /**
@@ -16,8 +15,8 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $trialVersions = [
-        GameInfo::VERSION_AOKTRIAL,
-        GameInfo::VERSION_AOCTRIAL,
+        Version::VERSION_AOKTRIAL,
+        Version::VERSION_AOCTRIAL,
     ];
 
     /**
@@ -26,11 +25,11 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $userpatchVersions = [
-        GameInfo::VERSION_USERPATCH11,
-        GameInfo::VERSION_USERPATCH12,
-        GameInfo::VERSION_USERPATCH13,
-        GameInfo::VERSION_USERPATCH14,
-        GameInfo::VERSION_AOFE21,
+        Version::VERSION_USERPATCH11,
+        Version::VERSION_USERPATCH12,
+        Version::VERSION_USERPATCH13,
+        Version::VERSION_USERPATCH14,
+        Version::VERSION_AOFE21,
     ];
 
     /**
@@ -39,10 +38,10 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $aokVersions = [
-        GameInfo::VERSION_AOK,
-        GameInfo::VERSION_AOKTRIAL,
-        GameInfo::VERSION_AOK20,
-        GameInfo::VERSION_AOK20A,
+        Version::VERSION_AOK,
+        Version::VERSION_AOKTRIAL,
+        Version::VERSION_AOK20,
+        Version::VERSION_AOK20A,
     ];
 
     /**
@@ -51,10 +50,10 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $aocVersions = [
-        GameInfo::VERSION_AOC,
-        GameInfo::VERSION_AOCTRIAL,
-        GameInfo::VERSION_AOC10,
-        GameInfo::VERSION_AOC10C,
+        Version::VERSION_AOC,
+        Version::VERSION_AOCTRIAL,
+        Version::VERSION_AOC10,
+        Version::VERSION_AOC10C,
     ];
 
     /**
@@ -63,7 +62,7 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $hdVersions = [
-        GameInfo::VERSION_HD
+        Version::VERSION_HD
     ];
 
 
@@ -122,27 +121,27 @@ class VersionAnalyzer extends Analyzer
     {
         switch ($version) {
             case 'TRL 9.3':
-                return $this->isMgx ? GameInfo::VERSION_AOCTRIAL : GameInfo::VERSION_AOKTRIAL;
+                return $this->isMgx ? Version::VERSION_AOCTRIAL : Version::VERSION_AOKTRIAL;
             case 'VER 9.3':
-                return GameInfo::VERSION_AOK;
+                return Version::VERSION_AOK;
             case 'VER 9.4':
                 if ($subVersion > 11.76) {
-                    return GameInfo::VERSION_HD;
+                    return Version::VERSION_HD;
                 }
-                return GameInfo::VERSION_AOC;
+                return Version::VERSION_AOC;
             case 'VER 9.5':
-                return GameInfo::VERSION_AOFE21;
+                return Version::VERSION_AOFE21;
             case 'VER 9.8':
-                return GameInfo::VERSION_USERPATCH12;
+                return Version::VERSION_USERPATCH12;
             case 'VER 9.9':
-                return GameInfo::VERSION_USERPATCH13;
+                return Version::VERSION_USERPATCH13;
             // UserPatch 1.4 RC 1
             case 'VER 9.A':
             // UserPatch 1.4 RC 2
             case 'VER 9.B':
             case 'VER 9.C':
             case 'VER 9.D':
-                return GameInfo::VERSION_USERPATCH14;
+                return Version::VERSION_USERPATCH14;
             default:
                 return $version;
         }
