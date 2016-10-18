@@ -230,12 +230,15 @@ function generateColors($agedir, $data)
         'terrain' => [],
         'players' => [],
     ];
-    foreach ($data['terrains'] as $id => $terrain) {
+    foreach ($data['terrain_colors'] as $id => $terrain) {
         $minimapColors = array_slice($terrain['minimap'], 0, 3);
         $colors['terrain'][$id] = array_map(function ($index) use (&$palette) {
             return $palette[$index];
         }, $minimapColors);
     }
+    $colors['players'] = array_map(function ($index) use (&$palette) {
+        return $palette[$index];
+    }, $data['player_colors']);
 
     file_put_contents($dataDir . '/colors.php',
         '<?php ' . "\n" .
