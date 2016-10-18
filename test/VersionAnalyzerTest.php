@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 use RecAnalyst\RecordedGame;
-use RecAnalyst\GameInfo;
+use RecAnalyst\Model\Version;
 use RecAnalyst\Analyzers\VersionAnalyzer;
 
 class VersionAnalyzerTest extends TestCase
@@ -35,7 +35,7 @@ class VersionAnalyzerTest extends TestCase
     public function versionsProvider()
     {
         return [
-            ['./recs/versions/aok.mgl', GameInfo::VERSION_AOK, [
+            ['./recs/versions/aok.mgl', Version::VERSION_AOK, [
                 'isMgl' => true,
                 'isMgx' => false,
                 'isMgz' => false,
@@ -45,32 +45,32 @@ class VersionAnalyzerTest extends TestCase
                 'isAoe2Record' => false,
                 'isHDEdition' => false,
             ]],
-            ['./recs/versions/HD_test.mgx', GameInfo::VERSION_HD, [
+            ['./recs/versions/HD_test.mgx', Version::VERSION_HD, [
                 'isAoC' => true,
                 'isHDEdition' => true,
                 'isHDPatch4' => false,
                 'isMsx' => false,
                 'isAoe2Record' => false,
             ]],
-            ['./recs/versions/HD-FE.mgx2', GameInfo::VERSION_HD, [
+            ['./recs/versions/HD-FE.mgx2', Version::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => false,
                 'isMsx' => false,
                 'isAoe2Record' => false,
             ]],
-            ['./recs/versions/mgx2_simple.mgx2', GameInfo::VERSION_HD, [
+            ['./recs/versions/mgx2_simple.mgx2', Version::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
                 'isMsx' => false,
                 'isAoe2Record' => false,
             ]],
-            ['./recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx', GameInfo::VERSION_HD, [
+            ['./recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx', Version::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
                 'isAoe2Record' => false,
                 'isMsx' => true,
             ]],
-            ['./recs/versions/MP_Replay_v4.msx2', GameInfo::VERSION_HD, [
+            ['./recs/versions/MP_Replay_v4.msx2', Version::VERSION_HD, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
                 'isAoe2Record' => false,

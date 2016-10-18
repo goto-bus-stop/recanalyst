@@ -3,7 +3,6 @@
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 use RecAnalyst\RecordedGame;
-use RecAnalyst\GameInfo;
 use RecAnalyst\Analyzers\HeaderAnalyzer;
 
 class HeaderAnalyzerTest extends TestCase

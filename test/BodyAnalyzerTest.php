@@ -3,7 +3,6 @@
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 use RecAnalyst\RecordedGame;
-use RecAnalyst\GameInfo;
 use RecAnalyst\Analyzers\BodyAnalyzer;
 
 class BodyAnalyzerTest extends TestCase
@@ -43,10 +42,7 @@ class BodyAnalyzerTest extends TestCase
     public function hdForgottenProvider()
     {
         return array_map(function ($path) {
-            return [$path];
-        }, glob(Path::makeRelative(
-            Path::join(__DIR__, './recs/forgotten/*'),
-            getcwd()
-        )));
+            return [Path::makeRelative($path, getcwd())];
+        }, glob(Path::join(__DIR__, './recs/forgotten/*')));
     }
 }
