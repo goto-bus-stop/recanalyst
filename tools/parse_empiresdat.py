@@ -15,6 +15,20 @@ data = decompress(f.read(), -15)
 empires = EmpiresDat()
 empires.read(data, 0)
 
+terrains = [
+    {
+        'name': terrain.name0,
+        'graphic': terrain.slp_id,
+        'minimap': [
+            terrain.map_color_hi,
+            terrain.map_color_med,
+            terrain.map_color_low,
+            terrain.map_color_cliff_lt,
+            terrain.map_color_cliff_rt,
+        ],
+    } for terrain in empires.terrains
+]
+
 units = {}
 for civ in empires.civs:
     for unitType, unitsOfType in civ.units.items():
@@ -25,6 +39,7 @@ for civ in empires.civs:
             }
 
 out = {
+    'terrains': terrains,
     'civilizations': [
         civ.name for civ in empires.civs
     ],
