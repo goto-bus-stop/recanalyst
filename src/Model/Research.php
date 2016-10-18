@@ -33,6 +33,11 @@ class Research
 
     /**
      * Create a research action.
+     *
+     * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
+     * @param int  $id  Research ID.
+     * @param int  $time  Time of the research action, in milliseconds since the
+     *     start of the game.
      */
     public function __construct(RecordedGame $rec, $id, $time)
     {
@@ -42,7 +47,9 @@ class Research
     }
 
     /**
+     * Get the localised research name.
      *
+     * @return string
      */
     public function name()
     {

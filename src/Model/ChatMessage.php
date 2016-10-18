@@ -1,6 +1,8 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
+
+use RecAnalyst\Model\Player;
 
 /**
  * The ChatMessage class represents a single chat message sent before or during
@@ -22,7 +24,7 @@ class ChatMessage
      * the lobby but left before the game started. In that case the Player
      * object will be empty except for `$name`.
      *
-     * @var \RecAnalyst\Player
+     * @var \RecAnalyst\Model\Player
      */
     public $player;
 
@@ -45,7 +47,7 @@ class ChatMessage
      *
      * @param int  $time  When this message was sent, in milliseconds since the
      *     start of the game.
-     * @param Player  $player  Player that sent the message.
+     * @param \RecAnalyst\Model\Player  $player  Player that sent the message.
      * @param string  $msg  Message content.
      * @param string  $group  Group this message was directed to.
      * @return void
@@ -69,7 +71,7 @@ class ChatMessage
      *
      * @param int  $time  Time at which this message was sent in milliseconds
      *    since the start of the game.
-     * @param Player  $player  Message Sender.
+     * @param \RecAnalyst\Model\Player  $player  Message Sender.
      * @param string  $chat  Message contents.
      * @return ChatMessage
      */
@@ -90,6 +92,6 @@ class ChatMessage
             }
         }
         $chat = substr($chat, strlen($player->name) + 2);
-        return new ChatMessage($time, $player, $chat, $group);
+        return new self($time, $player, $chat, $group);
     }
 }

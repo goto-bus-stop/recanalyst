@@ -3,12 +3,12 @@
 namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Map;
-use RecAnalyst\Team;
-use RecAnalyst\Tile;
-use RecAnalyst\GameInfo;
-use RecAnalyst\ChatMessage;
-use RecAnalyst\GameSettings;
-use RecAnalyst\RecAnalystConst;
+use RecAnalyst\Utils;
+use RecAnalyst\Model\GameInfo;
+use RecAnalyst\Model\Team;
+use RecAnalyst\Model\Tile;
+use RecAnalyst\Model\ChatMessage;
+use RecAnalyst\Model\GameSettings;
 
 /**
  * Analyzer for most things in a recorded game file header.
@@ -327,10 +327,10 @@ class HeaderAnalyzer extends Analyzer
             if ($player->team == 0) {
                 $found = false;
                 foreach ($teams as $team) {
-                    if ($team->getIndex() != $player->team) {
+                    if ($team->index() != $player->team) {
                         continue;
                     }
-                    foreach ($team->players as $coopPlayer) {
+                    foreach ($team->players() as $coopPlayer) {
                         if ($coopPlayer->index == $player->index) {
                             $team->addPlayer($player);
                             $found = true;

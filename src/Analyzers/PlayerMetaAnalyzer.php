@@ -2,7 +2,7 @@
 
 namespace RecAnalyst\Analyzers;
 
-use RecAnalyst\Player;
+use RecAnalyst\Model\Player;
 
 /**
  * Analyze the small player metadata block. Can be composed or run

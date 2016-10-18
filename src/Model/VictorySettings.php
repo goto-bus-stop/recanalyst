@@ -1,6 +1,8 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
+
+use RecAnalyst\RecordedGame;
 
 /**
  * Victory implements game's victory settings.
@@ -12,6 +14,13 @@ class VictorySettings
     const TIMELIMIT  = 2;
     const SCORELIMIT = 3;
     const CUSTOM     = 4;
+
+    /**
+     * Recorded game instance.
+     *
+     * @var \RecAnalyst\RecordedGame
+     */
+    private $rec;
 
     /**
      * Time limit.
@@ -39,8 +48,9 @@ class VictorySettings
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(RecordedGame $rec)
     {
+        $this->rec = $rec;
         $this->_timeLimit = $this->_scoreLimit = 0;
         $this->_victoryCondition = self::STANDARD;
     }

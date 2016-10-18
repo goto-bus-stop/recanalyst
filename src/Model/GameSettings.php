@@ -1,6 +1,9 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
+
+use RecAnalyst\RecordedGame;
+use RecAnalyst\Model\VictorySettings;
 
 class GameSettings
 {
@@ -124,7 +127,7 @@ class GameSettings
         $this->mapId = isset($attrs['mapId']) ? $attrs['mapId'] : 0;
         $this->popLimit = isset($attrs['popLimit']) ? $attrs['popLimit'] : 0;
         $this->lockDiplomacy = isset($attrs['lockDiplomacy']) ? $attrs['lockDiplomacy'] : false;
-        $this->victory = new VictorySettings();
+        $this->victory = new VictorySettings($rec);
     }
 
     /**

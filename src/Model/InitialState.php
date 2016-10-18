@@ -1,6 +1,6 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
 
 /**
  * InitialState represents the initial state of a player, including resources
@@ -103,16 +103,5 @@ class InitialState
         $this->houseCapacity = 0;
         $this->population = $this->civilianPop = $this->militaryPop = $this->extraPop = 0;
         $this->position = [0, 0];
-    }
-
-    /**
-     * Returns starting age string.
-     *
-     * @return string
-     */
-    public function getStartingAgeString()
-    {
-        return isset(RecAnalystConst::$STARTING_AGES[$this->startingAge]) ?
-            RecAnalystConst::$STARTING_AGES[$this->startingAge] : '';
     }
 }

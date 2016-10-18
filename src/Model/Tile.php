@@ -1,5 +1,6 @@
 <?php
-namespace RecAnalyst;
+
+namespace RecAnalyst\Model;
 
 /**
  * Represents a map tile.
@@ -44,6 +45,8 @@ class Tile
      */
     public function __construct($x, $y, $terrain, $elevation)
     {
+        $this->x = $x;
+        $this->y = $y;
         $this->terrain = $terrain;
         $this->elevation = $elevation;
     }

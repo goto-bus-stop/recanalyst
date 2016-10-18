@@ -1,8 +1,10 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
 
+use RecAnalyst\RecordedGame;
 use RecAnalyst\Model\Research;
+use RecAnalyst\Model\InitialState;
 
 /**
  * The Player class represents a player in the game. This includes co-op players.

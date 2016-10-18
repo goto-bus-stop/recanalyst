@@ -1,6 +1,6 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
 
 /**
  * Represents a Team of Players in the game.
@@ -10,7 +10,7 @@ class Team
     /**
      * Team's index.
      *
-     * For internal purposes only. Use Team#getIndex() instead.
+     * For internal purposes only. Use Team#index() instead.
      *
      * @var int
      * @api private
@@ -20,9 +20,9 @@ class Team
     /**
      * Players in this team.
      *
-     * @var array
+     * @var \RecAnalyst\Model\Player[]
      */
-    public $players;
+    private $players;
 
     /**
      * Class constructor.
@@ -38,7 +38,7 @@ class Team
     /**
      * Adds a player to the team.
      *
-     * @param  \RecAnalyst\Player  $player  The player we wish to add
+     * @param  \RecAnalyst\Model\Player  $player  The player we wish to add
      * @return void
      */
     public function addPlayer(Player $player)
@@ -53,7 +53,7 @@ class Team
      * Returns a player at the specified offset.
      *
      * @param  int  An index of the player
-     * @return \RecAnalyst\Player|null
+     * @return \RecAnalyst\Model\Player|null
      */
     public function getPlayer($index)
     {
@@ -65,7 +65,7 @@ class Team
      *
      * @return int
      */
-    public function getIndex()
+    public function index()
     {
         return $this->index;
     }
@@ -73,7 +73,7 @@ class Team
     /**
      * Get the players in this team.
      *
-     * @return \RecAnalyst\Player[]
+     * @return \RecAnalyst\Model\Player[]
      */
     public function players()
     {

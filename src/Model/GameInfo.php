@@ -1,6 +1,8 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
+
+use RecAnalyst\RecordedGame;
 
 /**
  * GameInfo holds metadata about the analyzed game.
@@ -38,6 +40,7 @@ class GameInfo
      * Objectives string.
      *
      * @var string
+     * @api private
      */
     public $objectivesString;
 
@@ -45,6 +48,7 @@ class GameInfo
      * Original Scenario filename.
      *
      * @var string
+     * @api private
      */
     public $scFileName;
 
@@ -68,22 +72,21 @@ class GameInfo
      */
     public function getPlayersString()
     {
-        // players
-        $idx = 0;
-        $team_ary = [0, 0, 0, 0, 0, 0, 0, 0];
-        foreach ($this->owner->teams as $team) {
-            foreach ($team->players as $player) {
-                if (!$player->isCooping) {
-                    $team_ary[$idx]++;
-                }
-            }
-            $idx++;
-        }
-        $team_ary = array_diff($team_ary, [0]);
-        if (array_sum($team_ary) === count($this->owner->teams) && count($this->owner->teams) > 2) {
+        $teams = $this->rec->teams();
+
+        $teamMembers = array_map($teams, function (&$team) {
+            // Count non-cooping players.
+            return array_reduce($team->players(), function ($count, &$player) {
+                return $player->isCooping ? $count : $count + 1;
+            }, 0);
+        });
+
+        // Remove teams without players.
+        $teamMembers = array_diff($teamMembers, [0]);
+        if (array_sum($teamMembers) === count($teams) && count($teams) > 2) {
             return 'FFA';
         } else {
-            return implode('v', $team_ary);
+            return implode('v', $teamMembers);
         }
     }
 
@@ -151,21 +154,11 @@ class GameInfo
     }
 
     /**
-     * Returns the duration of the game.
-     *
-     * @return number The duration of the game in seconds.
-     */
-    public function getPlayTime()
-    {
-        return $this->playTime;
-    }
-
-    /**
      * Returns the objectives string.
      *
      * @return string The objectives.
      */
-    public function getObjectives()
+    public function objectives()
     {
         return $this->objectivesString;
     }
@@ -175,7 +168,7 @@ class GameInfo
      *
      * @return string The Scenario file name.
      */
-    public function getScenarioFilename()
+    public function scenarioFilename()
     {
         return $this->scFileName;
     }

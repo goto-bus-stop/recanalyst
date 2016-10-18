@@ -1,6 +1,6 @@
 <?php
 
-namespace RecAnalyst;
+namespace RecAnalyst\Model;
 
 /**
  * Represents a resource tribute.
@@ -22,14 +22,14 @@ class Tribute
     /**
      * Player this tribute was sent from.
      *
-     * @var \RecAnalyst\Player
+     * @var \RecAnalyst\Model\Player
      */
     public $playerFrom;
 
     /**
      * Player this tribute was sent to.
      *
-     * @var \RecAnalyst\Player
+     * @var \RecAnalyst\Model\Player
      */
     public $playerTo;
 

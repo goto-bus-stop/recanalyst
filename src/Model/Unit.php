@@ -1,5 +1,8 @@
 <?php
-namespace RecAnalyst;
+
+namespace RecAnalyst\Model;
+
+use RecAnalyst\RecordedGame;
 
 /**
  * Unit represents a unit object in the game.
