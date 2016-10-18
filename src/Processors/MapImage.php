@@ -70,11 +70,13 @@ class MapImage
             'manager' => null,
             'showPositions' => true,
             'showPlayerUnits' => true,
+            'showElevation' => false,
         ], $options);
 
         $this->imageManager = $options['manager'] ?: static::defaultManager();
         $this->showPositions = $options['showPositions'];
         $this->showPlayerUnits = $options['showPlayerUnits'];
+        $this->showElevation = $options['showElevation'];
     }
 
     /**
@@ -92,7 +94,18 @@ class MapImage
 
         foreach ($mapData as $y => $row) {
             foreach ($row as $x => $tile) {
-                $color = $p->getTerrainColor($tile->terrain);
+                $variation = 1;
+                if ($this->showElevation) {
+                    if (isset($mapData[$y + 1][$x + 1])) {
+                        $bottomRight = $mapData[$y + 1][$x + 1];
+                        if ($bottomRight->elevation < $tile->elevation) {
+                            $variation = 0;
+                        } else if ($bottomRight->elevation > $tile->elevation) {
+                            $variation = 2;
+                        }
+                    }
+                }
+                $color = $p->getTerrainColor($tile->terrain, $variation);
                 if (!is_null($color)) {
                     $this->fastPixel($image, $x, $y, $color);
                 } else {
