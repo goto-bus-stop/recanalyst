@@ -183,15 +183,17 @@ class AgeOfEmpires extends ResourcePack
     }
 
     /**
-     *Get the color for a terrain type.
+     * Get the color for a terrain type.
      *
      * @param int  $id  Terrain type ID.
+     * @param int  $variation  Terrain variation: 0 for a downward slope, 2 for
+     *     an upward slope, 1 for flat terrain (default).
      * @return string Hexadecimal representation of the terrain color,
      *    eg. "#004abb".
      */
-    public function getTerrainColor($id)
+    public function getTerrainColor($id, $variation = 1)
     {
-        return Colors::getTerrainColor($id);
+        return Colors::getTerrainColor($id, $variation);
     }
 
     /**

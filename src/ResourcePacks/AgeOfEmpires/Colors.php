@@ -10,55 +10,6 @@ namespace RecAnalyst\ResourcePacks\AgeOfEmpires;
 class Colors
 {
     /**
-     * Default terrain colors, indexed by ID.
-     *
-     * @var array
-     */
-    public static $TERRAIN_COLORS = [
-        '#339727',
-        '#305db6',
-        '#e8b478',
-        '#e4a252',
-        '#5492b0',
-        '#339727',
-        '#e4a252',
-        '#82884d',
-        '#82884d',
-        '#339727',
-        '#157615',
-        '#e4a252',
-        '#339727',
-        '#157615',
-        '#e8b478',
-        '#305db6',
-        '#339727',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#157615',
-        '#004aa1',
-        '#004abb',
-        '#e4a252',
-        '#e4a252',
-        '#ffec49',
-        '#e4a252',
-        '#305db6',
-        '#82884d',
-        '#82884d',
-        '#82884d',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#98c0f0',
-        '#c8d8ff',
-        '#98c0f0',
-        '#c8d8ff',
-        '#c8d8ff',
-        '#e4a252',
-    ];
-
-    /**
      * Default colors of GAIA-owned objects, indexed by unit ID.
      *
      * @var array
@@ -86,31 +37,33 @@ class Colors
     ];
 
     /**
-     * Default player colors.
+     * Get colors from the resources file.
      *
-     * @var array
+     * @param string  $category  Color category.
+     * @return array
      */
-    public static $PLAYER_COLORS = [
-        0 => '#0000ff',
-        1 => '#ff0000',
-        2 => '#00ff00',
-        3 => '#ffff00',
-        4 => '#00ffff',
-        5 => '#ff00ff',
-        6 => '#b9b9b9',
-        7 => '#ff8201',
-    ];
+    private static function getColors($category)
+    {
+        static $colors;
+        if (empty($colors)) {
+            $colors = require(__DIR__ . '/../../../resources/data/ageofempires/colors.php');
+        }
+        return $colors[$category];
+    }
 
     /**
      * Get the color for a terrain type.
      *
      * @param int  $id  Terrain type ID.
+     * @param int  $variation  Terrain variation: 0 for a downward slope, 2 for
+     *     an upward slope, 1 for flat terrain (default).
      * @return string Hexadecimal representation of the terrain color,
      *    eg. "#004abb".
      */
-    public static function getTerrainColor($id)
+    public static function getTerrainColor($id, $variation = 1)
     {
-        return self::$TERRAIN_COLORS[$id];
+        $terrainColors = self::getColors('terrain');
+        return $terrainColors[$id][$variation];
     }
 
     /**
@@ -135,6 +88,7 @@ class Colors
      */
     public static function getPlayerColor($id)
     {
-        return self::$PLAYER_COLORS[$id];
+        $playerColors = self::getColors('players');
+        return $playerColors[$id];
     }
 }
