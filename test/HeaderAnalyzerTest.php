@@ -34,6 +34,36 @@ class HeaderAnalyzerTest extends TestCase
         }
     }
 
+    public function testScenarioMessages()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/scenario/scenario-with-messages.mgz'));
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        $messageTypes = [
+            // Identifiers embedded in the test game.
+            'instructions' => 'RECANALYST:INSTRUCTIONS',
+            'hints' => 'RECANALYST:HINTS',
+            'loss' => 'RECANALYST:LOSS',
+            'victory' => 'RECANALYST:VICTORY',
+            'scouts' => 'RECANALYST:SCOUT',
+            'history' => 'RECANALYST:HISTORY',
+        ];
+        foreach ($messageTypes as $type => $expected) {
+            $this->assertAttributeContains($expected, $type, $analysis->messages);
+        }
+    }
+
+    /**
+     * Test a scenario with complex trigger info. This Age of Heroes beta
+     * version contains something like 700+ triggers.
+     */
+    public function testSkippingComplexTriggerInfo()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/scenario/age-of-heroes.mgz'));
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        // Just check that we didn't crash.
+        $this->assertNotNull($analysis);
+    }
+
     public function gamesProvider()
     {
         $files = glob(Path::makeRelative(
