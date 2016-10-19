@@ -47,6 +47,29 @@ function generateLanguageFiles($agedir, $data)
             13562,
             'SPECIAL_MAPS_LABEL',
         ],
+        'map_names' => array_merge(
+            // Standard maps
+            array_combine(
+                range(9, 32), // Map IDs
+                range(10875, 10898) // string indices
+            ),
+            // Nomad
+            [ 33 => 10901 ],
+            // Real world maps
+            array_combine(
+                range(34, 43),
+                range(13544, 13553)
+            ),
+            // Custom
+            [ 44 => 13562 ],
+            // Blind random
+            [ 48 => 10902 ],
+            // New maps
+            array_combine(
+                range(49, 64),
+                range(10914, 10929)
+            )
+        ),
         'resources' => range(4301, 4304),
         'game_speeds' => range(9432, 9434),
         'reveal_map' => range(9755, 9757),
