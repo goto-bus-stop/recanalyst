@@ -63,17 +63,6 @@ class AgeOfEmpires extends ResourcePack
     }
 
     /**
-     * Get the in-game name of a builtin map.
-     *
-     * @param int  $id  Map ID of a builtin map.
-     * @return string|null Map name.
-     */
-    public function getMapName($id)
-    {
-        return Map::getMapName($id);
-    }
-
-    /**
      * Check whether a builtin map is a "Real World" map, such as Byzantinum or
      * Texas.
      *

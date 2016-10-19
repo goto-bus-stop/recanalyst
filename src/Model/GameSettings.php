@@ -239,9 +239,7 @@ class GameSettings
      */
     public function mapName()
     {
-        $resourcePack = $this->rec->getResourcePack();
-        // TODO Localise.
-        return $resourcePack->getMapName($this->mapId);
+        return $this->rec->trans('map_names', $this->mapId);
     }
 
     /**
