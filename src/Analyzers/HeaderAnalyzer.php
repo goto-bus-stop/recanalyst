@@ -123,28 +123,7 @@ class HeaderAnalyzer extends Analyzer
         $this->position = $version->isAoe2Record ? 0x1bf : 0x0c;
         $includeAi = $this->readHeader('L', 4);
         if ($includeAi !== 0) {
-            $this->position += 2;
-            $numAiStrings = $this->readHeader('v', 2);
-            $this->position += 4;
-            for ($i = 0; $i < $numAiStrings; $i += 1) {
-                $length = $this->readHeader('l', 4);
-                $this->position += $length;
-            }
-            $this->position += 6;
-            for ($i = 0; $i < 8; $i += 1) {
-                $this->position += 10;
-                $numRules = $this->readHeader('v', 2);
-                $this->position += 4 + $numRules * 400;
-            }
-            $this->position += 5544;
-            if ($version->subVersion >= 11.96) {
-                $this->position += 1280;
-            }
-            // In mgx2 records...
-            if ($version->subVersion >= 12) {
-                // TODO Is this constant? (Probably not!)
-                $this->position += 477700;
-            }
+            $this->skipAi();
         }
 
         $this->position += 4;
@@ -293,7 +272,76 @@ class HeaderAnalyzer extends Analyzer
     }
 
     /**
-     * Skip a scenario triggers info block.
+     *
+     */
+    protected function skipAi()
+    {
+        $version = $this->version;
+
+        // String table
+        $this->position += 2;
+        $numAiStrings = $this->readHeader('v', 2);
+        $this->position += 4;
+        for ($i = 0; $i < $numAiStrings; $i += 1) {
+            $length = $this->readHeader('l', 4);
+            $this->position += $length;
+        }
+        $this->position += 6;
+
+        // Compiled script
+        // Compute size of a single AI rule. A rule can contain conditions and
+        // actions, with 4 integer parameters each. A rule can have 16
+        $actionSize = (
+            4 + // int type
+            2 + // id
+            2 + // unknown
+            4 * 4 // params
+        );
+        $ruleSize = (
+            12 + // unknown
+            1 + // number of facts
+            1 + // number of facts + actions
+            2 + // unknown
+            $actionSize * 16
+        );
+
+        // For HD Edition's MGX2 files.
+        if ($version->isHDPatch4) {
+            // TODO what's in this? More actions, perhaps?
+            $ruleSize += 0x180;
+        }
+
+        for ($i = 0; $i < 8; $i += 1) {
+            $this->position += (
+                4 + // int unknown
+                4 + // int seq
+                2 // max rules, constant
+            );
+            $numRules = $this->readHeader('v', 2);
+            $this->position += 4;
+            for ($j = 0; $j < $numRules; $j++) {
+                $this->position += $ruleSize;
+            }
+        }
+        $this->position += 104; // unknown
+        $this->position += 10 * 4 * 8; // timers: 10 ints * 8 players
+        $this->position += 256 * 4; // shared goals: 256 ints
+        $this->position += 4096; // ???
+        if ($version->subVersion >= 11.96) {
+            $this->position += 1280; // ???
+        }
+
+        // TODO is this the correct cutoff point?
+        if ($version->subVersion >= 12.3) {
+            // The 4 bytes here are likely actually somewhere in between one
+            // of the skips above.
+            $this->position += 4;
+        }
+    }
+
+    /**
+     * Skip a scenario triggers info block. See ScenarioTriggersAnalyzer for
+     * contents of a trigger block.
      */
     protected function skipTriggerInfo()
     {
