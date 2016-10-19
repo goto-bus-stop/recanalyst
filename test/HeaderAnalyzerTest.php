@@ -105,6 +105,12 @@ class HeaderAnalyzerTest extends TestCase
                 ['name' => 'Eternal Lobster'],
                 ['name' => 'Ernak the Hun'],
             ], 2],
+            ['./recs/ai/20141214_blutze(mong)+ffraid(pers) vs bots(goth+chin).mgx2', [
+                ['name' => 'Purpleblutzicle'],
+                ['name' => 'Ffraid'],
+                ['name' => 'Li Shi-min'],
+                ['name' => 'Theodoric the Goth'],
+            ], 4],
             ['./recs/FluffyFur+yousifr+TheBlackWinds+Mobius_One[Chinese]=VS=MOD3000+Chrazini+ClosedLoop+ [AGM]Wineup[Britons]_1v1_8PlayerCo-op_01222015.mgx2', [
                 ['team' => 1, 'isCooping' => true, 'name' => 'Mobius One'],
                 ['team' => 2, 'isCooping' => true, 'name' => 'MOD3000'],
