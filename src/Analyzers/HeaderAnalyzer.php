@@ -148,6 +148,12 @@ class HeaderAnalyzer extends Analyzer
         $mapSizeY = $this->readHeader('l', 4);
         $analysis->mapSize = [$mapSizeX, $mapSizeY];
 
+        // If we went wrong somewhere, throw now so we don't end up in a near-
+        // infinite loop later.
+        if ($mapSizeX > 10000 || $mapSizeY > 10000) {
+            throw new \Exception('Got invalid map size');
+        }
+
         $numUnknownData = $this->readHeader('l', 4);
         for ($i = 0; $i < $numUnknownData; $i += 1) {
             if ($version->subVersion >= 11.93) {
@@ -159,6 +165,7 @@ class HeaderAnalyzer extends Analyzer
             $this->position += ($numFloats * 4) + 4;
         }
         $this->position += 2;
+
         $mapData = [];
         for ($y = 0; $y < $mapSizeY; $y += 1) {
             $mapData[$y] = [];
