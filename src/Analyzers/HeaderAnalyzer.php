@@ -297,30 +297,47 @@ class HeaderAnalyzer extends Analyzer
      */
     protected function skipTriggerInfo()
     {
+        // Effects and triggers are of variable size, but conditions are
+        // constant.
+        $conditionSize = (
+            (11 * 4) + // 11 ints
+            (4 * 4) + // area (4 ints)
+            (3 * 4) // 3 ints
+        );
+
         $numTriggers = $this->readHeader('l', 4);
-        if ($numTriggers > 0) {
-            for ($i = 0; $i < $numTriggers; $i += 1) {
-                $this->position += 18;
-                $this->position += $this->readHeader('l', 4);
-                $this->position += $this->readHeader('l', 4);
-                $numEffects = $this->readHeader('l', 4);
-                for ($j = 0; $j < $numEffects; $j += 1) {
-                    $this->position += 24;
-                    $numSelectedObjects = $this->readHeader('l', 4);
-                    if ($numSelectedObjects === -1) {
-                        $numSelectedObjects = 0;
-                    }
-                    $this->position += 72;
-                    $this->position += $this->readHeader('l', 4);
-                    $this->position += $this->readHeader('l', 4);
-                    $this->position += $numSelectedObjects * 8;
+        for ($i = 0; $i < $numTriggers; $i += 1) {
+            $this->position += 4 + (2 * 1) + (3 * 4); // int, 2 bools, 3 ints
+            $descriptionLength = $this->readHeader('l', 4);
+            $this->position += $descriptionLength;
+            $nameLength = $this->readHeader('l', 4);
+            $this->position += $nameLength;
+            $numEffects = $this->readHeader('l', 4);
+            for ($j = 0; $j < $numEffects; $j += 1) {
+                $this->position += 6 * 4; // 6 ints
+                $numSelectedObjects = $this->readHeader('l', 4);
+                if ($numSelectedObjects === -1) {
+                    $numSelectedObjects = 0;
                 }
-                $this->position += $numEffects * 8;
-                $numConditions = $this->readHeader('l', 4);
-                $this->position += (72 * $numConditions) + ($numConditions * 8);
+                $this->position += 9 * 4; // 9 ints
+                $this->position += 2 * 4; // location (2 ints)
+                $this->position += 4 * 4; // area (2 locations)
+                $this->position += 3 * 4; // 3 ints
+                $textLength = $this->readHeader('l', 4);
+                $this->position += $textLength;
+                $soundFileNameLength = $this->readHeader('l', 4);
+                $this->position += $soundFileNameLength;
+                $this->position += $numSelectedObjects * 4; // unit IDs (one int each)
             }
-            $this->position += $numTriggers * 8;
-            // type = scen
+            $this->position += $numEffects * 4; // effect order (list of ints)
+            $numConditions = $this->readHeader('l', 4);
+            $this->position += $numConditions * $conditionSize;
+            $this->position += $numConditions * 4; // conditions order (list of ints)
+        }
+
+        if ($numTriggers > 0) {
+            $this->position += $numTriggers * 4; // trigger order (list of ints)
+            // TODO perhaps also set game type to Scenario here?
         }
     }
 
