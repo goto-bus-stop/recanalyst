@@ -28,14 +28,16 @@ class HeaderAnalyzer extends Analyzer
         $aokSeparator = pack('c*', 0x9A, 0x99, 0x99, 0x3F);
 
         $rec = $this->rec;
-        $analysis = new \StdClass;
+        $this->analysis = new \StdClass;
+        $analysis = $this->analysis;
 
         $playersByIndex = [];
 
         $size = strlen($this->header);
         $this->position = 0;
 
-        $version = $this->read(VersionAnalyzer::class);
+        $this->version = $this->read(VersionAnalyzer::class);
+        $version = $this->version;
         $analysis->version = $version->version;
         $analysis->subVersion = $version->subVersion;
 
@@ -43,6 +45,9 @@ class HeaderAnalyzer extends Analyzer
         $gameSettingsPos = strrpos($this->header, $separator, -($size - $triggerInfoPos)) + strlen($separator);
         $scenarioSeparator = $version->isAoK ? $aokSeparator : $scenarioConstant;
         $scenarioHeaderPos = strrpos($this->header, $scenarioSeparator, -($size - $gameSettingsPos));
+        if ($scenarioHeaderPos !== -1) {
+            $scenarioHeaderPos -= 4;
+        }
 
         $this->position = $gameSettingsPos + 8;
 
@@ -203,6 +208,18 @@ class HeaderAnalyzer extends Analyzer
 
         $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
 
+        if ($scenarioHeaderPos > 0) {
+            $this->position = $scenarioHeaderPos;
+            $this->readScenarioHeader();
+            // Set game type now if it wasn't known. (Game type data is not
+            // included in MGL files.)
+            if ($gameType === -1) {
+                $gameType = GameSettings::TYPE_SCENARIO;
+            }
+        }
+
+        $analysis->messages = $this->readMessages();
+
         $analysis->teams = $this->buildTeams($players);
 
         $gameSettings = [
@@ -305,6 +322,75 @@ class HeaderAnalyzer extends Analyzer
             $this->position += $numTriggers * 8;
             // type = scen
         }
+    }
+
+    /**
+     * Read the scenario info header. Contains information about configured
+     * players and the scenario file.
+     *
+     * @return void
+     */
+    protected function readScenarioHeader()
+    {
+        $nextUnitId = $this->readHeader('l', 4);
+        $this->position += 4;
+        // Player names
+        for ($i = 0; $i < 16; $i++) {
+            $this->position += 256; // rtrim(readHeaderRaw(), \0)
+        }
+        // Player names (string table)
+        for ($i = 0; $i < 16; $i++) {
+            $this->position += 4; // int
+        }
+        for ($i = 0; $i < 16; $i++) {
+            $this->position += 4; // bool isActive
+            $this->position += 4; // bool isHuman
+            $this->position += 4; // int civilization
+            $this->position += 4; // const 0x00000004
+        }
+        $this->position += 5;
+
+        $elapsedTime = $this->readHeader('f', 4);
+        $nameLen = $this->readHeader('v', 2);
+        $filename = $this->readHeaderRaw($nameLen);
+
+        // These should be string IDs for messages?
+        if ($this->version->isMgl) {
+            $this->position += 20;
+        } else {
+            $this->position += 24;
+        }
+
+        $this->analysis->scenarioFilename = $filename;
+    }
+
+    /**
+     * Read messages.
+     *
+     * @return \StdClass
+     */
+    protected function readMessages()
+    {
+        $len = $this->readHeader('v', 2);
+        $instructions = rtrim($this->readHeaderRaw($len), "\0");
+        $len = $this->readHeader('v', 2);
+        $hints = rtrim($this->readHeaderRaw($len), "\0");
+        $len = $this->readHeader('v', 2);
+        $victory = rtrim($this->readHeaderRaw($len), "\0");
+        $len = $this->readHeader('v', 2);
+        $loss = rtrim($this->readHeaderRaw($len), "\0");
+        $len = $this->readHeader('v', 2);
+        $history = rtrim($this->readHeaderRaw($len), "\0");
+        $len = $this->readHeader('v', 2);
+        $scouts = rtrim($this->readHeaderRaw($len), "\0");
+        return (object) [
+            'instructions' => $instructions,
+            'hints' => $hints,
+            'victory' => $victory,
+            'loss' => $loss,
+            'history' => $history,
+            'scouts' => $scouts,
+        ];
     }
 
     /**
