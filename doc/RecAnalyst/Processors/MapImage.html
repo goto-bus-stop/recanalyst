@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>RecAnalyst\Processors\MapImage | RecAnalyst API</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:RecAnalyst_Processors_MapImage" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">RecAnalyst API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../RecAnalyst.html">RecAnalyst</a></li>
+                                        <li><a href="../../RecAnalyst/Processors.html">Processors</a></li>
+    
+                <li>MapImage</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            MapImage
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>MapImage</strong>        (<a href="https://github.com/goto-bus-stop/recanalyst/blob/master/src/Processors/MapImage.php">View source</a>)
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>Generate a top-down map image that shows the starting state of the game.</p>                    </div>
+    
+    
+    
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<abbr title="Intervention\Image\ImageManager">ImageManager</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_defaultManager">defaultManager</a>(<abbr title="Intervention\Image\ImageManager">ImageManager</abbr>|array $manager = null)
+        
+                                            <p>Configure the Intervention image manager. See:</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a> $rec, array $options = array())
+        
+                                            <p>Create a Map Image generator.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Intervention\Image\Image">Image</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_run">run</a>()
+        
+                                            <p>Generate a map!</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method_defaultManager">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/master/src/Processors/MapImage.php#L40">line 40</a></div>
+        <code>        static            <abbr title="Intervention\Image\ImageManager">ImageManager</abbr>
+    <strong>defaultManager</strong>(<abbr title="Intervention\Image\ImageManager">ImageManager</abbr>|array $manager = null)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Configure the Intervention image manager. See:</p>                    <p>http://image.intervention.io/getting_started/configuration</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Intervention\Image\ImageManager">ImageManager</abbr>|array</td>
+                <td>$manager</td>
+                <td>Image manager or array of image manager options to use.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Intervention\Image\ImageManager">ImageManager</abbr></td>
+            <td>The current default image manager.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/master/src/Processors/MapImage.php#L65">line 65</a></div>
+        <code>                    
+    <strong>__construct</strong>(<a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a> $rec, array $options = array())
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Create a Map Image generator.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a></td>
+                <td>$rec</td>
+                <td>Recorded game instance.</td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td>Options to use.
+    - <code>$options['manager']</code> - Use an ImageManager that's not the default.
+    - <code>$options['showPositions']</code> - Set to false to hide player starting
+      positions. Defaults to true.
+    - <code>$options['showPlayerUnits']</code> - Set to false to hide positions of
+      starting units (e.g. walls on Arena). Defaults to true.</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_run">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/master/src/Processors/MapImage.php#L87">line 87</a></div>
+        <code>                    <abbr title="Intervention\Image\Image">Image</abbr>
+    <strong>run</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Generate a map!</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Intervention\Image\Image">Image</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
