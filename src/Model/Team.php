@@ -10,30 +10,16 @@ class Team
     /**
      * Team's index.
      *
-     * For internal purposes only. Use Team#index() instead.
-     *
      * @var int
-     * @api private
      */
-    public $index;
+    private $index = -1;
 
     /**
      * Players in this team.
      *
      * @var \RecAnalyst\Model\Player[]
      */
-    private $players;
-
-    /**
-     * Class constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->index = -1;
-        $this->players = [];
-    }
+    private $players = [];
 
     /**
      * Adds a player to the team.

@@ -38,8 +38,6 @@ class HeaderAnalyzer extends Analyzer
 
         $this->version = $this->read(VersionAnalyzer::class);
         $version = $this->version;
-        $analysis->version = $version->version;
-        $analysis->subVersion = $version->subVersion;
 
         $triggerInfoPos = strrpos($this->header, $constant2, $this->position) + strlen($constant2);
         $gameSettingsPos = strrpos($this->header, $separator, -($size - $triggerInfoPos)) + strlen($separator);
@@ -488,9 +486,9 @@ class HeaderAnalyzer extends Analyzer
     /**
      * Group players into teams.
      *
-     * @param \RecAnalyst\Player[]  $players  Array of players.
+     * @param \RecAnalyst\Model\Player[]  $players  Array of players.
      *
-     * @return \RecAnalyst\Team[]
+     * @return \RecAnalyst\Model\Team[]
      */
     protected function buildTeams($players)
     {

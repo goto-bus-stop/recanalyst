@@ -17,7 +17,7 @@ class Unit
     /**
      * The player that owns this unit. NULL if GAIA.
      *
-     * @var \RecAnalyst\Player
+     * @var \RecAnalyst\Model\Player
      */
     public $owner = null;
 

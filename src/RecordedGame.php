@@ -151,7 +151,7 @@ class RecordedGame
     /**
      * Run an analysis on the current game.
      *
-     * @param  Analyzer  $analyzer
+     * @param  \RecAnalyst\Analyzers\Analyzer  $analyzer
      * @return mixed
      */
     public function runAnalyzer(Analyzer $analyzer)
@@ -355,7 +355,7 @@ class RecordedGame
     /**
      * Get the game settings used to play this recorded game.
      *
-     * @return \RecAnalyst\GameSettings
+     * @return \RecAnalyst\Model\GameSettings
      */
     public function gameSettings()
     {
@@ -388,7 +388,7 @@ class RecordedGame
     /**
      * Get the teams that played in this recorded game.
      *
-     * @return \RecAnalyst\Team[] Teams.
+     * @return \RecAnalyst\Model\Team[] Teams.
      */
     public function teams()
     {
@@ -398,7 +398,7 @@ class RecordedGame
     /**
      * Get the players that played in this recorded game.
      *
-     * @return \RecAnalyst\Player[] Players.
+     * @return \RecAnalyst\Model\Player[] Players.
      */
     public function players()
     {

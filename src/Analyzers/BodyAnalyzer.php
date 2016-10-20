@@ -3,10 +3,9 @@
 namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Model\Unit;
-use RecAnalyst\Model\Tribute;
-use RecAnalyst\GameInfo;
-use RecAnalyst\Model\ChatMessage;
 use RecAnalyst\RecordedGame;
+use RecAnalyst\Model\Tribute;
+use RecAnalyst\Model\ChatMessage;
 use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
 
 /**
@@ -14,24 +13,105 @@ use RecAnalyst\ResourcePacks\AgeOfEmpires\Civilization;
  */
 class BodyAnalyzer extends Analyzer
 {
+    /**
+     * Operation ID of in-game commands.
+     *
+     * @var int
+     */
     const OP_COMMAND = 0x01;
+    /**
+     * Operation ID of sync packets.
+     *
+     * @var int
+     */
     const OP_SYNC = 0x02;
+    /**
+     * Operation ID of "meta" operations like the start of the game or chat
+     * messages.
+     *
+     * @var int
+     */
     const OP_META = 0x03;
+    /**
+     * Same as OP_META, but not quite?
+     *
+     * @var int
+     */
     const OP_META2 = 0x04;
 
+    /**
+     * Game start identifier.
+     *
+     * @var int
+     */
     const META_GAME_START = 0x01F4;
+    /**
+     * Chat message identifier.
+     *
+     * @var int
+     */
     const META_CHAT = -1;
 
+    /**
+     * Resignation command ID.
+     *
+     * @var int
+     */
     const COMMAND_RESIGN = 0x0B;
+    /**
+     * Research command ID.
+     *
+     * @var int
+     */
     const COMMAND_RESEARCH = 0x65;
+    /**
+     * Unit training command ID.
+     *
+     * @var int
+     */
     const COMMAND_TRAIN = 0x77;
+    /**
+     * Unit training command ID (used by AIs).
+     *
+     * @var int
+     */
     const COMMAND_TRAIN_SINGLE = 0x64;
+    /**
+     * Building command ID.
+     *
+     * @var int
+     */
     const COMMAND_BUILD = 0x66;
+    /**
+     * Tribute command ID.
+     *
+     * @var int
+     */
     const COMMAND_TRIBUTE = 0x6C;
+    /**
+     * UserPatch post-game lobby data command ID.
+     *
+     * @var int
+     */
     const COMMAND_POSTGAME = 0xFF;
 
+    /**
+     * Feudal age research ID.
+     *
+     * @var int
+     */
     const RESEARCH_FEUDAL = 101;
+    /**
+     * Castle age research ID.
+     *
+     * @var int
+     */
     const RESEARCH_CASTLE = 102;
+    /**
+     * Imperial age research ID.
+     *
+     * @var int
+     */
     const RESEARCH_IMPERIAL = 103;
 
     /**
@@ -51,14 +131,14 @@ class BodyAnalyzer extends Analyzer
     /**
      * Tributes sent during the game.
      *
-     * @var Tribute[]
+     * @var \RecAnalyst\Model\Tribute[]
      */
     private $tributes = [];
 
     /**
      * Chat messages sent during the game.
      *
-     * @var ChatMessage[]
+     * @var \RecAnalyst\Model\ChatMessage[]
      */
     private $chatMessages = [];
 
@@ -150,6 +230,7 @@ class BodyAnalyzer extends Analyzer
                         if (!$player) {
                             break;
                         }
+
                         switch ($researchId) {
                             case self::RESEARCH_FEUDAL:
                                 $researchDuration = 130000;

@@ -115,7 +115,7 @@ class Player
 
     /**
      * An array of player's researches containing
-     * "research id => \RecAnalyst\Research instance" pairs.
+     * "research id => \RecAnalyst\Model\Research instance" pairs.
      *
      * @var array
      */
@@ -125,7 +125,7 @@ class Player
      * Contains the player's initial state, such as starting resources
      * and population.
      *
-     * @var \RecAnalyst\InitialState
+     * @var \RecAnalyst\Model\InitialState
      */
     public $initialState;
 
@@ -274,7 +274,7 @@ class Player
     }
 
     /**
-     * @return Research[]
+     * @return \RecAnalyst\Model\Research[]
      */
     public function researches()
     {
@@ -297,7 +297,7 @@ class Player
     /**
      * Get the player's starting age.
      *
-     * @see \RecAnalyst\InitialState::$startingAge
+     * @see \RecAnalyst\Model\InitialState::$startingAge
      *
      * @return string Name of the starting age.
      */

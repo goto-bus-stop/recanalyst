@@ -13,7 +13,7 @@ class PlayerMetaAnalyzer extends Analyzer
     /**
      * Run the analysis.
      *
-     * @return \RecAnalyst\Player[] Players.
+     * @return \RecAnalyst\Model\Player[] Players.
      */
     protected function run()
     {
@@ -49,7 +49,7 @@ class PlayerMetaAnalyzer extends Analyzer
      *     uint32 nameLength;
      *     char name[nameLength];
      *
-     * @return \RecAnalyst\Player
+     * @return \RecAnalyst\Model\Player
      */
     protected function readPlayerMeta()
     {

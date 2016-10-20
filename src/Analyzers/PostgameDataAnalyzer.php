@@ -2,10 +2,6 @@
 
 namespace RecAnalyst\Analyzers;
 
-use RecAnalyst\Player;
-use RecAnalyst\Unit;
-use RecAnalyst\GameInfo;
-
 /**
  * Analyze a UserPatch post-game data block, containing achievements.
  */

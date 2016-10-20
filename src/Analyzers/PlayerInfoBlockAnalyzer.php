@@ -30,14 +30,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
     /**
      * Units owned by GAIA at the start of the game.
      *
-     * @var \RecAnalyst\Unit[]
+     * @var \RecAnalyst\Model\Unit[]
      */
     private $gaiaObjects = [];
 
     /**
      * Units owned by players at the start of the game.
      *
-     * @var \RecAnalyst\Unit[]
+     * @var \RecAnalyst\Model\Unit[]
      */
     private $playerObjects = [];
 
