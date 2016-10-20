@@ -106,7 +106,8 @@ You can then refer to the different categories of icons in the following ways:
 
 ## API Documentation
 
-Full API documentation is available at https://goto-bus-stop.github.io/recanalyst/.
+Full API documentation is available at
+https://goto-bus-stop.github.io/recanalyst/doc/.
 
 [CREDITS]: ./CREDITS
 [Composer]: https://getcomposer.org
@@ -123,4 +124,4 @@ Full API documentation is available at https://goto-bus-stop.github.io/recanalys
 [Configuration]: #configuration
 [Laravel integration]: #laravel
 [Usage Examples]: ./examples#readme
-[API Documentation]: https://goto-bus-stop.github.io/recanalyst/
+[API Documentation]: https://goto-bus-stop.github.io/recanalyst/doc/
