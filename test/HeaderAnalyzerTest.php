@@ -124,7 +124,15 @@ class HeaderAnalyzerTest extends TestCase
                 // and coop partners at the end.
                 ['team' => 1, 'isCooping' => false, 'name' => 'FluffyFur'],
                 ['team' => 2, 'isCooping' => false, 'name' => '[AGM]Wineup'],
-            ], 2]
+            ], 2],
+            ['./recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record', [
+                ['name' => 'Dutch Class'],
+                ['name' => 'robo_boro'],
+            ], 2],
+            ['./recs/versions/Kingdoms Britons v Britons - SP Replay v4.6 @2016.05.05 130519.aoe2record', [
+                ['civId' => 1, 'name' => 'Idle Beaver'],
+                ['civId' => 1, 'name' => 'Duke of Normandy (AI)'],
+            ], 2],
         ];
     }
 }

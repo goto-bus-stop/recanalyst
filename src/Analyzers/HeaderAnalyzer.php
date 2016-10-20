@@ -120,7 +120,27 @@ class HeaderAnalyzer extends Analyzer
             $pregameChat = $this->readChat($playersByIndex);
         }
 
-        $this->position = $version->isAoe2Record ? 0x1bf : 0x0c;
+        if ($version->isAoe2Record) {
+            // Skip aoe2record header.
+            // TODO this probably contains more version information, perhaps
+            // about expansion packs or mods. Should read that in
+            // VersionAnalyzer.
+            $this->position = 0x0c;
+            // Skip 6 separators
+            $separator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
+            for ($i = 0; $i < 6; $i++) {
+                $this->position = strpos($this->header, $separator, $this->position);
+                if ($this->position === false) {
+                    throw new \Exception('Unrecognized aoe2record header format.');
+                }
+                $this->position += strlen($separator); // length of separator
+            }
+            // Some unknown stuff
+            $this->position += 10;
+        } else {
+            $this->position = 0x0c;
+        }
+
         $includeAi = $this->readHeader('L', 4);
         if ($includeAi !== 0) {
             $this->skipAi();
