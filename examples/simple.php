@@ -9,8 +9,10 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use RecAnalyst\RecordedGame;
 
+$filename = __DIR__ . '/../test/recs/forgotten/HD-FE.mgx2';
+
 // Read a recorded game from a file path.
-$rec = new RecordedGame('recorded_game.mgx2');
+$rec = new RecordedGame($filename);
 
 // Render a map image. Map images are instances of the \Intervention\Image
 // library, so you can easily manipulate them.
@@ -19,6 +21,9 @@ $rec->mapImage()
     ->save('minimap.png');
 
 // Display players and their civilizations.
+echo 'Players: ' . "\n";
 foreach ($rec->players() as $player) {
-    echo $player->name . ' (' . $player->civName(). ')' . "\n";
+    echo ' * ' . $player->name . ' (' . $player->civName(). ')' . "\n";
 }
+
+echo 'Minimap saved in minimap.png.' . "\n";
