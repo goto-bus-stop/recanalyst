@@ -32,8 +32,7 @@ $twig = new Twig_Environment($loader);
 $twig->addFilter(new Twig_SimpleFilter('formatGameTime', '\RecAnalyst\Utils::formatGameTime'));
 
 $twig->addFilter(new Twig_SimpleFilter('getResearchImage', function ($research) {
-    $data = RecAnalystConst::$RESEARCHES[$research->id];
-    $path = __DIR__ . '/../../resources/researches/' . $data[1] . '.png';
+    $path = __DIR__ . '/../../resources/images/researches/' . $research->id . '.png';
     if (is_file($path)) {
         return ImageManagerStatic::make($path)->encode('data-url');
     }
