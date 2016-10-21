@@ -406,6 +406,21 @@ class RecordedGame
     }
 
     /**
+     * Get the POV player. This is the player that recorded this recorded game
+     * file.
+     *
+     * @return \RecAnalyst\Model\Player
+     */
+    public function pov()
+    {
+        foreach ($this->players() as $player) {
+            if ($player->owner) {
+                return $player;
+            }
+        }
+    }
+
+    /**
      * Get the player achievements.
      *
      * return \StdClass[] Achievements for each player.

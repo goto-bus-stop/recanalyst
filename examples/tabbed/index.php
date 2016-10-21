@@ -11,15 +11,6 @@ use Twig_Loader_Array;
 // Read a recorded game from a file path.
 $rec = new RecordedGame(__DIR__ . '/../../test/recs/versions/HD_test.mgx');
 
-// Determine the POV of this recorded game.
-$pov = null;
-foreach ($rec->players() as $player) {
-    if ($player->owner) {
-        $pov = $player;
-        break;
-    }
-}
-
 // Configure Twig.
 $loader = new Twig_Loader_Array([
     // In a real app, the Twig filesystem loader should probably be used,
@@ -42,5 +33,4 @@ $twig->addFilter(new Twig_SimpleFilter('getResearchImage', function ($research) 
 echo $twig->render('results', [
     'mapImage' => $rec->mapImage()->resize(360, 180)->encode('data-url'),
     'rec' => $rec,
-    'pov' => $pov,
 ]);
