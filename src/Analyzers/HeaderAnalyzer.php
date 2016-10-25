@@ -26,6 +26,7 @@ class HeaderAnalyzer extends Analyzer
         $separator = pack('c*', 0x9D, 0xFF, 0xFF, 0xFF);
         $scenarioConstant = pack('c*', 0xF6, 0x28, 0x9C, 0x3F);
         $aokSeparator = pack('c*', 0x9A, 0x99, 0x99, 0x3F);
+        $aoe2recordScenarioSeparator = pack('c*', 0xAE, 0x47, 0xA1, 0x3F);
 
         $rec = $this->rec;
         $this->analysis = new \StdClass;
@@ -41,9 +42,15 @@ class HeaderAnalyzer extends Analyzer
 
         $triggerInfoPos = strrpos($this->header, $constant2, $this->position) + strlen($constant2);
         $gameSettingsPos = strrpos($this->header, $separator, -($size - $triggerInfoPos)) + strlen($separator);
-        $scenarioSeparator = $version->isAoK ? $aokSeparator : $scenarioConstant;
+        $scenarioSeparator = $scenarioConstant;
+        if ($version->isAoK) {
+            $scenarioSeparator = $aokSeparator;
+        }
+        if ($version->isAoe2Record) {
+            $scenarioSeparator = $aoe2recordScenarioSeparator;
+        }
         $scenarioHeaderPos = strrpos($this->header, $scenarioSeparator, -($size - $gameSettingsPos));
-        if ($scenarioHeaderPos !== -1) {
+        if ($scenarioHeaderPos !== false) {
             $scenarioHeaderPos -= 4;
         }
 

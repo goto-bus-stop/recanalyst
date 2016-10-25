@@ -66,12 +66,14 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertNotNull($analysis);
     }
 
-    public function testAoe2RecordGameSettings()
+    public function testAoe2Record()
     {
         $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record'));
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         $this->assertAttributeEquals(1, 'lockDiplomacy', $analysis->gameSettings);
         $this->assertAttributeEquals(GameSettings::LEVEL_EASIEST, 'difficultyLevel', $analysis->gameSettings);
+
+        $this->assertAttributeContains('Conquest Game', 'instructions', $analysis->messages);
     }
 
     public function gamesProvider()
