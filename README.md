@@ -5,11 +5,9 @@
 [![Build Status](https://travis-ci.org/goto-bus-stop/recanalyst.svg?branch=master)](https://travis-ci.org/goto-bus-stop/recanalyst)
 [![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
-> The `master` branch is under development. Check out the [v3.x branch][] for
-> the current version.
-
-RecAnalyst is a PHP package for analyzing Age of Kings, The Conquerors,
-Forgotten Empires and Age of Empires 2 HD (The Forgotten) recorded games.
+RecAnalyst is a PHP package for analyzing Age of Empires II recorded games. It
+supports recorded game files from Age of Kings, The Conquerors, UserPatch,
+Forgotten Empires, and HD Edition (optionally with expansions).
 
 [License][] - [Credits][] - [Requirements][] - [Installation][] -
 [Configuration][] - [Usage Examples][] - [API Documentation][]
@@ -37,8 +35,8 @@ See also [CREDITS][].
 
 ## Requirements
 
-RecAnalyst needs PHP 5.6+ or PHP 7. For generating map images, either the
-Imagick or GD extension needs to be installed as well.
+RecAnalyst works with PHP 5.6+ and PHP 7. The Imagick or GD extensions need to
+be installed to generate map images.
 
 ## Installation
 
