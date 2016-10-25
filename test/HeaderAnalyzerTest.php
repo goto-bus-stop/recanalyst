@@ -1,8 +1,10 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
+use PHPUnit\Framework\TestCase;
+
 use RecAnalyst\RecordedGame;
+use RecAnalyst\Model\GameSettings;
 use RecAnalyst\Analyzers\HeaderAnalyzer;
 
 class HeaderAnalyzerTest extends TestCase
@@ -62,6 +64,14 @@ class HeaderAnalyzerTest extends TestCase
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         // Just check that we didn't crash.
         $this->assertNotNull($analysis);
+    }
+
+    public function testAoe2RecordGameSettings()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record'));
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        $this->assertAttributeEquals(1, 'lockDiplomacy', $analysis->gameSettings);
+        $this->assertAttributeEquals(GameSettings::LEVEL_EASIEST, 'difficultyLevel', $analysis->gameSettings);
     }
 
     public function gamesProvider()

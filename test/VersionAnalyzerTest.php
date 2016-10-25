@@ -76,7 +76,6 @@ class VersionAnalyzerTest extends TestCase
                 'isAoe2Record' => false,
                 'isMsx' => true,
             ]],
-
         ];
     }
 }

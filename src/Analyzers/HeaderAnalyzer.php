@@ -49,17 +49,19 @@ class HeaderAnalyzer extends Analyzer
 
         $this->position = $gameSettingsPos + 8;
 
-        if (!$version->isAoK) {
-            $mapId = $this->readHeader('l', 4);
-        }
-        $difficulty = $this->readHeader('l', 4);
-        $lockTeams = $this->readHeader('L', 4);
+        $this->position = $gameSettingsPos + 8;
 
         // TODO Is 12.3 the correct cutoff point?
         if ($version->subVersion >= 12.3) {
             // TODO what are theeeese?
             $this->position += 16;
         }
+
+        if (!$version->isAoK) {
+            $mapId = $this->readHeader('l', 4);
+        }
+        $difficulty = $this->readHeader('l', 4);
+        $lockTeams = $this->readHeader('L', 4);
 
         $players = $this->read(PlayerMetaAnalyzer::class);
         foreach ($players as $player) {
@@ -230,6 +232,7 @@ class HeaderAnalyzer extends Analyzer
             'gameType' => $gameType,
             'gameSpeed' => $gameSpeed,
             'mapSize' => $mapSize,
+            'difficultyLevel' => $difficulty,
             // UserPatch stores the actual population limit divided by 25.
             'popLimit' => $version->isUserPatch ? $popLimit * 25 : $popLimit,
         ];

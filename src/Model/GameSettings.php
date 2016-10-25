@@ -119,9 +119,9 @@ class GameSettings
     public function __construct(RecordedGame $rec, $attrs = [])
     {
         $this->rec = $rec;
-        $this->difficultyLevel = self::LEVEL_HARDEST;
-        $this->gameSpeed = self::SPEED_NORMAL;
-        $this->revealMap = self::REVEAL_NORMAL;
+        $this->difficultyLevel = isset($attrs['difficultyLevel']) ? $attrs['difficultyLevel'] : self::LEVEL_HARDEST;
+        $this->gameSpeed = isset($attrs['gameSpeed']) ? $attrs['gameSpeed'] : self::SPEED_NORMAL;
+        $this->revealMap = isset($attrs['revealMap']) ? $attrs['revealMap'] : self::REVEAL_NORMAL;
         $this->gameType = isset($attrs['gameType']) ? $attrs['gameType'] : self::TYPE_RANDOMMAP;
         $this->mapSize = isset($attrs['mapSize']) ? $attrs['mapSize'] : self::SIZE_TINY;
         $this->mapId = isset($attrs['mapId']) ? $attrs['mapId'] : 0;
