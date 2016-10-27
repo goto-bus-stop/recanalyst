@@ -295,7 +295,7 @@ class RecordedGame
         }
         fclose($fp);
 
-        $this->headerContents = gzinflate($bindata, 8388608);  // 8MB
+        $this->headerContents = gzinflate($bindata, 8388608 * 2);  // 16MB
         unset($bindata);
 
         if (!strlen($this->headerContents)) {
