@@ -227,12 +227,17 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                             $this->position += 1;
                         }
                         break;
+                    // Flags, Map Revealers, ???, only tends to appear in
+                    // scenario games.
                     case 20:
+                        if ($version->isHDEdition) {
+                            $this->position += 3;
+                        }
                         if ($version->isMgx) {
                             $this->position += 59;
                             $isExtended = ord($this->header[$this->position]);
-                            $this->position -= 59;
-                            $this->position += 68 - 4;
+                            $this->position += 1; // $isExtended
+                            $this->position += 4;
                             if ($isExtended == 2) {
                                 $this->position += 34;
                             }
