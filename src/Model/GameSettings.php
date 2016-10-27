@@ -3,7 +3,6 @@
 namespace RecAnalyst\Model;
 
 use RecAnalyst\RecordedGame;
-use RecAnalyst\Model\VictorySettings;
 
 class GameSettings
 {
@@ -105,13 +104,6 @@ class GameSettings
     public $lockDiplomacy;
 
     /**
-     * Victory settings.
-     *
-     * @var \RecAnalyst\VictorySettings
-     */
-    public $victory;
-
-    /**
      * Class constructor.
      *
      * @return void
@@ -127,7 +119,6 @@ class GameSettings
         $this->mapId = isset($attrs['mapId']) ? $attrs['mapId'] : 0;
         $this->popLimit = isset($attrs['popLimit']) ? $attrs['popLimit'] : 0;
         $this->lockDiplomacy = isset($attrs['lockDiplomacy']) ? $attrs['lockDiplomacy'] : false;
-        $this->victory = new VictorySettings($rec);
     }
 
     /**
@@ -210,16 +201,6 @@ class GameSettings
     public function getLockDiplomacy()
     {
         return $this->lockDiplomacy;
-    }
-
-    /**
-     * Returns victory settings.
-     *
-     * @return VictorySettings
-     */
-    public function getVictorySettings()
-    {
-        return $this->victory;
     }
 
     /**

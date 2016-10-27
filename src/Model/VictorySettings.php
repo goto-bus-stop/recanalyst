@@ -25,23 +25,26 @@ class VictorySettings
     /**
      * Time limit.
      *
+     * @api private
      * @var int
      */
-    public $_timeLimit;
+    public $timeLimit = 0;
 
     /**
      * Score limit.
      *
+     * @api private
      * @var int
      */
-    public $_scoreLimit;
+    public $scoreLimit = 0;
 
     /**
      * Victory condition.
      *
+     * @api private
      * @var int
      */
-    public $_victoryCondition;
+    public $mode = self::STANDARD;
 
     /**
      * Class constructor.
@@ -51,8 +54,6 @@ class VictorySettings
     public function __construct(RecordedGame $rec)
     {
         $this->rec = $rec;
-        $this->_timeLimit = $this->_scoreLimit = 0;
-        $this->_victoryCondition = self::STANDARD;
     }
 
     /**

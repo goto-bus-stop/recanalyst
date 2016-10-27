@@ -363,6 +363,16 @@ class RecordedGame
     }
 
     /**
+     * Get the victory settings for this game.
+     *
+     * @return \RecAnalyst\Model\VictorySettings
+     */
+    public function victorySettings()
+    {
+        return $this->header()->victory;
+    }
+
+    /**
      * Get the result of analysis of the recorded game body.
      *
      * @return \StdClass

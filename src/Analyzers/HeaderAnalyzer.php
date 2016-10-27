@@ -76,19 +76,6 @@ class HeaderAnalyzer extends Analyzer
         }
         $analysis->players = $players;
 
-        $this->position = $triggerInfoPos - strlen($constant2);
-        if ($version->isMgx) {
-            $this->position -= 7;
-        }
-        $this->position -= 110;
-        $victoryCondition = $this->readHeader('l', 4);
-        $this->position += 8;
-        $isTimeLimit = ord($this->header[$this->position]);
-        $this->position += 1;
-        if ($isTimeLimit) {
-            $timeLimit = $this->readHeader('f', 4);
-        }
-
         $this->position = $triggerInfoPos + 1;
         $this->skipTriggerInfo();
 
@@ -232,6 +219,12 @@ class HeaderAnalyzer extends Analyzer
         }
 
         $analysis->messages = $this->readMessages();
+
+        // Skip two separators to find the victory condition block.
+        $this->position = strpos($this->header, $separator, $this->position);
+        $this->position = strpos($this->header, $separator, $this->position + 4);
+
+        $analysis->victory = $this->read(VictorySettingsAnalyzer::class);
 
         $analysis->teams = $this->buildTeams($players);
 
