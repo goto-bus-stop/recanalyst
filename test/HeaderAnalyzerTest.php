@@ -9,16 +9,9 @@ use RecAnalyst\Analyzers\HeaderAnalyzer;
 
 class HeaderAnalyzerTest extends TestCase
 {
-    /**
-     * @dataProvider gamesProvider
-     */
-    public function testBasic($file)
+    private function load($path)
     {
-        $rec = new RecordedGame($file);
-        // Just make sure it doesn't crash!
-        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
-
-        $this->assertNotNull($analysis);
+        return new RecordedGame(Path::join(__DIR__, $path));
     }
 
     /**
@@ -26,7 +19,7 @@ class HeaderAnalyzerTest extends TestCase
      */
     public function testPlayers($file, $expected, $expectedCount)
     {
-        $rec = new RecordedGame(Path::join(__DIR__, $file));
+        $rec = $this->load($file);
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         $this->assertAttributeEquals($expectedCount, 'numPlayers', $analysis);
         foreach ($expected as $index => $player) {
@@ -38,7 +31,7 @@ class HeaderAnalyzerTest extends TestCase
 
     public function testScenarioMessages()
     {
-        $rec = new RecordedGame(Path::join(__DIR__, 'recs/scenario/scenario-with-messages.mgz'));
+        $rec = $this->load('recs/scenario/scenario-with-messages.mgz');
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         $messageTypes = [
             // Identifiers embedded in the test game.
@@ -55,12 +48,34 @@ class HeaderAnalyzerTest extends TestCase
     }
 
     /**
+     * Test a game with multiple AI players.
+     */
+    public function testSkippingAiInfo()
+    {
+        $rec = $this->load('recs/ai/20141214_blutze(mong)+ffraid(pers) vs bots(goth+chin).mgx2');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        // Just check that we didn't crash.
+        $this->assertNotNull($analysis);
+    }
+
+    /**
      * Test a scenario with complex trigger info. This Age of Heroes beta
      * version contains something like 700+ triggers.
      */
     public function testSkippingComplexTriggerInfo()
     {
-        $rec = new RecordedGame(Path::join(__DIR__, 'recs/scenario/age-of-heroes.mgz'));
+        $rec = $this->load('recs/scenario/age-of-heroes.mgz');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        // Just check that we didn't crash.
+        $this->assertNotNull($analysis);
+    }
+
+    /**
+     * Test a single-player campaign game in HD Edition Patch 4+.
+     */
+    public function testAoe2RecordWithTriggerInfo()
+    {
+        $rec = $this->load('recs/versions/SP Replay v4.6 @2015.12.29 001221.aoe2record');
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         // Just check that we didn't crash.
         $this->assertNotNull($analysis);
@@ -68,26 +83,12 @@ class HeaderAnalyzerTest extends TestCase
 
     public function testAoe2Record()
     {
-        $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record'));
+        $rec = $this->load('recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record');
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         $this->assertAttributeEquals(1, 'lockDiplomacy', $analysis->gameSettings);
         $this->assertAttributeEquals(GameSettings::LEVEL_EASIEST, 'difficultyLevel', $analysis->gameSettings);
 
         $this->assertAttributeContains('Conquest Game', 'instructions', $analysis->messages);
-    }
-
-    public function gamesProvider()
-    {
-        $files = glob(Path::makeRelative(
-            Path::join(__DIR__, './recs/{forgotten,versions,ai}/*'),
-            getcwd()
-        ), GLOB_BRACE);
-
-        $provides = [];
-        foreach ($files as $path) {
-            $provides[$path] = [$path];
-        }
-        return $provides;
     }
 
     public function playersProvider()

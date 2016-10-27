@@ -56,8 +56,6 @@ class HeaderAnalyzer extends Analyzer
 
         $this->position = $gameSettingsPos + 8;
 
-        $this->position = $gameSettingsPos + 8;
-
         // TODO Is 12.3 the correct cutoff point?
         if ($version->subVersion >= 12.3) {
             // TODO what are theeeese?
@@ -381,13 +379,25 @@ class HeaderAnalyzer extends Analyzer
             (3 * 4) // 3 ints
         );
 
+        if ($this->version->isHDPatch4) {
+            $conditionSize += 2 * 4; // 2 ints
+        }
+
         $numTriggers = $this->readHeader('l', 4);
         for ($i = 0; $i < $numTriggers; $i += 1) {
             $this->position += 4 + (2 * 1) + (3 * 4); // int, 2 bools, 3 ints
             $descriptionLength = $this->readHeader('l', 4);
-            $this->position += $descriptionLength;
+            // HD edition 4.x saves a length of -1 when the string is absent,
+            // whereas older versions would use 0. That used to work fine
+            // without this guard, but now we should only skip if the length is
+            // positive.
+            if ($descriptionLength > 0) {
+                $this->position += $descriptionLength;
+            }
             $nameLength = $this->readHeader('l', 4);
-            $this->position += $nameLength;
+            if ($nameLength > 0) {
+                $this->position += $nameLength;
+            }
             $numEffects = $this->readHeader('l', 4);
             for ($j = 0; $j < $numEffects; $j += 1) {
                 $this->position += 6 * 4; // 6 ints
@@ -399,15 +409,22 @@ class HeaderAnalyzer extends Analyzer
                 $this->position += 2 * 4; // location (2 ints)
                 $this->position += 4 * 4; // area (2 locations)
                 $this->position += 3 * 4; // 3 ints
+                if ($this->version->isHDPatch4) {
+                    $this->position += 4; // int for the new Attack Stance effect
+                }
                 $textLength = $this->readHeader('l', 4);
-                $this->position += $textLength;
+                if ($textLength > 0) {
+                    $this->position += $textLength;
+                }
                 $soundFileNameLength = $this->readHeader('l', 4);
-                $this->position += $soundFileNameLength;
+                if ($soundFileNameLength > 0) {
+                    $this->position += $soundFileNameLength;
+                }
                 $this->position += $numSelectedObjects * 4; // unit IDs (one int each)
             }
             $this->position += $numEffects * 4; // effect order (list of ints)
             $numConditions = $this->readHeader('l', 4);
-            $this->position += $numConditions * $conditionSize;
+            $this->position += $numConditions * $conditionSize; // conditions
             $this->position += $numConditions * 4; // conditions order (list of ints)
         }
 
