@@ -2,6 +2,7 @@
 
 namespace RecAnalyst\Model;
 
+use RecAnalyst\Model\Team;
 use RecAnalyst\RecordedGame;
 use RecAnalyst\Model\Research;
 use RecAnalyst\Model\InitialState;
@@ -25,14 +26,14 @@ class Player
      *
      * @var string
      */
-    public $name;
+    public $name = '';
 
     /**
      * The player's index.
      *
      * @var int
      */
-    public $index;
+    public $index = -1;
 
     /**
      * Defines if the player is a human.
@@ -55,63 +56,63 @@ class Player
      *
      * @var int
      */
-    public $team;
+    public $teamIndex = -1;
 
     /**
      * Defines if player is an owner of the game.
      *
      * @var bool
      */
-    public $owner;
+    public $owner = false;
 
     /**
      * ID of the player's civilization.
      *
      * @var int
      */
-    public $civId;
+    public $civId = -1;
 
     /**
      * Player color ID.
      *
      * @var int
      */
-    public $colorId;
+    public $colorId = -1;
 
     /**
      * Indicates if the player is cooping in the game.
      *
      * @var bool
      */
-    public $isCooping;
+    public $isCooping = false;
 
     /**
      * Player's feudal time (in ms, 0 if hasn't been reached).
      *
      * @var int
      */
-    public $feudalTime;
+    public $feudalTime = 0;
 
     /**
      * Player's castle time (in ms).
      *
      * @var int
      */
-    public $castleTime;
+    public $castleTime = 0;
 
     /**
      * Player's imperial time (in ms).
      *
      * @var int
      */
-    public $imperialTime;
+    public $imperialTime = 0;
 
     /**
-     * Player's resign time (in ms) or 0 if player hasn't been resigned.
+     * Player's resign time (in ms) or 0 if player hasn't resigned.
      *
      * @var int
      */
-    public $resignTime;
+    public $resignTime = 0;
 
     /**
      * An array of player's researches containing
@@ -119,7 +120,7 @@ class Player
      *
      * @var array
      */
-    private $researchesById;
+    private $researchesById = [];
 
     /**
      * Contains the player's initial state, such as starting resources
@@ -127,7 +128,7 @@ class Player
      *
      * @var \RecAnalyst\Model\InitialState
      */
-    public $initialState;
+    public $initialState = null;
 
     /**
      * Class constructor.
@@ -135,16 +136,9 @@ class Player
      * @param \RecAnalyst\RecordedGame|null  $rec  Recorded game instance.
      * @return void
      */
-    public function __construct($rec = null)
+    public function __construct(RecordedGame $rec = null)
     {
         $this->rec = $rec;
-        $this->name = '';
-        $this->index = $this->team = $this->colorId = -1;
-        $this->human = $this->owner = $this->isCooping = false;
-        $this->civId = 0;
-        $this->feudalTime = $this->castleTime = $this->imperialTime = 0;
-        $this->resignTime = 0;
-        $this->researchesById = [];
         $this->initialState = new InitialState();
     }
 
@@ -159,23 +153,18 @@ class Player
     }
 
     /**
-     * Returns the index of the player's team in RecAnalyst::$teams.
+     * Get the player's team.
      *
-     * @return int
+     * @return \RecAnalyst\Model\Team|null
      */
-    public function getTeamID()
+    public function team()
     {
-        return $this->team;
-    }
-
-    /**
-     * Returns the player's name.
-     *
-     * @return string Player name.
-     */
-    public function getName()
-    {
-        return $this->name;
+        $teams = $this->rec->teams();
+        foreach ($teams as $team) {
+            if ($team->index() === $this->teamIndex) {
+                return $team;
+            }
+        }
     }
 
     /**
@@ -191,46 +180,6 @@ class Player
     public function isSpectator()
     {
         return $this->spectator;
-    }
-
-    /**
-     * Returns this player's feudal age advance time.
-     *
-     * @return int Feudal age time in milliseconds since the start of the game.
-     */
-    public function getFeudalTime()
-    {
-        return $this->feudalTime;
-    }
-
-    /**
-     * Returns this player's castle age advance time.
-     *
-     * @return int Castle age time in milliseconds since the start of the game.
-     */
-    public function getCastleTime()
-    {
-        return $this->castleTime;
-    }
-
-    /**
-     * Returns this player's imperial age advance time.
-     *
-     * @return int Imperial age time in milliseconds since the start of the game.
-     */
-    public function getImperialTime()
-    {
-        return $this->imperialTime;
-    }
-
-    /**
-     * Returns this player's resign time.
-     *
-     * @return int Resignation time in milliseconds since the start of the game.
-     */
-    public function getResignTime()
-    {
-        return $this->resignTime;
     }
 
     /**
@@ -307,5 +256,15 @@ class Player
             return $this->rec->trans('ages', $this->initialState->startingAge);
         }
         return null;
+    }
+
+    /**
+     * Get the player's starting position.
+     *
+     * @return int[]
+     */
+    public function position()
+    {
+        return $this->initialState->position;
     }
 }

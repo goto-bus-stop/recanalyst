@@ -19,89 +19,75 @@ class InitialState
      *
      * @var int
      */
-    public $food;
+    public $food = 0;
 
     /**
      * Initial wood.
      *
      * @var int
      */
-    public $wood;
+    public $wood = 0;
 
     /**
      * Initial stone.
      *
      * @var int
      */
-    public $stone;
+    public $stone = 0;
 
     /**
      * Initial gold.
      *
      * @var int
      */
-    public $gold;
+    public $gold = 0;
 
     /**
      * Starting age.
      *
      * @var int
      */
-    public $startingAge;
+    public $startingAge = self::DARKAGE;
 
     /**
      * Initial house capacity.
      *
      * @var int
      */
-    public $houseCapacity;
+    public $houseCapacity = 0;
 
     /**
      * Initial population.
      *
      * @var int
      */
-    public $population;
+    public $population = 0;
 
     /**
      * Initial civilian population.
      *
      * @var int
      */
-    public $civilianPop;
+    public $civilianPop = 0;
 
     /**
      * Initial military population.
      *
      * @var int
      */
-    public $militaryPop;
+    public $militaryPop = 0;
 
     /**
      * Initial extra population.
      *
      * @var int
      */
-    public $extraPop;
+    public $extraPop = 0;
 
     /**
      * Initial position, `[$x, $y]`.
      *
      * @var float[]
      */
-    public $position;
-
-    /**
-     * Class constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->food = $this->wood = $this->stone = 0;
-        $this->startingAge = self::DARKAGE;
-        $this->houseCapacity = 0;
-        $this->population = $this->civilianPop = $this->militaryPop = $this->extraPop = 0;
-        $this->position = [0, 0];
-    }
+    public $position = [0, 0];
 }

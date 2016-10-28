@@ -130,8 +130,8 @@ class MapImage
                     continue;
                 }
 
-                $color = $p->getPlayerColor($player->colorId);
-                list ($x, $y) = $player->initialState->position;
+                $color = $player->color();
+                list ($x, $y) = $player->position();
                 $image->circle(18, $x, $y, function ($shape) use ($color) {
                     $shape->border(1, $color);
                 });
@@ -146,7 +146,7 @@ class MapImage
                 if ($object->owner->index < 0) {
                     continue;
                 }
-                $color = $p->getPlayerColor($object->owner->colorId);
+                $color = $object->owner->color();
                 list ($x, $y) = $object->position;
                 $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
                     $shape->background($color);
