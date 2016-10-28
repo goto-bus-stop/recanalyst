@@ -2,6 +2,8 @@
 
 namespace RecAnalyst;
 
+use RecAnalyst\BasicTranslator;
+use RecAnalyst\StreamExtractor;
 use RecAnalyst\Analyzers\Analyzer;
 use RecAnalyst\Processors\MapImage;
 use RecAnalyst\Processors\Achievements;
@@ -24,14 +26,7 @@ class RecordedGame
      *
      * @var resource
      */
-    private $fd;
-
-    /**
-     * Size of the compressed header block.
-     *
-     * @var int
-     */
-    private $headerLen;
+    private $fp;
 
     /**
      * Current resource pack.
@@ -59,8 +54,10 @@ class RecordedGame
      */
     public function __construct($filename = null, array $options = [])
     {
+        // Set the file name and file pointer/handle/resource. (pick your
+        // favourite name…!)
         if (is_resource($filename)) {
-            $this->fd = $filename;
+            $this->fp = $filename;
             $this->filename = '';
         } else if (is_object($filename) && is_a($filename, 'SplFileInfo')) {
             $this->filename = $filename->getRealPath();
@@ -68,8 +65,14 @@ class RecordedGame
             $this->filename = $filename;
         }
 
+        if (!$this->fp) {
+            $this->open();
+        }
+
+        // Remember if we're in a Laravel environment.
         $this->isLaravel = function_exists('app') && is_a(app(), 'Illuminate\Foundation\Application');
 
+        // Parse options and defaults.
         $this->options = array_merge([
             'translator' => null,
         ], $options);
@@ -82,58 +85,29 @@ class RecordedGame
             }
         }
 
-        $this->reset();
-    }
+        // Set default resource pack. The VersionAnalyzer could be used in the
+        // future to detect which resource pack to use, should support for SWGB
+        // or other games be added.
+        $this->resourcePack = new ResourcePacks\AgeOfEmpires();
 
-    /**
-     * Loads the file for analysis. Deprecated: provided for compatibility with
-     * older RecAnalyst versions.
-     *
-     * @param string  $filename  File name.
-     * @param mixed  $input  File handle or string contents.
-     * @return void
-     */
-    public function load($filename, $input)
-    {
-        $this->filename = $filename;
-        if (is_string($input)) {
-            // Create file stream from input string
-            $this->fd = fopen('php://memory', 'r+');
-            fwrite($this->fd, $input);
-            rewind($this->fd);
-        } else {
-            $this->fd = $input;
-        }
-        $this->extractStreams();
+        // Initialize the header/body extractor.
+        $this->streams = new StreamExtractor($this->fp);
     }
 
     /**
      * Create a file handle for the recorded game file.
-     * Not sure why this is public…
      *
      * @return void
      */
-    public function open()
+    private function open()
     {
-        $this->fd = fopen($this->filename, 'r');
-    }
-
-    /**
-     * Resets the internal state.
-     *
-     * @return void
-     */
-    public function reset()
-    {
-        $this->analyses = [];
-
-        $this->headerLen = 0;
-
-        $this->resourcePack = new ResourcePacks\AgeOfEmpires();
+        $this->fp = fopen($this->filename, 'r');
     }
 
     /**
      * Get the current resource pack.
+     *
+     * @return \RecAnalyst\ResourcePacks\ResourcePack
      */
     public function getResourcePack()
     {
@@ -148,9 +122,6 @@ class RecordedGame
      */
     public function runAnalyzer(Analyzer $analyzer)
     {
-        if (empty($this->headerContents)) {
-            $this->extractStreams();
-        }
         return $analyzer->analyze($this);
     }
 
@@ -177,116 +148,13 @@ class RecordedGame
     }
 
     /**
-     * Determine the header length if the Header Length field was not set in the
-     * file.
-     */
-    private function manuallyDetermineHeaderLength()
-    {
-        // This separator is part of the Start Game command, which is the very
-        // first command in the recorded game body. It's … reasonably accurate.
-        $separator = pack('c*', 0xF4, 0x01, 0x00, 0x00);
-        // We need to reset the file pointer when we're done
-        $initialBase = ftell($this->fd);
-
-        $base = $initialBase;
-        $buffer = '';
-        while (($buffer = fread($this->fd, 8192)) !== false) {
-            $index = strpos($buffer, $separator);
-            if ($index !== false) {
-                $this->headerLen = $base + $index - 4;
-                fseek($this->fd, $initialBase);
-                return;
-            }
-            $base += strlen($buffer);
-        }
-        fseek($this->fd, $initialBase);
-    }
-
-    /**
-     * Extracts header and body streams from recorded game.
-     *
-     * @return void
-     * @throws RecAnalystException
-     */
-    protected function extractStreams()
-    {
-        if (empty($this->filename) && empty($this->fd)) {
-            throw new RecAnalystException(
-                'No file has been specified for analyzing',
-                RecAnalystException::FILE_NOT_SPECIFIED
-            );
-        }
-        if (empty($this->fd)) {
-            $this->open();
-        }
-        $fp = $this->fd;
-        $rawRead = fread($fp, 4);
-        if ($rawRead === false || strlen($rawRead) < 4) {
-            throw new RecAnalystException(
-                'Unable to read the header length',
-                RecAnalystException::HEADERLEN_READERROR
-            );
-        }
-        list (, $this->headerLen) = unpack('V', $rawRead);
-        if (!$this->headerLen) {
-            $this->manuallyDetermineHeaderLength();
-        }
-        if (!$this->headerLen) {
-            throw new RecAnalystException(
-                'Header length is zero',
-                RecAnalystException::EMPTY_HEADER
-            );
-        }
-        $rawRead = fread($fp, 4);
-
-        // In MGL files, the header starts immediately after the header length
-        // bytes. In MGX files, another int32 is stored first, possibly indicating
-        // the position of possible further headers(? something for saved chapters,
-        // at least, or perhaps saved & restored games).
-        $headerStart = pack('c*', 0xEC, 0x7D, 0x09);
-        $hasNextPos = substr($rawRead, 0, 3) !== $headerStart;
-
-        $this->headerLen -= $hasNextPos ? 8 : 4;
-        if (!$hasNextPos) {
-            fseek($fp, -4, SEEK_CUR);
-        }
-
-        $read = 0;
-        $bindata = '';
-        while ($read < $this->headerLen && ($buff = fread($fp, $this->headerLen - $read))) {
-            $read += strlen($buff);
-            $bindata .= $buff;
-        }
-        unset($buff);
-
-        $this->bodyContents = '';
-        while (!feof($fp)) {
-            $this->bodyContents .= fread($fp, 8192);
-        }
-        fclose($fp);
-
-        $this->headerContents = gzinflate($bindata, 8388608 * 2);  // 16MB
-        unset($bindata);
-
-        if (!strlen($this->headerContents)) {
-            throw new RecAnalystException(
-                'Cannot decompress header section',
-                RecAnalystException::HEADER_DECOMPRESSERROR
-            );
-        }
-    }
-
-    /**
      * Return the raw decompressed header contents.
      *
      * @return string
      */
     public function getHeaderContents()
     {
-        if (empty($this->headerContents)) {
-            $this->extractStreams();
-        }
-        return $this->headerContents;
+        return $this->streams->getHeader();
     }
 
     /**
@@ -296,10 +164,7 @@ class RecordedGame
      */
     public function getBodyContents()
     {
-        if (empty($this->bodyContents)) {
-            $this->extractStreams();
-        }
-        return $this->bodyContents;
+        return $this->streams->getBody();
     }
 
     /**
