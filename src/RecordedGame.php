@@ -13,13 +13,6 @@ use RecAnalyst\ResourcePacks\ResourcePack;
 class RecordedGame
 {
     /**
-     * Elapsed time for analyzing in milliseconds.
-     *
-     * @var int
-     */
-    protected $analyzeTime;
-
-    /**
      * Completed analyses.
      *
      * @var array
@@ -132,7 +125,6 @@ class RecordedGame
      */
     public function reset()
     {
-        $this->analyzeTime = 0;
         $this->analyses = [];
 
         $this->headerLen = 0;
@@ -182,28 +174,6 @@ class RecordedGame
             $this->analyses[$key] = $result;
         }
         return $this->analyses[$key];
-    }
-
-    /**
-     * Run a v3.x-style analysis.
-     *
-     * @deprecated Probably not so useful anymore? Should provide different
-     *     accessors that run what they need, instead.
-     */
-    public function analyze()
-    {
-        $starttime = microtime(true);
-        if (!$this->header()) {
-            return false;
-        }
-        if (!$this->body()) {
-            return false;
-        }
-
-        $this->postAnalyze();
-        $endtime = microtime(true);
-        $this->analyzeTime = round(($endtime - $starttime) * 1000);
-        return true;
     }
 
     /**
@@ -439,16 +409,6 @@ class RecordedGame
     {
         $proc = new Achievements($this, $options);
         return $proc->run();
-    }
-
-    /**
-     * Returns analyze time (in ms).
-     *
-     * @return int
-     */
-    public function getAnalyzeTime()
-    {
-        return $this->analyzeTime;
     }
 
     /**
