@@ -132,7 +132,9 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             $civilianPop = $this->readHeader('f', 4);
             $this->position += 8;
             $militaryPop = $this->readHeader('f', 4);
-            if ($version->isMgx) {
+            if ($version->isAoe2Record) {
+                $this->position += 673;
+            } else if ($version->isMgx) {
                 $this->position += 629;
             } else {
                 $this->position += 593;
@@ -184,7 +186,7 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
             $objects = $this->read(PlayerObjectsListAnalyzer::class, [
                 'players' => array_merge([
-                    0 => $gaia
+                    0 => $gaia,
                 ], $playersByIndex),
             ]);
 
