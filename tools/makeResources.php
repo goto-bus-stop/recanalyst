@@ -73,7 +73,7 @@ function generateLanguageFiles($agedir, $data)
         'resources' => range(4301, 4304),
         'game_speeds' => range(9432, 9434),
         'reveal_map' => range(9755, 9757),
-        'civilizations' => range(10221, 10247),
+        'civilizations' => range(10220, 10247),
         'map_sizes' => range(10611, 10617),
         'difficulties' => range(11216, 11220),
     ];
@@ -185,6 +185,7 @@ function generateImages($agedir, $data)
     ];
     $strings = require(__DIR__ . '/../resources/lang/en/ageofempires.php');
     $civNames = $strings['civilizations'];
+    unset($civNames[0]);
 
     $researchesDir = __DIR__ . '/../resources/images/researches';
     $civsDir = __DIR__ . '/../resources/images/civs';
