@@ -124,6 +124,19 @@ class MapImage
             });
         }
 
+        if ($this->showPlayerUnits) {
+            foreach ($header->playerInfo->playerObjects as $object) {
+                if ($object->owner->index < 0) {
+                    continue;
+                }
+                $color = $object->owner->color();
+                list ($x, $y) = $object->position;
+                $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
+                    $shape->background($color);
+                });
+            }
+        }
+
         if ($this->showPositions) {
             foreach ($header->players as $player) {
                 if ($player->isCooping || $player->isSpectator()) {
@@ -136,19 +149,6 @@ class MapImage
                     $shape->border(1, $color);
                 });
                 $image->circle(8, $x, $y, function ($shape) use ($color) {
-                    $shape->background($color);
-                });
-            }
-        }
-
-        if ($this->showPlayerUnits) {
-            foreach ($header->playerInfo->playerObjects as $object) {
-                if ($object->owner->index < 0) {
-                    continue;
-                }
-                $color = $object->owner->color();
-                list ($x, $y) = $object->position;
-                $image->rectangle($x - 1, $y - 1, $x + 1, $y + 1, function ($shape) use ($color) {
                     $shape->background($color);
                 });
             }
