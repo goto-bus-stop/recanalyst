@@ -140,6 +140,8 @@ class HeaderAnalyzer extends Analyzer
 
         $this->position += 4;
         $gameSpeed = $this->readHeader('l', 4);
+        // These bytes contain the game speed again several times over, as ints
+        // and as floats (On normal speed: 150, 1.5 and 0.15). Why?!
         $this->position += 37;
         $pov = $this->readHeader('v', 2);
         if (array_key_exists($pov, $playersByIndex)) {
@@ -151,7 +153,8 @@ class HeaderAnalyzer extends Analyzer
         // - 1, because player #0 is GAIA.
         $analysis->numPlayers = $numPlayers - 1;
         if ($version->isMgx) {
-            $this->position += 2;
+            $this->position += 1; // Is instant building enabled? (cheat "aegis")
+            $this->position += 1; // Are cheats enabled?
         }
         $gameMode = $this->readHeader('v', 2);
 
@@ -166,8 +169,8 @@ class HeaderAnalyzer extends Analyzer
             throw new \Exception('Got invalid map size');
         }
 
-        $numUnknownData = $this->readHeader('l', 4);
-        for ($i = 0; $i < $numUnknownData; $i += 1) {
+        $numMapZones = $this->readHeader('l', 4);
+        for ($i = 0; $i < $numMapZones; $i += 1) {
             if ($version->subVersion >= 11.93) {
                 $this->position += 2048 + $mapSizeX * $mapSizeY * 2;
             } else {
@@ -176,7 +179,9 @@ class HeaderAnalyzer extends Analyzer
             $numFloats = $this->readHeader('l', 4);
             $this->position += ($numFloats * 4) + 4;
         }
-        $this->position += 2;
+
+        $this->position += 1; // Map visibility flag
+        $this->position += 1; // Fog of War flag
 
         $mapData = [];
         for ($y = 0; $y < $mapSizeY; $y += 1) {
@@ -193,16 +198,21 @@ class HeaderAnalyzer extends Analyzer
         }
 
         $numData = $this->readHeader('l', 4);
-        $this->position += 4 + $numData * 4;
+        $this->position += 4; // Some ID relating to the previous line...
+        $this->position += $numData * 4;
         for ($i = 0; $i < $numData; $i += 1) {
-            $numCouples = $this->readHeader('l', 4);
-            $this->position += $numCouples * 8;
+            $numObstructions = $this->readHeader('l', 4);
+            $this->position += $numObstructions * 8;
         }
         $mapSizeX2 = $this->readHeader('l', 4);
         $mapSizeY2 = $this->readHeader('l', 4);
-        $this->position += $mapSizeX2 * $mapSizeY2 * 4 + 4;
+        // Visibility map. Can we use this for something?
+        $this->position += $mapSizeX2 * $mapSizeY2 * 4;
+        $this->position += 4;
         $numData = $this->readHeader('l', 4);
-        $this->position += $numData * 27 + 4;
+        $this->position += $numData * 27;
+        // int. Value is 10060 in AoK recorded games, 40600 in AoC and on.
+        $this->position += 4;
 
         $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
 
