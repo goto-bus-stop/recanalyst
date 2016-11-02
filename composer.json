@@ -1,7 +1,7 @@
 {
   "name": "recanalyst/recanalyst",
   "description": "Analyzes Age of Empires 2 recorded game files.",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "type": "library",
   "homepage": "http://idlebeaver.ninja/recanalyst",
   "autoload": {
