@@ -31,7 +31,7 @@ v2.1.0 © 2007-2010 biegleux &lt;biegleux@gmail.com&gt;
 [Original project homepage][]  
 [Original project documentation][]
 
-See also [CREDITS][].
+See also [references.md][].
 
 ## Requirements
 
@@ -107,7 +107,7 @@ You can then refer to the different categories of icons in the following ways:
 Full API documentation is available at
 https://goto-bus-stop.github.io/recanalyst/doc/.
 
-[CREDITS]: ./CREDITS
+[references.md]: ./references.md
 [Composer]: https://getcomposer.org
 [v3.x branch]: https://github.com/goto-bus-stop/recanalyst/tree/v3.x
 [Original project homepage]: http://recanalyst.sourceforge.net/
