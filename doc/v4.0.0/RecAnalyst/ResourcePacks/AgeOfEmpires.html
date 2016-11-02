@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>RecAnalyst\ResourcePacks\AgeOfEmpires | RecAnalyst API</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:RecAnalyst_ResourcePacks_AgeOfEmpires" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                    <form action="#" method="GET">
+                <select id="version-switcher" name="version">
+                                            <option value="../../../v4.0.0/index.html" selected>v4.0.0</option>
+                                            <option value="../../../v4.0.1/index.html">v4.0.1</option>
+                                            <option value="../../../master/index.html">master branch</option>
+                                    </select>
+            </form>
+                <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">RecAnalyst API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../RecAnalyst.html">RecAnalyst</a></li>
+                                        <li><a href="../../RecAnalyst/ResourcePacks.html">ResourcePacks</a></li>
+    
+                <li>AgeOfEmpires</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            AgeOfEmpires
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>AgeOfEmpires</strong>        extends <a href="../../RecAnalyst/ResourcePacks/ResourcePack.html"><abbr title="RecAnalyst\ResourcePacks\ResourcePack">ResourcePack</abbr></a>        (<a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php">View source</a>)
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>Resource pack for Age of Empires 2 recorded games of all stripes (base game,
+expansions, HD Edition, Userpatch, …).</p>                    </div>
+    
+    
+            <h2>Constants</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td>NAME</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
+    
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getCivName">getCivName</a>(int $id)
+        
+                                            <p>Get the English name for a civilization.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isAoKCiv">isAoKCiv</a>(int $id)
+        
+                                            <p>Checks if a civilization is included in the Age of Kings base game.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isAoCCiv">isAoCCiv</a>(int $id)
+        
+                                            <p>Checks if a civilization was added in the Age of Conquerors expansion.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isForgottenCiv">isForgottenCiv</a>(int $id)
+        
+                                            <p>Checks if a civilization was added in the Forgotten Empires expansion.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isRealWorldMap">isRealWorldMap</a>(int $id)
+        
+                                            <p>Check whether a builtin map is a "Real World" map, such as Byzantinum or
+Texas.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isCustomMap">isCustomMap</a>(int $id)
+        
+                                            <p>Check whether a map ID denotes a custom map (i.e., not a builtin one).</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isStandardMap">isStandardMap</a>(int $id)
+        
+                                            <p>Check whether a map ID denotes a builtin map.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isGateUnit">isGateUnit</a>(int $id)
+        
+                                            <p>Checks whether a unit type ID is a Gate unit.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isPalisadeGateUnit">isPalisadeGateUnit</a>(int $id)
+        
+                                            <p>Checks whether a unit type ID is a Palisade Gate unit.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isCliffUnit">isCliffUnit</a>(int $id)
+        
+                                            <p>Checks whether a unit type ID is a cliff. (Yes! Cliffs are units!)</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isGaiaObject">isGaiaObject</a>(int $id)
+        
+                                            <p>Checks whether a unit type ID is a GAIA object type. Used to determine
+which objects to draw on a map.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isGaiaUnit">isGaiaUnit</a>(int $id)
+        
+                                            <p>Checks whether a unit type ID is a GAIA unit. Used to determine which
+units to draw on a map as not belonging to any player.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    int
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_normalizeUnit">normalizeUnit</a>(int $id)
+        
+                                            <p>Normalize a unit type ID. Turns some groups of unit IDs (such as gates in
+four directions) into a single unit ID, so it's easier to work with.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getTerrainColor">getTerrainColor</a>(int $id, int $variation = 1)
+        
+                                            <p>Get the color for a terrain type.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getUnitColor">getUnitColor</a>(int $id)
+        
+                                            <p>Get the color for a unit or object type, such as sheep or boar or
+cliffs(!).</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getPlayerColor">getPlayerColor</a>(int $id)
+        
+                                            <p>Get the color for a player.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method_getCivName">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L24">line 24</a></div>
+        <code>                    string
+    <strong>getCivName</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the English name for a civilization.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Civilization ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Civilization name.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isAoKCiv">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L36">line 36</a></div>
+        <code>                    bool
+    <strong>isAoKCiv</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks if a civilization is included in the Age of Kings base game.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Civilization ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the given civilization exists in AoK, false
+    otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isAoCCiv">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L48">line 48</a></div>
+        <code>                    bool
+    <strong>isAoCCiv</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks if a civilization was added in the Age of Conquerors expansion.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Civilization ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the given civilization is part of AoC, false
+    otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isForgottenCiv">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L60">line 60</a></div>
+        <code>                    bool
+    <strong>isForgottenCiv</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks if a civilization was added in the Forgotten Empires expansion.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Civilization ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the given civilization is part of The Forgotten,
+    false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isRealWorldMap">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L72">line 72</a></div>
+        <code>                    bool
+    <strong>isRealWorldMap</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check whether a builtin map is a "Real World" map, such as Byzantinum or
+Texas.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Map ID of a builtin map.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the map is a "Real World" map, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isCustomMap">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L86">line 86</a></div>
+        <code>                    bool
+    <strong>isCustomMap</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check whether a map ID denotes a custom map (i.e., not a builtin one).</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Map ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the map is a custom map, false if it is builtin.</td>
+        </tr>
+    </table>
+
+            
+            
+                            <h4>See also</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>\RecAnalyst\ResourcePacks\AgeOfEmpires::isStandardMap
+</td>
+                <td>   For the inverse.</td>
+            </tr>
+            </table>
+
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isStandardMap">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L100">line 100</a></div>
+        <code>                    bool
+    <strong>isStandardMap</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check whether a map ID denotes a builtin map.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Map ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the map is builtin, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                            <h4>See also</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>\RecAnalyst\ResourcePacks\AgeOfEmpires::isCustomMap
+</td>
+                <td>   For the inverse.</td>
+            </tr>
+            </table>
+
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isGateUnit">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L111">line 111</a></div>
+        <code>                    bool
+    <strong>isGateUnit</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks whether a unit type ID is a Gate unit.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the unit type is a gate, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isPalisadeGateUnit">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L122">line 122</a></div>
+        <code>                    bool
+    <strong>isPalisadeGateUnit</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks whether a unit type ID is a Palisade Gate unit.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the unit type is a palisade gate, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isCliffUnit">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L133">line 133</a></div>
+        <code>                    bool
+    <strong>isCliffUnit</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks whether a unit type ID is a cliff. (Yes! Cliffs are units!)</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the unit type is a cliff, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isGaiaObject">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L145">line 145</a></div>
+        <code>                    bool
+    <strong>isGaiaObject</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks whether a unit type ID is a GAIA object type. Used to determine
+which objects to draw on a map.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the unit type is a GAIA object, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isGaiaUnit">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L157">line 157</a></div>
+        <code>                    bool
+    <strong>isGaiaUnit</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Checks whether a unit type ID is a GAIA unit. Used to determine which
+units to draw on a map as not belonging to any player.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td>True if the unit type is a GAIA unit, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_normalizeUnit">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L169">line 169</a></div>
+        <code>                    int
+    <strong>normalizeUnit</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Normalize a unit type ID. Turns some groups of unit IDs (such as gates in
+four directions) into a single unit ID, so it's easier to work with.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>int</td>
+            <td>Normalized unit type ID.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getTerrainColor">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L183">line 183</a></div>
+        <code>                    string
+    <strong>getTerrainColor</strong>(int $id, int $variation = 1)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the color for a terrain type.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Terrain type ID.</td>
+            </tr>
+                    <tr>
+                <td>int</td>
+                <td>$variation</td>
+                <td>Terrain variation: 0 for a downward slope, 2 for
+    an upward slope, 1 for flat terrain (default).</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Hexadecimal representation of the terrain color,
+   eg. "#004abb".</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getUnitColor">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L196">line 196</a></div>
+        <code>                    string
+    <strong>getUnitColor</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the color for a unit or object type, such as sheep or boar or
+cliffs(!).</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Unit type ID.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Hexadecimal representation of the unit color,
+   eg. "#714b33".</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getPlayerColor">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/ResourcePacks/AgeOfEmpires.php#L208">line 208</a></div>
+        <code>                    string
+    <strong>getPlayerColor</strong>(int $id)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the color for a player.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Player color ID (0-7).</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Hexadecimal representation of the player color,
+   eg. "#ff00ff".</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>

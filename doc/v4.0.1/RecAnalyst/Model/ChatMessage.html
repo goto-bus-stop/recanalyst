@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>RecAnalyst\Model\ChatMessage | RecAnalyst API</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:RecAnalyst_Model_ChatMessage" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                    <form action="#" method="GET">
+                <select id="version-switcher" name="version">
+                                            <option value="../../../v4.0.0/index.html" selected>v4.0.0</option>
+                                            <option value="../../../v4.0.1/index.html">v4.0.1</option>
+                                            <option value="../../../master/index.html">master branch</option>
+                                    </select>
+            </form>
+                <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">RecAnalyst API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../RecAnalyst.html">RecAnalyst</a></li>
+                                        <li><a href="../../RecAnalyst/Model.html">Model</a></li>
+    
+                <li>ChatMessage</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            ChatMessage
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>ChatMessage</strong>        (<a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/Model/ChatMessage.php">View source</a>)
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>The ChatMessage class represents a single chat message sent before or during
+the game.</p>                    </div>
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_time">
+                                                                                int
+                </td>
+                <td>$time</td>
+                <td class="last">Sent time in milliseconds since the start of the game.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_player">
+                                                                                <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>
+                </td>
+                <td>$player</td>
+                <td class="last">Player who sent this message.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_msg">
+                                                                                string
+                </td>
+                <td>$msg</td>
+                <td class="last">Message text.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_group">
+                                                                                string
+                </td>
+                <td>$group</td>
+                <td class="last">Group at which this chat is directed (<Team>, <Enemy>, <All>), if any.</td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(int $time, <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a> $player = null, string $msg = &#039;&#039;, string $group = &#039;&#039;)
+        
+                                            <p>Class constructor.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../RecAnalyst/Model/ChatMessage.html"><abbr title="RecAnalyst\Model\ChatMessage">ChatMessage</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_create">create</a>(int $time, <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a> $player, string $chat)
+        
+                                            <p>Helper method to create a chat message from a chat string more easily.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/Model/ChatMessage.php#L55">line 55</a></div>
+        <code>                    void
+    <strong>__construct</strong>(int $time, <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a> $player = null, string $msg = &#039;&#039;, string $group = &#039;&#039;)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Class constructor.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$time</td>
+                <td>When this message was sent, in milliseconds since the
+    start of the game.</td>
+            </tr>
+                    <tr>
+                <td><a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a></td>
+                <td>$player</td>
+                <td>Player that sent the message.</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$msg</td>
+                <td>Message content.</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$group</td>
+                <td>Group this message was directed to.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_create">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.0/src/Model/ChatMessage.php#L78">line 78</a></div>
+        <code>        static            <a href="../../RecAnalyst/Model/ChatMessage.html"><abbr title="RecAnalyst\Model\ChatMessage">ChatMessage</abbr></a>
+    <strong>create</strong>(int $time, <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a> $player, string $chat)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Helper method to create a chat message from a chat string more easily.</p>                    <p>Messages actually have the player name and sometimes a group specifier
+(<Team>, <Enemy>, etc) included in their message body which is lame.
+Sometimes players that don't end up in the player info blocks of the
+recorded games sent messages anyway (particularly pre-game chat by people
+who joined the multiplayer lobby and then left) so we deal with that too.</p>            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$time</td>
+                <td>Time at which this message was sent in milliseconds
+   since the start of the game.</td>
+            </tr>
+                    <tr>
+                <td><a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a></td>
+                <td>$player</td>
+                <td>Message Sender.</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$chat</td>
+                <td>Message contents.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../RecAnalyst/Model/ChatMessage.html"><abbr title="RecAnalyst\Model\ChatMessage">ChatMessage</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
