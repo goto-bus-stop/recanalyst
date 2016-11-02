@@ -148,8 +148,7 @@ class HeaderAnalyzer extends Analyzer
             $owner = $playersByIndex[$pov];
             $owner->owner = true;
         }
-        $numPlayers = ord($this->header[$this->position]);
-        $this->position += 1;
+        $numPlayers = ord($this->header[$this->position++]);
         // - 1, because player #0 is GAIA.
         $analysis->numPlayers = $numPlayers - 1;
         if ($version->isMgx) {

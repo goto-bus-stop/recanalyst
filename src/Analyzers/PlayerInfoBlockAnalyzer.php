@@ -114,9 +114,14 @@ class PlayerInfoBlockAnalyzer extends Analyzer
 
             // skip playername
             $playerNameLen = $this->readHeader('v', 2);
-            $this->position += $playerNameLen + 6;
+            $this->position += $playerNameLen;
 
-            // Civ header
+            $this->position += 1; // always 22?
+            $numResources = $this->readHeader('l', 4);
+            $this->position += 1; // always 33?
+            $resourcesEnd = $this->position + 4 * $numResources;
+
+            // Interesting resources
             $food = $this->readHeader('f', 4);
             $wood = $this->readHeader('f', 4);
             $stone = $this->readHeader('f', 4);
@@ -126,19 +131,16 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             $this->position += 4;
             // Post-Imperial Age = Imperial Age here
             $startingAge = $this->readHeader('f', 4);
-            $this->position += 16;
+            $this->position += 4 * 4;
             $population = $this->readHeader('f', 4);
-            $this->position += 100;
+            $this->position += 25 * 4;
             $civilianPop = $this->readHeader('f', 4);
-            $this->position += 8;
+            $this->position += 2 * 4;
             $militaryPop = $this->readHeader('f', 4);
-            if ($version->isAoe2Record) {
-                $this->position += 673;
-            } else if ($version->isMgx) {
-                $this->position += 629;
-            } else {
-                $this->position += 593;
-            }
+
+            $this->position = $resourcesEnd;
+            $this->position += 1; // 1 byte
+
             $initCameraX = $this->readHeader('f', 4);
             $initCameraY = $this->readHeader('f', 4);
             if ($version->isMgx) {
