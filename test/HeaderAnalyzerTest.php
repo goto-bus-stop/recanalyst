@@ -91,6 +91,16 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertAttributeContains('Conquest Game', 'instructions', $analysis->messages);
     }
 
+    public function testAoe2RecordVictorySettings()
+    {
+        $rec = $this->load('recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+
+        $this->assertAttributeEquals(VictorySettings::STANDARD, 'mode', $analysis->victory);
+        $this->assertAttributeEquals(900, 'scoreLimit', $analysis->victory);
+        $this->assertAttributeEquals(9000, 'timeLimit', $analysis->victory);
+    }
+
     public function playersProvider()
     {
         return [

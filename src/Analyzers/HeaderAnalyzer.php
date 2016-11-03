@@ -27,6 +27,7 @@ class HeaderAnalyzer extends Analyzer
         $scenarioConstant = pack('c*', 0xF6, 0x28, 0x9C, 0x3F);
         $aokSeparator = pack('c*', 0x9A, 0x99, 0x99, 0x3F);
         $aoe2recordScenarioSeparator = pack('c*', 0xAE, 0x47, 0xA1, 0x3F);
+        $aoe2recordHeaderSeparator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
 
         $rec = $this->rec;
         $this->analysis = new \StdClass;
@@ -119,13 +120,12 @@ class HeaderAnalyzer extends Analyzer
             // VersionAnalyzer.
             $this->position = 0x0c;
             // Skip 6 separators
-            $separator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
             for ($i = 0; $i < 6; $i++) {
-                $this->position = strpos($this->header, $separator, $this->position);
+                $this->position = strpos($this->header, $aoe2recordHeaderSeparator, $this->position);
                 if ($this->position === false) {
                     throw new \Exception('Unrecognized aoe2record header format.');
                 }
-                $this->position += strlen($separator); // length of separator
+                $this->position += strlen($aoe2recordHeaderSeparator); // length of separator
             }
             // Some unknown stuff
             $this->position += 10;
