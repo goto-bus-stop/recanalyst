@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 use RecAnalyst\RecordedGame;
 use RecAnalyst\Model\GameSettings;
+use RecAnalyst\Model\VictorySettings;
 use RecAnalyst\Analyzers\HeaderAnalyzer;
 
 class HeaderAnalyzerTest extends TestCase
