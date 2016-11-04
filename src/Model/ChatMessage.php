@@ -78,11 +78,24 @@ class ChatMessage
     public static function create($time, $player, $chat)
     {
         $group = '';
-        // this is directed someplace
+        // This is directed someplace (@All, @Team, @Enemy, etc.)
+        // Voobly adds @Rating messages too, which we might wish to parse into
+        // the player objects later as a `->rating` property.
         if ($chat[0] === '<') {
-            $end = strpos($chat, '>');
-            $group = substr($chat, 1, $end - 1);
-            $chat = substr($chat, $end + 1);
+            // Standard directed chat messages have a format like:
+            //   <All>PlayerName: message
+            // Voobly rating messages however:
+            //   <Rating> PlayerName: message
+            // ...adds a space character before the name, so we deal with it
+            // separately.
+            if (substr($chat, 0, 9) === '<Rating> ') {
+                $group = 'Rating';
+                $chat = substr($chat, 9);
+            } else {
+                $end = strpos($chat, '>');
+                $group = substr($chat, 1, $end - 1);
+                $chat = substr($chat, $end + 1);
+            }
         }
         if (is_null($player)) {
             $player = new Player();
@@ -91,6 +104,7 @@ class ChatMessage
                 $player->name = substr($player->name, 1);
             }
         }
+        // Cut the player name out of the message contents.
         $chat = substr($chat, strlen($player->name) + 2);
         return new self($time, $player, $chat, $group);
     }

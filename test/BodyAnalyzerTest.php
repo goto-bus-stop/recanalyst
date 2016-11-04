@@ -29,6 +29,19 @@ class BodyAnalyzerTest extends TestCase
         $this->assertTrue($analysis->duration > 0);
     }
 
+    /**
+     * Check that voobly injected messages are trimmed correctly.
+     */
+    public function testVooblyInjectedMessages()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/up1.4.mgz'));
+        $messages = $rec->runAnalyzer(new BodyAnalyzer)->chatMessages;
+        // Rating messages should belong to a player.
+        $this->assertEquals($messages[0]->group, 'Rating');
+        $this->assertEquals($messages[0]->msg, '2212');
+        $this->assertEquals($messages[0]->player->name, 'Zuppi');
+    }
+
     public function recordsProvider()
     {
         return [
