@@ -22,6 +22,11 @@ one on AoCZone. It uses the Twig template engine to render data. Using a
 template engine is recommended, because they'll usually handle HTML escaping for
 you.
 
+## [Tabbed without Twig](./tabbed-native)
+
+The same example as above, but without a template engine. Useful as a reference
+point for your own displays.
+
 ## [Laravel](./laravel.php)
 
 A Laravel controller that shows certain bits and pieces of recorded game data,

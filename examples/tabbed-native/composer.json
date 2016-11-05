@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "serve": "php -S localhost:6047"
+    }
+}
