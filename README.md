@@ -104,6 +104,8 @@ You can then refer to the different categories of icons in the following ways:
 
 ## API Documentation
 
+To get started, the [Usage Examples][] might be helpful.
+
 Full API documentation is available at
 https://goto-bus-stop.github.io/recanalyst/doc/.
 
