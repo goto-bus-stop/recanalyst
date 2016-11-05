@@ -5,6 +5,11 @@
 A very small example that saves a minimap and displays players and their
 civilizations on the command line.
 
+## [Chat](./chat.php)
+
+A small example that reads all chat messages from a recorded game and displays
+them on the command line.
+
 ## [Localized](./simple-localized.php)
 
 A small example that displays some information about the game settings of a
