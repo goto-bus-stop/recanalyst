@@ -42,6 +42,15 @@ for civ in empires.civs:
                 'graphic': unit.icon_id,
             }
 
+researches = {}
+index = 0
+for research in empires.researches:
+    researches[index] = {
+        'name': research.language_dll_name,
+        'graphic': research.icon_id
+    }
+    index += 1
+
 out = {
     'player_colors': players,
     'terrain_colors': terrains,
@@ -49,12 +58,7 @@ out = {
         civ.name for civ in empires.civs
     ],
     'units': units,
-    'researches': {
-        research.tech_effect_id: {
-            'name': research.language_dll_name,
-            'graphic': research.icon_id
-        } for research in empires.researches
-    }
+    'researches': researches,
 }
 
 print(json.dumps(out))
