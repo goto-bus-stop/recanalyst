@@ -242,7 +242,7 @@ class PlayerObjectsListAnalyzer extends Analyzer
                     }
                     break;
                 default:
-                    throw new \Exception(sprintf('Unknown object type %d', $objectType));
+                    throw new \Exception(sprintf('Unknown object type %d', $this->objectType));
             }
         }
 
