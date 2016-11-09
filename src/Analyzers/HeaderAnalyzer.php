@@ -215,6 +215,7 @@ class HeaderAnalyzer extends Analyzer
 
         $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
 
+        $this->analysis->scenarioFilename = null;
         if ($scenarioHeaderPos > 0) {
             $this->position = $scenarioHeaderPos;
             $this->readScenarioHeader();
