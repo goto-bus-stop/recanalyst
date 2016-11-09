@@ -110,7 +110,10 @@ class AgeOfEmpires extends ResourcePack
      */
     public function isGateUnit($id)
     {
-        return Unit::isGateUnit($id);
+        return $id === Unit::GATE
+            || $id === Unit::GATE2
+            || $id === Unit::GATE3
+            || $id === Unit::GATE4;
     }
 
     /**
@@ -121,7 +124,10 @@ class AgeOfEmpires extends ResourcePack
      */
     public function isPalisadeGateUnit($id)
     {
-        return Unit::isPalisadeGateUnit($id);
+        return $id === Unit::PALISADE_GATE
+            || $id === Unit::PALISADE_GATE2
+            || $id === Unit::PALISADE_GATE3
+            || $id === Unit::PALISADE_GATE4;
     }
 
     /**
@@ -132,7 +138,7 @@ class AgeOfEmpires extends ResourcePack
      */
     public function isCliffUnit($id)
     {
-        return Unit::isCliffUnit($id);
+        return $id >= Unit::CLIFF1 && $id <= Unit::CLIFF10;
     }
 
     /**
@@ -144,7 +150,10 @@ class AgeOfEmpires extends ResourcePack
      */
     public function isGaiaObject($id)
     {
-        return Unit::isGaiaObject($id);
+        return $id >= Unit::CLIFF1 && $id <= Unit::CLIFF10
+            || $id === Unit::GOLDMINE
+            || $id === Unit::STONEMINE
+            || $id === Unit::FORAGEBUSH;
     }
 
     /**
@@ -156,7 +165,12 @@ class AgeOfEmpires extends ResourcePack
      */
     public function isGaiaUnit($id)
     {
-        return Unit::isGaiaUnit($id);
+        return $id === Unit::RELIC
+            || $id === Unit::DEER
+            || $id === Unit::BOAR
+            || $id === Unit::JAVELINA
+            || $id === Unit::TURKEY
+            || $id === Unit::SHEEP;
     }
 
     /**
@@ -168,7 +182,13 @@ class AgeOfEmpires extends ResourcePack
      */
     public function normalizeUnit($id)
     {
-        return Unit::normalizeUnit($id);
+        if ($this->isGateUnit($id)) {
+            return Unit::GATE;
+        }
+        if ($this->isPalisadeGateUnit($id)) {
+            return Unit::PALISADE_GATE;
+        }
+        return $id;
     }
 
     /**
