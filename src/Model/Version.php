@@ -112,6 +112,34 @@ class Version
     const VERSION_HD = 14;
 
     /**
+     * Version ID for HD Edition patch 4.3.
+     *
+     * @var int
+     */
+    const VERSION_HD43 = 15;
+
+    /**
+     * Version ID for HD Edition patch 4.6.
+     *
+     * @var int
+     */
+    const VERSION_HD46 = 16;
+
+    /**
+     * Version ID for HD Edition patch 4.7.
+     *
+     * @var int
+     */
+    const VERSION_HD47 = 17;
+
+    /**
+     * Version ID for HD Edition patch 4.8.
+     *
+     * @var int
+     */
+    const VERSION_HD48 = 18;
+
+    /**
      * Recorded game instance.
      *
      * @var \RecAnalyst\RecordedGame

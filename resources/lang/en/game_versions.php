@@ -18,4 +18,8 @@ return [
     Version::VERSION_USERPATCH14 => 'AOC UP1.4',
     Version::VERSION_AOFE21 => 'AOFE 2.1',
     Version::VERSION_HD => 'HD Edition',
+    Version::VERSION_HD43 => 'HD Edition 4.3',
+    Version::VERSION_HD46 => 'HD Edition 4.6',
+    Version::VERSION_HD47 => 'HD Edition 4.7',
+    Version::VERSION_HD48 => 'HD Edition 4.8',
 ];

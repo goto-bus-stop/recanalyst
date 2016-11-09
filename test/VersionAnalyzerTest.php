@@ -64,18 +64,23 @@ class VersionAnalyzerTest extends TestCase
                 'isMsx' => false,
                 'isAoe2Record' => false,
             ]],
-            ['./recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx', Version::VERSION_HD, [
+            ['./recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx', Version::VERSION_HD43, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
                 'isAoe2Record' => false,
                 'isMsx' => true,
             ]],
-            ['./recs/versions/MP_Replay_v4.msx2', Version::VERSION_HD, [
+            ['./recs/versions/MP_Replay_v4.msx2', Version::VERSION_HD43, [
                 'isHDEdition' => true,
                 'isHDPatch4' => true,
                 'isAoe2Record' => false,
                 'isMsx' => true,
             ]],
+            ['./recs/versions/SP Replay v4.6 @2016.05.05 130050.aoe2record', Version::VERSION_HD46, [
+                'isHDEdition' => true,
+                'isHDPatch4' => true,
+                'isAoe2Record' => true,
+            ]]
         ];
     }
 }

@@ -62,7 +62,13 @@ class VersionAnalyzer extends Analyzer
      * @var int[]
      */
     public $hdVersions = [
-        Version::VERSION_HD
+        Version::VERSION_HD,
+        Version::VERSION_HD43,
+        Version::VERSION_HD46,
+        // Currently unused: HD 4.6 and 4.7 use the same file format, so we can't
+        // easily detect which one it is.
+        Version::VERSION_HD47,
+        Version::VERSION_HD48,
     ];
 
 
@@ -125,6 +131,17 @@ class VersionAnalyzer extends Analyzer
             case 'VER 9.3':
                 return Version::VERSION_AOK;
             case 'VER 9.4':
+                if ($subVersion >= 12.49) {
+                    return Version::VERSION_HD48;
+                }
+                if ($subVersion >= 12.36) {
+                    // Patch versions 4.6 and 4.7.
+                    return Version::VERSION_HD46;
+                }
+                if ($subVersion >= 12.34) {
+                    // Probably versions 4.3 through 4.5?
+                    return Version::VERSION_HD43;
+                }
                 if ($subVersion > 11.76) {
                     return Version::VERSION_HD;
                 }
