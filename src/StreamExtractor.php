@@ -44,13 +44,26 @@ class StreamExtractor
     private $fp = null;
 
     /**
+     * Options.
+     *
+     * @var array
+     */
+    private $options = [];
+
+    /**
      * Create a stream extractor instance.
      *
      * @param resource  $fp  Stream resource for the recorded game file.
+     * @param array  $options  Stream extractor options.
+     *     - `$options['memoryLimit']` - Maximum amount of bytes of memory to
+     *       allocate for the decompressed header. Defaults to 16777216 (16MB).
      */
-    public function __construct($fp)
+    public function __construct($fp, array $options = [])
     {
         $this->fp = $fp;
+        $this->options = array_merge([
+            'memoryLimit' => 16 * 1024 * 1024, // 16 MB
+        ], $options);
     }
 
     /**
@@ -138,7 +151,7 @@ class StreamExtractor
         }
         unset($buff);
 
-        $this->headerContents = gzinflate($bindata, 8388608 * 2);  // 16MB
+        $this->headerContents = gzinflate($bindata, $this->options['memoryLimit']);
         unset($bindata);
 
         if (!strlen($this->headerContents)) {

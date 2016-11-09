@@ -91,7 +91,7 @@ class RecordedGame
         $this->resourcePack = new ResourcePacks\AgeOfEmpires();
 
         // Initialize the header/body extractor.
-        $this->streams = new StreamExtractor($this->fp);
+        $this->streams = new StreamExtractor($this->fp, $options);
     }
 
     /**
