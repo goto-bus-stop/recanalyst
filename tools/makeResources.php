@@ -1,5 +1,17 @@
 <?php
 
+function array_merge_preserving_keys()
+{
+    $arrays = func_get_args();
+    $result = [];
+    foreach ($arrays as $array) {
+        foreach ($array as $key => $value) {
+            $result[$key] = $value;
+        }
+    }
+    return $result;
+}
+
 function downloadOpenage()
 {
     $shell = 'git clone ' .
@@ -47,7 +59,7 @@ function generateLanguageFiles($agedir, $data)
             13562,
             'SPECIAL_MAPS_LABEL',
         ],
-        'map_names' => array_merge(
+        'map_names' => array_merge_preserving_keys(
             // Standard maps
             array_combine(
                 range(9, 32), // Map IDs
