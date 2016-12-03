@@ -88,6 +88,7 @@ class HeaderAnalyzerTest extends TestCase
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
         $this->assertAttributeEquals(1, 'lockDiplomacy', $analysis->gameSettings);
         $this->assertAttributeEquals(GameSettings::LEVEL_EASIEST, 'difficultyLevel', $analysis->gameSettings);
+        $this->assertAttributeEquals(28, 'mapId', $analysis->gameSettings);
 
         $this->assertAttributeContains('Conquest Game', 'instructions', $analysis->messages);
     }
