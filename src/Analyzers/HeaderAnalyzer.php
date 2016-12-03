@@ -63,7 +63,11 @@ class HeaderAnalyzer extends Analyzer
             $this->position += 16;
         }
 
-        if (!$version->isAoK) {
+        if ($version->isAoe2Record) {
+            // Always 0? Map ID is now in the aoe2record front matter and gets
+            // parsed below.
+            $this->position += 4;
+        } else if (!$version->isAoK) {
             $mapId = $this->readHeader('l', 4);
         }
         $difficulty = $this->readHeader('l', 4);
@@ -119,6 +123,20 @@ class HeaderAnalyzer extends Analyzer
             // about expansion packs or mods. Should read that in
             // VersionAnalyzer.
             $this->position = 0x0c;
+            // Two 1000s: once as float, and once as int.
+            $this->position += 8;
+            // A boolean. Maybe Base=0, Expansions=1?
+            $this->position += 4;
+            // Not sure *exactly* what these ints stand for, but it might be
+            // metadata about the exact datasets used.
+            $numInts = $this->readHeader('l', 4);
+            $this->position += 4 * $numInts;
+            $this->position += 4 * 2;
+
+            $mapId = $this->readHeader('l', 4);
+            // There are more ints after this, but we got the data we need, so
+            // we'll just skip that.
+
             // Skip 6 separators
             for ($i = 0; $i < 6; $i++) {
                 $this->position = strpos($this->header, $aoe2recordHeaderSeparator, $this->position);
