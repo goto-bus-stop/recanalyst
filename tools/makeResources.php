@@ -76,11 +76,44 @@ function generateLanguageFiles($agedir, $data)
             [ 44 => 13562 ],
             // Blind random
             [ 48 => 10902 ],
-            // New maps
+            // Forgotten Empires maps
             array_combine(
-                range(49, 64),
+                range(66, 81),
                 range(10914, 10929)
-            )
+            ),
+            // African Kingdoms maps
+            [
+                82 => 'RMS_KILIMANJARO',
+                83 => 'RMS_MOUNTAINPASS',
+                84 => 'RMS_NILEDELTA',
+                85 => 'RMS_SERENGETI',
+                86 => 'RMS_SOCOTRA',
+            ],
+            // African Kingdoms Real World maps
+            [
+                87 => 'RWM_AMAZON',
+                88 => 'RWM_CHINA',
+                89 => 'RWM_HORNOFAFRICA',
+                90 => 'RWM_INDIA',
+                91 => 'RWM_MADAGASCAR',
+                92 => 'RWM_WESTAFRICA',
+                93 => 'RWM_BOHEMIA',
+                94 => 'RWM_EARTH',
+            ],
+            // African Kingdoms special maps
+            [
+                95 => 'SPECIALMAP_CANYONS',
+                96 => 'SPECIALMAP_ENEMYARCHIPELAGO',
+                97 => 'SPECIALMAP_ENEMYISLANDS',
+                98 => 'SPECIALMAP_FAROUT',
+                99 => 'SPECIALMAP_FRONTLINE',
+                100 => 'SPECIALMAP_INNERCIRCLE',
+                101 => 'SPECIALMAP_MOTHERLAND',
+                102 => 'SPECIALMAP_OPENPLAINS',
+                103 => 'SPECIALMAP_RINGOFWATER',
+                104 => 'SPECIALMAP_SNAKEPIT',
+                105 => 'SPECIALMAP_THEEYE',
+            ]
         ),
         'resources' => range(4301, 4304),
         'game_speeds' => range(9432, 9434),
