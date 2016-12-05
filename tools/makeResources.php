@@ -29,7 +29,7 @@ function loadResearchAndUnitData($agedir)
 {
     $shell = 'python3 ' .
         escapeshellarg(__DIR__ . '/parse_empiresdat.py') . ' ' .
-        escapeshellarg($agedir . '/resources/_common/dat/empires2_x1_p1.dat');
+        escapeshellarg($agedir . '/resources/_common/dat/empires2_x2_p1.dat');
     echo "> $shell\n";
     $json = shell_exec($shell);
     return json_decode($json, true);
