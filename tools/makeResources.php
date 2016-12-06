@@ -250,7 +250,7 @@ function generateImages($agedir, $data)
 
         echo "$id, ";
         if (file_exists($in)) {
-            rename($in, $out);
+            copy($in, $out);
         }
     }
     echo " done \n";
