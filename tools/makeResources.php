@@ -78,6 +78,11 @@ function generateLanguageFiles($agedir, $data)
             [ 48 => 10902 ],
             // Forgotten Empires maps
             array_combine(
+                range(49, 64),
+                range(10914, 10929)
+            ),
+            // Forgotten Empires maps in African Kingdoms
+            array_combine(
                 range(66, 81),
                 range(10914, 10929)
             ),
