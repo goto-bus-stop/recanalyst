@@ -275,7 +275,7 @@ class RecordedGame
      */
     public function pov()
     {
-        foreach ($this->players() as $player) {
+        foreach ($this->header()->players as $player) {
             if ($player->owner) {
                 return $player;
             }
