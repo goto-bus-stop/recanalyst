@@ -243,11 +243,28 @@ class RecordedGame
     /**
      * Get the players that played in this recorded game.
      *
+     * Excludes spectating players in HD Edition games.
+     *
      * @return \RecAnalyst\Model\Player[] Players.
      */
     public function players()
     {
-        return $this->header()->players;
+        return array_filter($this->header()->players, function ($player) {
+            return !$player->isSpectator();
+        });
+    }
+
+    /**
+     * Get the players that spectated this recorded game. Spectating players are
+     * only saved in the recorded games played in HD Edition.
+     *
+     * @return \RecAnalyst\Model\Player[] Spectators.
+     */
+    public function spectators()
+    {
+        return array_filter($this->header()->players, function ($player) {
+            return $player->isSpectator();
+        });
     }
 
     /**
