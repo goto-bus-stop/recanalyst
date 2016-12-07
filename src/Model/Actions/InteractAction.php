@@ -22,8 +22,32 @@ class InteractAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time)
+    public function __construct(RecordedGame $rec, $time, $playerId, $targetId, $x, $y, $units)
     {
         parent::__construct($rec, $time);
+
+        $this->playerId = $playerId;
+        $this->targetId = $targetId;
+        $this->x = $x;
+        $this->y = $y;
+        $this->units = $units;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Interact(playerId=%d, targetId=%d, x=%.2f, y=%.2f, units[%d]={%s})',
+            $this->playerId,
+            $this->targetId,
+            $this->x,
+            $this->y,
+            count($this->units),
+            implode(', ', $this->units)
+        );
     }
 }

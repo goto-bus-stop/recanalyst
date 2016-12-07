@@ -259,6 +259,35 @@ class BodyAnalyzer extends Analyzer
                 $this->position++;
 
                 switch ($command) {
+                    case self::COMMAND_INTERACT:
+                        $playerId = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $targetId = $this->readBody('l', 4);
+                        $unitCount = $this->readBody('l', 4);
+                        $this->push(new Actions\InteractAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $targetId,
+                            $this->readBody('f', 4),
+                            $this->readBody('f', 4),
+                            $this->readUnits($unitCount)
+                        ));
+                        break;
+                    case self::COMMAND_MOVE:
+                        $playerId = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $this->position += 4;
+                        $count = $this->readBody('l', 4);
+                        $this->push(new Actions\MoveAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $this->readBody('f', 4),
+                            $this->readBody('f', 4),
+                            $this->readUnits($count)
+                        ));
+                        break;
                     // player resign
                     case self::COMMAND_RESIGN:
                         $playerIndex = ord($this->body[$this->position]);
