@@ -16,12 +16,40 @@ class BuildAction extends Action
      */
     const ID = 0x66;
 
-    // Build(num=%d, x=%.2f, y=%.2f, pId=%d, oId=%d, qId=%d, frame=%d)
+    /**
+     * X-coordinate of the new building location.
+     *
+     * @var float
+     */
     public $x;
+
+    /**
+     * Y-coordinate of the new building location.
+     *
+     * @var float
+     */
     public $y;
+
+    /**
+     * ID of the Player who sent the action.
+     *
+     * @var int
+     */
     public $playerId;
+
+    /**
+     * Building type ID to build.
+     *
+     * @var int
+     */
     public $objectId;
-    public $villagers = [];
+
+    /**
+     * IDs of the units that will be tasked to build this building.
+     *
+     * @var int[]
+     */
+    public $builders = [];
 
     /**
      * Create a ...
@@ -29,7 +57,7 @@ class BuildAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time, $playerId, $x, $y, $objectId, $villagers)
+    public function __construct(RecordedGame $rec, $time, $playerId, $x, $y, $objectId, $builders)
     {
         parent::__construct($rec, $time);
 
@@ -37,6 +65,24 @@ class BuildAction extends Action
         $this->x = $x;
         $this->y = $y;
         $this->objectId = $objectId;
-        $this->villagers = $villagers;
+        $this->builders = $builders;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Build(playerId=%d, x=%.2f, y=%.2f, objectId=%d, builders[%d]={%s})',
+            $this->playerId,
+            $this->x,
+            $this->y,
+            $this->objectId,
+            count($this->builders),
+            implode(', ', $this->builders)
+        );
     }
 }

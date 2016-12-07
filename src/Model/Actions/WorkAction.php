@@ -14,7 +14,7 @@ class WorkAction extends Action
      *
      * @var int
      */
-    const ID = 0x2;
+    const ID = 0x02;
 
     /**
      * Create a ...

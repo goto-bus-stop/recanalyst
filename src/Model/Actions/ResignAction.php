@@ -16,10 +16,24 @@ class ResignAction extends Action
      */
     const ID = 0xb;
 
-    // Resign(pId=%d, commId=%d, dropped=%d)
-    private $playerId;
+    /**
+     * @var int
+     */
+    public $playerId;
+
+    /**
+     * [TODO]
+     *
+     * @var int
+     */
     private $commId;
-    private $dropped;
+
+    /**
+     * Whether the player dropped.
+     *
+     * @var bool
+     */
+    public $dropped;
 
     /**
      * Create a ...
@@ -34,5 +48,20 @@ class ResignAction extends Action
         $this->playerId = $playerId;
         $this->commId = $commId;
         $this->dropped = $dropped;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Resign(playerId=%d, commId=%d, dropped=%s)',
+            $this->playerId,
+            $this->commId,
+            $this->dropped ? 'true' : 'false'
+        );
     }
 }

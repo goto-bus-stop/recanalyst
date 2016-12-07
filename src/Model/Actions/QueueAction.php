@@ -16,9 +16,25 @@ class QueueAction extends Action
      */
     const ID = 0x77;
 
-    // Queue(bId=%d, tId=%d, count=%d)
+    /**
+     * ID of the building that the action applies to.
+     *
+     * @var int
+     */
     public $buildingId;
+
+    /**
+     * ID of the unit type that is being queued.
+     *
+     * @var int
+     */
     public $typeId;
+
+    /**
+     * Amount of units that are being queued.
+     *
+     * @var int
+     */
     public $count;
 
     /**
@@ -34,5 +50,20 @@ class QueueAction extends Action
         $this->buildingId = $buildingId;
         $this->typeId = $typeId;
         $this->count = $count;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Queue(buildingId=%d, typeId=%d, count=%d)',
+            $this->buildingId,
+            $this->typeId,
+            $this->count
+        );
     }
 }

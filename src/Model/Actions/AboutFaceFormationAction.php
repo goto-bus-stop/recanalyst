@@ -14,7 +14,21 @@ class AboutFaceFormationAction extends Action
      *
      * @var int
      */
-    const ID = 0x1a;
+    const ID = 0x1A;
+
+    /**
+     * ID of the player that is executing this action.
+     *
+     * @var int
+     */
+    public $playerId;
+
+    /**
+     * Formation this action applies to.
+     *
+     * @var int
+     */
+    public $formationId;
 
     /**
      * Create a ...
@@ -25,5 +39,19 @@ class AboutFaceFormationAction extends Action
     public function __construct(RecordedGame $rec, $time)
     {
         parent::__construct($rec, $time);
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'AboutFaceFormation(playerId=%d, formationId=%d)',
+            $this->playerId,
+            $this->formationId
+        );
     }
 }

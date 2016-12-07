@@ -5,7 +5,8 @@ namespace RecAnalyst\Model\Actions;
 use RecAnalyst\RecordedGame;
 
 /**
- * Represents ...
+ * Represents an off-board trade action. This is probably from an older alpha
+ * when trading was going to be much more advanced than in the final game.
  */
 class OffboardTradeAction extends Action
 {

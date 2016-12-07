@@ -5,7 +5,8 @@ namespace RecAnalyst\Model\Actions;
 use RecAnalyst\RecordedGame;
 
 /**
- * Represents ...
+ * Represents an attribute addition, for example when cheating in more
+ * resources.
  */
 class AddAttributeAction extends Action
 {
@@ -14,7 +15,28 @@ class AddAttributeAction extends Action
      *
      * @var int
      */
-    const ID = 0x5;
+    const ID = 0x05;
+
+    /**
+     * Player the action applies to.
+     *
+     * @var int
+     */
+    public $playerId;
+
+    /**
+     * Attribute number.
+     *
+     * @var int
+     */
+    public $attribute;
+
+    /**
+     * Amount of $attribute to add.
+     *
+     * @var int
+     */
+    public $amount;
 
     /**
      * Create a ...
@@ -25,5 +47,20 @@ class AddAttributeAction extends Action
     public function __construct(RecordedGame $rec, $time)
     {
         parent::__construct($rec, $time);
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'AddAttribute(playerId=%d, attribute=%d, amount=%d)',
+            $this->playerId,
+            $this->attribute,
+            $this->amount
+        );
     }
 }

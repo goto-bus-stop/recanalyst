@@ -16,6 +16,10 @@ class GuardAction extends Action
      */
     const ID = 0x13;
 
+    // Guard(num=%d, target=%d)
+    public $targetId;
+    public $units;
+
     /**
      * Create a ...
      *
@@ -25,5 +29,20 @@ class GuardAction extends Action
     public function __construct(RecordedGame $rec, $time)
     {
         parent::__construct($rec, $time);
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Guard(targetId=%d, units[%d]={%s})',
+            $this->targetId,
+            count($this->units),
+            implode(', ', $this->units)
+        );
     }
 }

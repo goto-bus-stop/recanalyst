@@ -16,6 +16,41 @@ class SetGatherPointAction extends Action
      */
     const ID = 0x78;
 
+    // SetGatherPoint(num=%d, x=%.2f, y=%.2f, tId=%d, tmId=%d)
+    /**
+     * Units (buildings) whose output should gather here.
+     *
+     * @var int[]
+     */
+    public $units;
+    /**
+     * New X-coordinate for the gather point.
+     *
+     * @var float
+     */
+    public $x;
+
+    /**
+     * New Y-coordinate for the gather point.
+     *
+     * @var float
+     */
+    public $y;
+
+    /**
+     * Optionally, the ID of a unit target to place the gather point.
+     *
+     * @var int
+     */
+    public $targetId;
+
+    /**
+     * [TODO]
+     *
+     * @var int
+     */
+    public $tmid;
+
     /**
      * Create a ...
      *

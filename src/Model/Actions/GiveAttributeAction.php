@@ -16,13 +16,40 @@ class GiveAttributeAction extends Action
      */
     const ID = 0x6c;
 
-    // GiveAttr(from=%d, to=%d, attr=%d, amount=%d)
-    // GiveAttr(from=%d to=%d, attr=%d, amt=%.2f, cost=%.2f)
-    private $fromId;
-    private $toId;
-    private $attribute;
-    private $amount;
-    private $cost;
+    /**
+     * ID of the giving player.
+     *
+     * @var int
+     */
+    public $fromId;
+
+    /**
+     * ID of the receiving player.
+     *
+     * @var int
+     */
+    public $toId;
+
+    /**
+     * Attribute type ID.
+     *
+     * @var int
+     */
+    public $attribute;
+
+    /**
+     * Amount of $attribute to give.
+     *
+     * @var float
+     */
+    public $amount;
+
+    /**
+     * Cost of the transfer (Market fee).
+     *
+     * @var float
+     */
+    public $cost;
 
     /**
      * Create a ...
@@ -55,5 +82,22 @@ class GiveAttributeAction extends Action
     public function toPlayer()
     {
         return $this->rec->getPlayer($this->toId);
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'GiveAttribute(fromId=%d, toId=%d, attribute=%d, amount=%.2f, cost=%.2f)',
+            $this->fromId,
+            $this->toId,
+            $this->attribute,
+            $this->amount,
+            $this->cost
+        );
     }
 }
