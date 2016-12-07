@@ -16,6 +16,10 @@ class CancelBuildAction extends Action
      */
     const ID = 0x6a;
 
+    // CancelBuild( uId=%d, pId=%d)
+    private $playerId;
+    private $unitId;
+
     /**
      * Create a ...
      *

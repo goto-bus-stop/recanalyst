@@ -16,6 +16,11 @@ class WheelFormationAction extends Action
      */
     const ID = 0x19;
 
+    // WheelFormation(pId, formId=%d, angle=%d)
+    private $playerId;
+    private $formationId;
+    private $angle;
+
     /**
      * Create a ...
      *

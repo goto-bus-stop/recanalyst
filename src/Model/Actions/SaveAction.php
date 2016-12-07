@@ -14,7 +14,11 @@ class SaveAction extends Action
      *
      * @var int
      */
-    const ID = 0x1b;
+    const ID = 0x1B;
+
+    // MpSave(ExitAfterSave=%d, CommId=%d)
+    private $commId;
+    private $exitAfterSave;
 
     /**
      * Create a ...

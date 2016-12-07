@@ -16,6 +16,10 @@ class BreakFormationAction extends Action
      */
     const ID = 0x18;
 
+    // BreakFormation(pId=%d, formId=%d)
+    private $playerId;
+    private $formationId;
+
     /**
      * Create a ...
      *

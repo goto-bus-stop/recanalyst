@@ -16,6 +16,12 @@ class ExploreAction extends Action
      */
     const ID = 0x68;
 
+    // Explore(num=%d, x=%.2f, y=%.2f, pId=%d
+    private $units;
+    private $x;
+    private $y;
+    private $playerId;
+
     /**
      * Create a ...
      *

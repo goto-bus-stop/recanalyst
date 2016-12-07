@@ -16,6 +16,10 @@ class FollowAction extends Action
      */
     const ID = 0x14;
 
+    // Follow(num=%d, target=%d)
+    private $num;
+    private $target;
+
     /**
      * Create a ...
      *

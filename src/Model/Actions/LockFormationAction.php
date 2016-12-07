@@ -14,7 +14,12 @@ class LockFormationAction extends Action
      *
      * @var int
      */
-    const ID = 0x1e;
+    const ID = 0x1E;
+
+    // LockFormation(pId=%d, formId=%d, formType=%d)
+    private $playerId;
+    private $formationId;
+    private $formationType;
 
     /**
      * Create a ...

@@ -16,6 +16,12 @@ class GroupWaypointAction extends Action
      */
     const ID = 0x10;
 
+    // GroupWaypoint(num=%d, commId=%d, x=%d, y=%d )
+    private $num;
+    private $commId;
+    private $x;
+    private $y;
+
     /**
      * Create a ...
      *

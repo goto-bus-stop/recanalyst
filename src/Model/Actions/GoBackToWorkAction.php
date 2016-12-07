@@ -16,6 +16,9 @@ class GoBackToWorkAction extends Action
      */
     const ID = 0x80;
 
+    // GoBackToWork(uId=%d)
+    private $unitId;
+
     /**
      * Create a ...
      *

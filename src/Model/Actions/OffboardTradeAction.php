@@ -17,6 +17,10 @@ class OffboardTradeAction extends Action
      */
     const ID = 0x7c;
 
+    // OffboardTrade(uId=%d, tradeRoute=%d )
+    private $unitId;
+    private $tradeRoute;
+
     /**
      * Create a ...
      *

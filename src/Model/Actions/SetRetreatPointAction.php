@@ -16,6 +16,9 @@ class SetRetreatPointAction extends Action
      */
     const ID = 0x79;
 
+    // SetRetreatPoint(uId=%d)
+    private $unitId;
+
     /**
      * Create a ...
      *

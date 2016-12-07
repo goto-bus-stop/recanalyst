@@ -16,6 +16,12 @@ class UnitTransformAction extends Action
      */
     const ID = 0x7d;
 
+    // UnitTransform(num=%d, uId=%d, pId=%d, qId=%d)
+    private $num;
+    private $unitId;
+    private $playerId;
+    private $qId;
+
     /**
      * Create a ...
      *

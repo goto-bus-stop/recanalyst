@@ -16,6 +16,10 @@ class UnitAiStateAction extends Action
      */
     const ID = 0x12;
 
+    // UnitAiState(num=%d, state=%d)
+    private $num;
+    private $state;
+
     /**
      * Create a ...
      *

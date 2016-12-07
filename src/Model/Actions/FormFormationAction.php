@@ -16,6 +16,11 @@ class FormFormationAction extends Action
      */
     const ID = 0x17;
 
+    // FormFormation(num=%d, pId=%d, formation=%d)
+    private $num;
+    private $playerId;
+    private $formation;
+
     /**
      * Create a ...
      *

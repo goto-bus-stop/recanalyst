@@ -16,6 +16,9 @@ class ChapterAction extends Action
      */
     const ID = 0x20;
 
+    // SaveChapter(commId=%d)
+    private $commId;
+
     /**
      * Create a ...
      *

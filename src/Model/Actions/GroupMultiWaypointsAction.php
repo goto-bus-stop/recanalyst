@@ -16,6 +16,10 @@ class GroupMultiWaypointsAction extends Action
      */
     const ID = 0x1f;
 
+    // GroupMultiWaypoints(num=%d, waypoints=%d)
+    private $num;
+    private $waypoints;
+
     /**
      * Create a ...
      *

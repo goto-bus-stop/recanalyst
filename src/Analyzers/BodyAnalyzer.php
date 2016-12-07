@@ -374,6 +374,9 @@ class BodyAnalyzer extends Analyzer
                             $this->units[$unitType] += $amount;
                         }
                         break;
+                    case self::COMMAND_GAME:
+                        $this->processGameAction();
+                        break;
                     // AI trains unit
                     case self::COMMAND_MAKE:
                         $this->position += 9;
@@ -462,6 +465,7 @@ class BodyAnalyzer extends Analyzer
                         $this->postGameData = $this->read(PostgameDataAnalyzer::class);
                         break;
                     default:
+                        printf("Unknown action %02x (%d)\n", $command, $length);
                         break;
                 }
 
@@ -477,6 +481,10 @@ class BodyAnalyzer extends Analyzer
 
         if (!empty($this->buildings)) {
             ksort($this->buildings);
+        }
+
+        foreach ($this->actions as $action) {
+            echo '[' . \RecAnalyst\Utils::formatGameTime($action->time) . '] ' . $action . "\n";
         }
 
         $analysis = new \StdClass;
@@ -535,6 +543,33 @@ class BodyAnalyzer extends Analyzer
                 $player,
                 substr($chat, 3)
             );
+        }
+    }
+
+    private function processGameAction()
+    {
+        $action = ord($this->body[$this->position++]);
+        $playerId = ord($this->body[$this->position++]);
+        switch ($action) {
+            case Actions\GameAction::CHEAT:
+                $this->position++;
+                $cheatId = ord($this->body[$this->position++]);
+                $this->push(new Actions\Game\CheatAction(
+                    $this->rec,
+                    $this->currentTime,
+                    $action,
+                    $playerId,
+                    $cheatId
+                ));
+                break;
+            default:
+                $this->push(new Actions\GameAction(
+                    $this->rec,
+                    $this->currentTime,
+                    $action,
+                    $playerId
+                ));
+                break;
         }
     }
 

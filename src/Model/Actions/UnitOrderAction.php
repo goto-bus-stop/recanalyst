@@ -16,6 +16,15 @@ class UnitOrderAction extends Action
      */
     const ID = 0x75;
 
+    // UnitOrder(num=%d, x=%.2f, y=%.2f, tId=%d, qId=%d, action=%d, param=%d)
+    private $units;
+    private $x;
+    private $y;
+    private $targetId;
+    private $qid;
+    private $action;
+    private $parameter;
+
     /**
      * Create a ...
      *

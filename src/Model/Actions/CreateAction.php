@@ -16,6 +16,13 @@ class CreateAction extends Action
      */
     const ID = 0x4;
 
+    // Create( obj_cat=%d, pId=%d, loc=%.10f,%.10f,%.10f )
+    private $objectCategory;
+    private $playerId;
+    private $x;
+    private $y;
+    private $z;
+
     /**
      * Create a ...
      *

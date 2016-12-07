@@ -16,6 +16,13 @@ class UnloadAction extends Action
      */
     const ID = 0x6f;
 
+    // Unload(num=%d, x=%.2f, y=%.2f, flag=%d, unitType=%d)
+    private $num;
+    private $x;
+    private $y;
+    private $flag;
+    private $unitType;
+
     /**
      * Create a ...
      *

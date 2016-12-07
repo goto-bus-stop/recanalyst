@@ -16,6 +16,12 @@ class SellCommodityAction extends Action
      */
     const ID = 0x7a;
 
+    // BuySellAttr(uId=%d, pId=%d, attr=%d, amt=%d)
+    private $unitId;
+    private $playerId;
+    private $attribute;
+    private $amount;
+
     /**
      * Create a ...
      *

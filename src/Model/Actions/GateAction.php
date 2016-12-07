@@ -16,6 +16,9 @@ class GateAction extends Action
      */
     const ID = 0x72;
 
+    // Gate(uId=%d)
+    private $unitId;
+
     /**
      * Create a ...
      *

@@ -16,6 +16,10 @@ class TradeAttributeAction extends Action
      */
     const ID = 0x6d;
 
+    // TradeAttr(num=%d, attr=%d)
+    private $num;
+    private $attribute;
+
     /**
      * Create a ...
      *

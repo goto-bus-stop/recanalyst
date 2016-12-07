@@ -16,6 +16,19 @@ class DiplomacyAction extends Action
      */
     const ID = 0x76;
 
+    // Diplomacy(pId1, pId2, seq=%d, status=%d, declare=%d, diplo=%d, int=%d, trade=%d, demand=%d, gold=%d, len=%d)
+    private $playerId1;
+    private $playerId2;
+    private $seq;
+    private $status;
+    private $declare;
+    private $diplo;
+    private $int;
+    private $trade;
+    private $demand;
+    private $gold;
+    private $length;
+
     /**
      * Create a ...
      *

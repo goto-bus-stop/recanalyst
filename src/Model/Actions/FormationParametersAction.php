@@ -14,7 +14,17 @@ class FormationParametersAction extends Action
      *
      * @var int
      */
-    const ID = 0x1c;
+    const ID = 0x1C;
+
+    // FormationParams(pId=%d, lineRatio=%d, colRatio=%d, minColDist=%d,
+    //                 colToLineDist=%d, formInfluenceDist=%.10f, breakAutoFormationsBySpeed=%d)
+    private $playerId;
+    private $lineRatio;
+    private $columnRatio;
+    private $minColumnDistance;
+    private $columnToLineDistance;
+    private $formInfluenceDistance;
+    private $breakAutoFormationsBySpeed;
 
     /**
      * Create a ...
