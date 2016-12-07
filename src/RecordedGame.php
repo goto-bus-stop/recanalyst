@@ -283,6 +283,21 @@ class RecordedGame
     }
 
     /**
+     * Get a player by their index.
+     *
+     * @param int  $id  Player index.
+     * @return \RecAnalyst\Model\Player|null
+     */
+    public function getPlayer($id)
+    {
+        foreach ($this->header()->players as $player) {
+            if ($player->index === $id) {
+                return $player;
+            }
+        }
+    }
+
+    /**
      * Get the player achievements.
      *
      * return \StdClass[] Achievements for each player.
