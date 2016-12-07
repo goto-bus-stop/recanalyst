@@ -294,10 +294,9 @@ class BodyAnalyzer extends Analyzer
                         break;
                     // tributing
                     case self::COMMAND_TRIBUTE:
-                        $playerIdFrom = ord($this->body[$this->position]);
-                        $playerIdTo = ord($this->body[$this->position]);
-                        $resourceId = ord($this->body[$this->position]);
-                        $this->position += 3;
+                        $playerIdFrom = ord($this->body[$this->position++]);
+                        $playerIdTo = ord($this->body[$this->position++]);
+                        $resourceId = ord($this->body[$this->position++]);
 
                         $playerFrom = $playersByIndex[$playerIdFrom];
                         $playerTo = $playersByIndex[$playerIdTo];

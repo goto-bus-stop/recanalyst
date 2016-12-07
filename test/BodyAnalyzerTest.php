@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 use RecAnalyst\RecordedGame;
+use RecAnalyst\Model\Tribute;
 use RecAnalyst\Analyzers\BodyAnalyzer;
 
 class BodyAnalyzerTest extends TestCase
@@ -40,6 +41,19 @@ class BodyAnalyzerTest extends TestCase
         $this->assertEquals($messages[0]->group, 'Rating');
         $this->assertEquals($messages[0]->msg, '2212');
         $this->assertEquals($messages[0]->player->name, 'Zuppi');
+    }
+
+    /**
+     * Check that tributes have the correct properties and associated players.
+     */
+    public function testTributes()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx'));
+        $tributes = $rec->runAnalyzer(new BodyAnalyzer)->tributes;
+        $this->assertAttributeEquals(10000, 'amount', $tributes[0]);
+        $this->assertAttributeEquals(Tribute::WOOD, 'resourceId', $tributes[0]);
+        $this->assertAttributeEquals('Ruga the Hun (Original AI)', 'name', $tributes[0]->playerFrom);
+        $this->assertAttributeEquals('Mu Gui-ying (Original AI)', 'name', $tributes[0]->playerTo);
     }
 
     public function recordsProvider()
