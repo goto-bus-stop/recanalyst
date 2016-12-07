@@ -208,7 +208,7 @@ class Player
         if (is_null($achievements)) {
             return null;
         }
-        return $achievements[$this->index];
+        return $achievements[$this->index - 1];
     }
 
     /**

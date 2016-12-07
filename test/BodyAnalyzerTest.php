@@ -56,6 +56,14 @@ class BodyAnalyzerTest extends TestCase
         $this->assertAttributeEquals('Mu Gui-ying (Original AI)', 'name', $tributes[0]->playerTo);
     }
 
+    public function testAchievements()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/up1.4.mgz'));
+        $rec->body(); // Populate achievements on player objects.
+        $this->assertAttributeEquals(7411, 'score', $rec->getPlayer(1)->achievements());
+        $this->assertAttributeEquals(9484, 'score', $rec->getPlayer(2)->achievements());
+    }
+
     public function recordsProvider()
     {
         return [
