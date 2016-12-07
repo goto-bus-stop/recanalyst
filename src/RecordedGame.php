@@ -271,7 +271,7 @@ class RecordedGame
      * Get the POV player. This is the player that recorded this recorded game
      * file.
      *
-     * @return \RecAnalyst\Model\Player
+     * @return \RecAnalyst\Model\Player|null
      */
     public function pov()
     {
