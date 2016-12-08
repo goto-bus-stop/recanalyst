@@ -3,6 +3,7 @@
 namespace RecAnalyst\Model;
 
 use RecAnalyst\RecordedGame;
+use RecAnalyst\Processors\MapName as MapNameExtractor;
 
 class GameSettings
 {
@@ -216,10 +217,22 @@ class GameSettings
     /**
      * Get the map name.
      *
+     * @param array  $options  Options.
+     *   - `$options['extractRMSName']` - Whether to attempt to find the RMS
+     *     file names of custom random maps. Defaults to `true`.
+     *
      * @return string Map name.
      */
-    public function mapName()
+    public function mapName($options = [])
     {
+        $extractRmsName = isset($options['extractRMSName']) ? $options['extractRMSName'] : true;
+        if ($extractRmsName && $this->isCustomMap()) {
+            $nameExtractor = new MapNameExtractor($this->rec);
+            $likelyName = $nameExtractor->run();
+            if ($likelyName) {
+                return $likelyName;
+            }
+        }
         return $this->rec->trans('map_names', $this->mapId);
     }
 
