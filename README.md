@@ -10,7 +10,8 @@ supports recorded game files from Age of Kings, The Conquerors, UserPatch,
 Forgotten Empires, and HD Edition (optionally with expansions).
 
 [License][] - [Credits][] - [Requirements][] - [Installation][] -
-[Configuration][] - [Usage Examples][] - [API Documentation][]
+[Configuration][] - [Usage Examples][] - [API Documentation][] -
+[Limitations][]
 
 ```php
 $rec = new \RecAnalyst\RecordedGame('recorded_game.mgx2');
@@ -109,6 +110,22 @@ To get started, the [Usage Examples][] might be helpful.
 Full API documentation is available at
 https://goto-bus-stop.github.io/recanalyst/doc/.
 
+## Limitations
+
+These are some things to take into account when writing your own applications
+with RecAnalyst:
+
+ - Achievements data is only available in multiplayer UserPatch 1.4 (`.mgz`)
+   games. It isn't saved in single player recordings nor in any other game
+   version.
+ - RecAnalyst cannot be used to find the state of the recorded game at any point
+   except the very start. This is because AoC stores a list of actions, so to
+   reconstruct the game state at a given point, the game has to be simulated
+   exactly. See [#1][limitation/gameplay].
+ - Rarely, Age of Empires fails to save Resign actions just before the end of
+   the game. In those cases, RecAnalyst cannot determine the `resignTime`
+   property for players. See [#35][limitation/resignTime].
+
 [references.md]: ./references.md
 [Composer]: https://getcomposer.org
 [v3.x branch]: https://github.com/goto-bus-stop/recanalyst/tree/v3.x
@@ -125,3 +142,7 @@ https://goto-bus-stop.github.io/recanalyst/doc/.
 [Laravel integration]: #laravel
 [Usage Examples]: ./examples#readme
 [API Documentation]: https://goto-bus-stop.github.io/recanalyst/doc/
+[Limitations]: #limitations
+
+[limitation/gameplay]: https://github.com/goto-bus-stop/recanalyst/issues/1
+[limitation/resignTime]: https://github.com/goto-bus-stop/recanalyst/issues/35
