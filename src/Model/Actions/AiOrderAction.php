@@ -51,7 +51,7 @@ class AiOrderAction extends Action
     public function __toString()
     {
         return sprintf(
-            'AddAttribute(playerId=%d, attribute=%d, amount=%d)',
+            'AiOrder(playerId=%d, attribute=%d, amount=%d)',
             $this->playerId,
             $this->attribute,
             $this->amount

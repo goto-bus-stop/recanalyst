@@ -288,6 +288,16 @@ class BodyAnalyzer extends Analyzer
                             $this->readUnits($count)
                         ));
                         break;
+                    case self::COMMAND_UNIT_AI_STATE:
+                        $numUnits = ord($this->body[$this->position++]);
+                        $stance = ord($this->body[$this->position++]);
+                        $this->push(new Actions\UnitAiStateAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $stance,
+                            $this->readUnits($numUnits)
+                        ));
+                        break;
                     // player resign
                     case self::COMMAND_RESIGN:
                         $playerIndex = ord($this->body[$this->position]);
@@ -427,7 +437,7 @@ class BodyAnalyzer extends Analyzer
                         }
                         break;
                     // tributing
-                    case self::COMMAND_TRIBUTE:
+                    case self::COMMAND_GIVE_ATTRIBUTE2:
                         $playerIdFrom = ord($this->body[$this->position++]);
                         $playerIdTo = ord($this->body[$this->position++]);
                         $resourceId = ord($this->body[$this->position++]);
