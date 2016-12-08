@@ -103,6 +103,16 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertAttributeEquals(9000, 'timeLimit', $analysis->victory);
     }
 
+    /**
+     * @dataProvider chatCountsProvider
+     */
+    public function testChat($file, $expectedCount)
+    {
+        $rec = $this->load($file);
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        $this->assertCount($expectedCount, $analysis->pregameChat);
+    }
+
     public function playersProvider()
     {
         return [
@@ -158,6 +168,14 @@ class HeaderAnalyzerTest extends TestCase
                 ['civId' => 1, 'name' => 'Idle Beaver'],
                 ['civId' => 1, 'name' => 'Duke of Normandy (AI)'],
             ], 2],
+        ];
+    }
+
+    public function chatCountsProvider()
+    {
+        return [
+            ['recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record', 13],
+            ['recs/versions/HD_test.mgx', 50],
         ];
     }
 }

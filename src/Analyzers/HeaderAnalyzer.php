@@ -112,6 +112,10 @@ class HeaderAnalyzer extends Analyzer
             $this->position += 1;
         }
 
+        if ($version->isHDEdition) {
+            $this->position += 4;
+        }
+
         $pregameChat = [];
         if ($version->isMgx) {
             $pregameChat = $this->readChat($playersByIndex);
