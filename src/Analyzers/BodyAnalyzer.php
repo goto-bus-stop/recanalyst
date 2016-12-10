@@ -361,6 +361,31 @@ class BodyAnalyzer extends Analyzer
                             $this->chatMessages[] = new ChatMessage($this->currentTime, null, $message);
                         }
                         break;
+                    case self::COMMAND_PATROL:
+                        $start = $this->position - 1;
+                        $numUnits = ord($this->body[$this->position++]);
+                        $numWaypoints = ord($this->body[$this->position++]);
+                        $this->position++;
+                        $waypoints = [];
+                        // bytes for 10 waypoints are allocated. however, not
+                        // all of them are used, so we skip reading the ones
+                        // that are certainly empty.
+                        for ($i = 0; $i < $numWaypoints; $i++) {
+                            $waypoints[$i][0] = $this->readBody('f', 4);
+                        }
+                        $this->position += (10 - $numWaypoints) * 4;
+                        for ($i = 0; $i < $numWaypoints; $i++) {
+                            $waypoints[$i][1] = $this->readBody('f', 4);
+                        }
+                        $this->position += (10 - $numWaypoints) * 4;
+
+                        $this->push(new Actions\PatrolAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $this->readUnits($numUnits),
+                            $waypoints
+                        ));
+                        break;
                     case self::COMMAND_FORM_FORMATION:
                         $count = ord($this->body[$this->position++]);
                         $playerId = ord($this->body[$this->position++]);
@@ -657,6 +682,15 @@ class BodyAnalyzer extends Analyzer
                             $marketId
                         ));
                         break;
+                    case self::COMMAND_GO_BACK_TO_WORK:
+                        $this->position += 3;
+                        $unitId = $this->readBody('l', 4);
+
+                        $this->push(new Actions\GoBackToWorkAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $unitId
+                        ));
                     // multiplayer postgame data in UP1.4 RC2+
                     case self::COMMAND_POSTGAME:
                         $this->postGameData = $this->read(PostgameDataAnalyzer::class);

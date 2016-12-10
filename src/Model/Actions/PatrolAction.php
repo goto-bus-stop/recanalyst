@@ -16,8 +16,19 @@ class PatrolAction extends Action
      */
     const ID = 0x15;
 
-    // Patrol(num=%d, waypoints[%d]={%s})
+    /**
+     * IDs of the units to be patrolled.
+     *
+     * @var int[]
+     */
     private $units = [];
+
+    /**
+     * Array of waypoints to pass by while patrolling. Each waypoint is a pair
+     * of coordinates [$x, $y].
+     *
+     * @var float[][]
+     */
     private $waypoints = [];
 
     /**
@@ -32,5 +43,23 @@ class PatrolAction extends Action
 
         $this->units = $units;
         $this->waypoints = $waypoints;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Patrol(units[%d]={%s}, waypoints[%d]={%s})',
+            count($this->units),
+            implode(', ', $this->units),
+            count($this->waypoints),
+            implode(', ', array_map(function ($w) {
+                return vsprintf('{%.2f, %.2f}', $w);
+            }, $this->waypoints))
+        );
     }
 }
