@@ -49,7 +49,7 @@ class SetGatherPointAction extends Action
      *
      * @var int
      */
-    public $tmid;
+    public $targetType;
 
     /**
      * Create a ...
@@ -57,8 +57,32 @@ class SetGatherPointAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time)
+    public function __construct(RecordedGame $rec, $time, $targetId, $targetType, $x, $y, $units)
     {
         parent::__construct($rec, $time);
+
+        $this->targetId = $targetId;
+        $this->targetType = $targetType;
+        $this->x = $x;
+        $this->y = $y;
+        $this->units = $units;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'SetGatherPoint(targetId=%d, typeId=%d, x=%.2f, y=%.2f, units[%d]={%s})',
+            $this->targetId,
+            $this->targetType,
+            $this->x,
+            $this->y,
+            count($this->units),
+            implode(', ', $this->units)
+        );
     }
 }

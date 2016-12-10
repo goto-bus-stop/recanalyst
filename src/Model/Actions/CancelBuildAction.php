@@ -16,9 +16,19 @@ class CancelBuildAction extends Action
      */
     const ID = 0x6a;
 
-    // CancelBuild( uId=%d, pId=%d)
-    private $playerId;
-    private $unitId;
+    /**
+     * Player who is canceling this object.
+     *
+     * @var int
+     */
+    public $playerId;
+
+    /**
+     * Object to cancel or delete.
+     *
+     * @var int
+     */
+    public $objectId;
 
     /**
      * Create a ...
@@ -26,8 +36,25 @@ class CancelBuildAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time)
+    public function __construct(RecordedGame $rec, $time, $playerId, $objectId)
     {
         parent::__construct($rec, $time);
+
+        $this->playerId = $playerId;
+        $this->objectId = $objectId;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'CancelBuild(playerId=%d, objectId=%d)',
+            $this->playerId,
+            $this->objectId
+        );
     }
 }

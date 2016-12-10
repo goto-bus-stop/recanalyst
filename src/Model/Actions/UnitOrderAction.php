@@ -17,6 +17,13 @@ class UnitOrderAction extends Action
     const ID = 0x75;
 
     /**
+     * ID of the Garrison action.
+     *
+     * @var int
+     */
+    const GARRISON = 0x05;
+
+    /**
      * @var int[]
      */
     public $units;
@@ -39,11 +46,6 @@ class UnitOrderAction extends Action
     /**
      * @var int
      */
-    public $qId;
-
-    /**
-     * @var int
-     */
     public $action;
 
     /**
@@ -57,17 +59,26 @@ class UnitOrderAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time, $x, $y, $targetId, $qId, $action, $parameter, $units)
+    public function __construct(RecordedGame $rec, $time, $x, $y, $targetId, $action, $parameter, $units)
     {
         parent::__construct($rec, $time);
 
         $this->x = $x;
         $this->y = $y;
         $this->targetId = $targetId;
-        $this->qId = $qId;
         $this->action = $action;
         $this->parameter = $parameter;
         $this->units = $units;
+    }
+
+    /**
+     * Determine whether the order is targeted at an object.
+     *
+     * @return bool True if the order has an object target, false if it does not.
+     */
+    public function hasTarget()
+    {
+        return $this->targetId !== -1;
     }
 
     /**
@@ -78,11 +89,10 @@ class UnitOrderAction extends Action
     public function __toString()
     {
         return sprintf(
-            'UnitOrder(x=%.2f, y=%.2f, targetId=%d, qId=%d, action=%d, parameter=%d, units[%d]={%s})',
+            'UnitOrder(x=%.2f, y=%.2f, targetId=%d, action=%d, parameter=%d, units[%d]={%s})',
             $this->x,
             $this->y,
             $this->targetId,
-            $this->qId,
             $this->action,
             $this->parameter,
             count($this->units),

@@ -274,6 +274,30 @@ class BodyAnalyzer extends Analyzer
                             $this->readUnits($unitCount)
                         ));
                         break;
+                    case self::COMMAND_STOP:
+                        $count = ord($this->body[$this->position++]);
+                        $this->push(new Actions\StopAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_WORK:
+                        $this->position += 3;
+                        $targetId = $this->readBody('l', 4);
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 3;
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+                        $this->push(new Actions\WorkAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $targetId,
+                            $x,
+                            $y,
+                            $this->readUnits($count)
+                        ));
+                        break;
                     case self::COMMAND_MOVE:
                         $playerId = ord($this->body[$this->position++]);
                         $this->position += 2;
@@ -288,6 +312,24 @@ class BodyAnalyzer extends Analyzer
                             $this->readUnits($count)
                         ));
                         break;
+                    case self::COMMAND_CREATE:
+                        $this->position++;
+                        $objectCategory = $this->readBody('v', 2);
+                        $playerId = ord($this->body[$this->position++]);
+                        $this->position += 3;
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+                        $z = $this->readBody('f', 4);
+                        $this->push(new Actions\CreateAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $objectCategory,
+                            $x,
+                            $y,
+                            $z
+                        ));
+                        break;
                     case self::COMMAND_UNIT_AI_STATE:
                         $numUnits = ord($this->body[$this->position++]);
                         $stance = ord($this->body[$this->position++]);
@@ -300,9 +342,9 @@ class BodyAnalyzer extends Analyzer
                         break;
                     // player resign
                     case self::COMMAND_RESIGN:
-                        $playerIndex = ord($this->body[$this->position]);
-                        $playerNumber = ord($this->body[$this->position + 1]);
-                        $dropped = ord($this->body[$this->position + 2]);
+                        $playerIndex = ord($this->body[$this->position++]);
+                        $playerNumber = ord($this->body[$this->position++]);
+                        $dropped = ord($this->body[$this->position++]);
 
                         $this->push(new Actions\ResignAction(
                             $this->rec,
@@ -312,13 +354,26 @@ class BodyAnalyzer extends Analyzer
                             $dropped
                         ));
 
-                        $this->position += 3;
                         $player = $playersByIndex[$playerIndex];
                         if ($player && $player->resignTime === 0) {
                             $player->resignTime = $this->currentTime;
                             $message = sprintf('%s resigned', $player->name);
                             $this->chatMessages[] = new ChatMessage($this->currentTime, null, $message);
                         }
+                        break;
+                    case self::COMMAND_FORM_FORMATION:
+                        $count = ord($this->body[$this->position++]);
+                        $playerId = ord($this->body[$this->position++]);
+                        $this->position += 1;
+                        $formation = $this->readBody('l', 4);
+
+                        $this->push(new Actions\FormFormationAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $formation,
+                            $this->readUnits($count)
+                        ));
                         break;
                     // researches
                     case self::COMMAND_RESEARCH:
@@ -387,11 +442,44 @@ class BodyAnalyzer extends Analyzer
                     case self::COMMAND_GAME:
                         $this->processGameAction();
                         break;
+                    case self::COMMAND_BUILD_WALL:
+                        $count = ord($this->body[$this->position++]);
+                        $playerId = ord($this->body[$this->position++]);
+                        $x1 = ord($this->body[$this->position++]);
+                        $y1 = ord($this->body[$this->position++]);
+                        $x2 = ord($this->body[$this->position++]);
+                        $y2 = ord($this->body[$this->position++]);
+                        $this->position += 1; // Padding
+                        $objectType = $this->readBody('v', 2);
+                        $this->position += 2; // Padding
+                        $this->position += 4; // Always -1
+
+                        $this->push(new Actions\BuildWallAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $objectType,
+                            [$x1, $y1],
+                            [$x2, $y2],
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_CANCEL_BUILD:
+                        $this->position += 3;
+                        $objectId = $this->readBody('l', 4);
+                        $playerId = $this->readBody('l', 4);
+                        $this->push(new Actions\CancelBuildAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $objectId
+                        ));
+                        break;
                     // AI trains unit
                     case self::COMMAND_MAKE:
-                        $this->position += 9;
-                        $playerId = -1;
-                        $objectId = -1;
+                        $this->position += 3;
+                        $objectId = $this->readBody('l', 4);
+                        $playerId = $this->readBody('v', 2);
                         $unitType = $this->readBody('v', 2);
 
                         $this->push(new Actions\MakeAction(
@@ -469,6 +557,105 @@ class BodyAnalyzer extends Analyzer
                         } else {
                             $this->position += 8;
                         }
+                        break;
+                    case self::COMMAND_REPAIR:
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $targetId = $this->readBody('l', 4);
+                        $this->push(new Actions\RepairAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $targetId,
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_UNLOAD:
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+                        $flag = ord($this->body[$this->position++]);
+                        $this->position += 3;
+                        $unitType = $this->readBody('l', 4);
+
+                        $this->push(new Actions\UnloadAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $x,
+                            $y,
+                            $flag,
+                            $unitType,
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_UNIT_ORDER:
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $targetId = $this->readBody('l', 4);
+                        $action = ord($this->body[$this->position++]);
+                        $this->position += 3;
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+                        $parameter = $this->readBody('l', 4);
+
+                        $this->push(new Actions\UnitOrderAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $x,
+                            $y,
+                            $targetId,
+                            $action,
+                            $parameter,
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_SET_GATHER_POINT:
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $targetId = $this->readBody('l', 4);
+                        $targetType = $this->readBody('l', 4);
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+
+                        $this->push(new Actions\SetGatherPointAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $targetId,
+                            $targetType,
+                            $x,
+                            $y,
+                            $this->readUnits($count)
+                        ));
+                        break;
+                    case self::COMMAND_SELL_COMMODITY:
+                        $playerId = ord($this->body[$this->position++]);
+                        $resourceType = ord($this->body[$this->position++]);
+                        $amount = ord($this->body[$this->position++]);
+                        $marketId = $this->readBody('l', 4);
+
+                        $this->push(new Actions\SellCommodityAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $resourceType,
+                            $amount,
+                            $marketId
+                        ));
+                        break;
+                    case self::COMMAND_BUY_COMMODITY:
+                        $playerId = ord($this->body[$this->position++]);
+                        $resourceType = ord($this->body[$this->position++]);
+                        $amount = ord($this->body[$this->position++]);
+                        $marketId = $this->readBody('l', 4);
+
+                        $this->push(new Actions\BuyCommodityAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerId,
+                            $resourceType,
+                            $amount,
+                            $marketId
+                        ));
                         break;
                     // multiplayer postgame data in UP1.4 RC2+
                     case self::COMMAND_POSTGAME:

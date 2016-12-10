@@ -17,13 +17,11 @@ class BuildWallAction extends Action
     const ID = 0x69;
 
     // BuildWall(num=%d, x1=%d, y1=%d, x2=%d, y2=%d, pId=%d, oId=%d, qId=%d)
-    private $num;
-    private $x1;
-    private $y1;
-    private $x2;
-    private $y2;
-    private $playerId;
-    private $objectId;
+    public $playerId;
+    public $objectId;
+    public $from;
+    public $to;
+    public $units;
 
     /**
      * Create a ...
@@ -31,8 +29,34 @@ class BuildWallAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time)
+    public function __construct(RecordedGame $rec, $time, $playerId, $objectType, $from, $to, $builders)
     {
         parent::__construct($rec, $time);
+
+        $this->playerId = $playerId;
+        $this->objectType = $objectType;
+        $this->from = $from;
+        $this->to = $to;
+        $this->builders = $builders;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'BuildWall(playerId=%d, objectType=%d, from={%d,%d}, to={%d,%d}, builders[%d]={%s})',
+            $this->playerId,
+            $this->objectType,
+            $this->from[0],
+            $this->from[1],
+            $this->to[0],
+            $this->to[1],
+            count($this->builders),
+            implode(', ', $this->builders)
+        );
     }
 }

@@ -16,9 +16,25 @@ class MakeAction extends Action
      */
     const ID = 0x64;
 
-    // Make(pId=%d, uId=%d, oId=%d, qId=%d)
+    /**
+     * Player who is "making" a unit.
+     *
+     * @var int
+     */
     private $playerId;
-    private $unitId;
+
+    /**
+     * Unit type ID to create.
+     *
+     * @var int
+     */
+    private $typeId;
+
+    /**
+     * Object ID where the unit will be created. Usually a building.
+     *
+     * @var int
+     */
     private $objectId;
 
     /**
@@ -27,12 +43,27 @@ class MakeAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time, $playerId, $unitId, $objectId)
+    public function __construct(RecordedGame $rec, $time, $playerId, $typeId, $objectId)
     {
         parent::__construct($rec, $time);
 
         $this->playerId = $playerId;
-        $this->unitId = $unitId;
+        $this->typeId = $typeId;
         $this->objectId = $objectId;
+    }
+
+    /**
+     * Get a string representation of the action.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            'Make(playerId=%d, typeId=%d, objectId=%d)',
+            $this->playerId,
+            $this->typeId,
+            $this->objectId
+        );
     }
 }
