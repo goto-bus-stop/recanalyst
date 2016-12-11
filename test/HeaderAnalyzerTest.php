@@ -113,6 +113,48 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertCount($expectedCount, $analysis->pregameChat);
     }
 
+    public function testCoops()
+    {
+        $rec = $this->load('recs/coop/coop.mgx');
+        $players = $rec->runAnalyzer(new HeaderAnalyzer)->players;
+
+        $this->assertAttributeEquals(1, 'index', $players[0]);
+        $this->assertAttributeEquals(2, 'index', $players[1]);
+        $this->assertAttributeEquals(2, 'index', $players[2]);
+        $this->assertAttributeEquals(1, 'index', $players[3]);
+
+        $this->assertTrue($players[0]->isCooping());
+        $this->assertTrue($players[1]->isCooping());
+        $this->assertTrue($players[2]->isCooping());
+        $this->assertTrue($players[3]->isCooping());
+
+        // Check that coop main/partner are defined correctly.
+        $this->assertTrue($players[0]->isCoopMain());
+        $this->assertFalse($players[0]->isCoopPartner());
+        $this->assertTrue($players[1]->isCoopMain());
+        $this->assertFalse($players[1]->isCoopPartner());
+        $this->assertTrue($players[2]->isCoopPartner());
+        $this->assertFalse($players[2]->isCoopMain());
+        $this->assertTrue($players[3]->isCoopPartner());
+        $this->assertFalse($players[3]->isCoopMain());
+
+        $rec = $this->load('recs/FluffyFur+yousifr+TheBlackWinds+Mobius_One[Chinese]=VS=MOD3000+Chrazini+ClosedLoop+ [AGM]Wineup[Britons]_1v1_8PlayerCo-op_01222015.mgx2');
+        $players = $rec->runAnalyzer(new HeaderAnalyzer)->players;
+
+        // Check that coop partners are collected correctly.
+        $partners = $players[0]->getCoopPartners();
+        $this->assertCount(3, $partners);
+        $partners = $players[7]->getCoopPartners();
+        $this->assertCount(3, $partners);
+
+        // Check that coop mains are returned correctly.
+        $this->assertEquals(
+            $players[6]->getCoopMain(),
+            $players[0]
+        );
+        $this->assertContains($players[6], $players[0]->getCoopPartners());
+    }
+
     public function playersProvider()
     {
         return [
@@ -153,12 +195,8 @@ class HeaderAnalyzerTest extends TestCase
                 ['team' => 1, 'isCooping' => true, 'name' => 'yousifr'],
                 ['team' => 2, 'isCooping' => true, 'name' => 'Chrazini'],
                 ['team' => 2, 'isCooping' => true, 'name' => 'ClosedLoop'],
-                // TODO Is this ordering new in HD Edition? Here, the "main" players
-                // are at the end, and the coop partners at the start of the players
-                // array; in older AoC versions, the "main" players were at the start,
-                // and coop partners at the end.
-                ['team' => 1, 'isCooping' => false, 'name' => 'FluffyFur'],
-                ['team' => 2, 'isCooping' => false, 'name' => '[AGM]Wineup'],
+                ['team' => 1, 'isCooping' => true, 'name' => 'FluffyFur'],
+                ['team' => 2, 'isCooping' => true, 'name' => '[AGM]Wineup'],
             ], 2],
             ['./recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record', [
                 ['name' => 'Dutch Class', 'colorId' => 0],

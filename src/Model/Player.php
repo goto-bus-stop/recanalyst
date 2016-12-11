@@ -82,6 +82,7 @@ class Player
     /**
      * Indicates if the player is cooping in the game.
      *
+     * @deprecated 5.0.0 Use the {@link isCooping()} method instead.
      * @var bool
      */
     public $isCooping = false;
@@ -118,9 +119,14 @@ class Player
      * An array of player's researches containing
      * "research id => \RecAnalyst\Model\Research instance" pairs.
      *
-     * @var array
+     * @var \RecAnalyst\Model\Research[]
      */
     private $researchesById = [];
+
+    /**
+     * Co-op partners.
+     */
+    private $coopPartners;
 
     /**
      * Contains the player's initial state, such as starting resources
@@ -168,13 +174,69 @@ class Player
     }
 
     /**
+     * Set the player's co-op partner group.
+     *
+     * @internal Only for use by Analyzers.
+     * @param array  $partners  Players in this group, including this player.
+     */
+    public function setCoopPartners(array $partners)
+    {
+        $this->coopPartners = $partners;
+        // Compatibility with v4.1.0 and below.
+        $this->isCooping = $this->isCooping();
+    }
+
+    /**
+     * Check whether the player is the main player in a co-op group.
+     *
+     * @return bool
+     */
+    public function isCoopMain()
+    {
+        return $this->coopPartners[0] === $this;
+    }
+
+    /**
+     * Get the main player of this player's co-op group.
+     *
+     * @return \RecAnalyst\Model\Player
+     */
+    public function getCoopMain()
+    {
+        return $this->coopPartners[0];
+    }
+
+    /**
+     * Check whether the player is a partner, and thus not the main player, in a
+     * co-op group.
+     *
+     * @return bool
+     */
+    public function isCoopPartner()
+    {
+        return count($this->coopPartners) > 1 && !$this->isCoopMain();
+    }
+
+    /**
+     * Get co-op partners of this player.
+     *
+     * @return \RecAnalyst\Model\Player[] Array of co-op partners.
+     */
+    public function getCoopPartners()
+    {
+        return array_filter($this->coopPartners, function ($partner) {
+            return $partner !== $this;
+        });
+    }
+
+    /**
      * Returns whether the player is co-oping.
      *
      * @return boolean True if the player is co-oping, false otherwise.
      */
     public function isCooping()
     {
-        return $this->isCooping;
+        return count($this->coopPartners) > 1;
     }
 
     public function isSpectator()
