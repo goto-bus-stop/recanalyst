@@ -37,9 +37,13 @@ class AttackGroundAction extends Action
      * @param \RecAnalyst\RecordedGame  $rec  Recorded game instance.
      * @param int  $time  Recorded game instance.
      */
-    public function __construct(RecordedGame $rec, $time)
+    public function __construct(RecordedGame $rec, $time, $x, $y, $units)
     {
         parent::__construct($rec, $time);
+
+        $this->x = $x;
+        $this->y = $y;
+        $this->units = $units;
     }
 
     /**

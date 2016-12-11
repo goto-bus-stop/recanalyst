@@ -330,14 +330,37 @@ class BodyAnalyzer extends Analyzer
                             $z
                         ));
                         break;
-                    case self::COMMAND_UNIT_AI_STATE:
-                        $numUnits = ord($this->body[$this->position++]);
-                        $stance = ord($this->body[$this->position++]);
-                        $this->push(new Actions\UnitAiStateAction(
+                    case self::COMMAND_ADD_ATTRIBUTE:
+                        $playerId = ord($this->body[$this->position++]);
+                        $resourceType = ord($this->body[$this->position++]);
+                        $this->position += 1;
+                        $amount = $this->readBody('f', 4);
+
+                        $this->push(new Actions\AddAttributeAction(
                             $this->rec,
                             $this->currentTime,
-                            $stance,
-                            $this->readUnits($numUnits)
+                            $playerId,
+                            $resourceType,
+                            $amount
+                        ));
+                        break;
+                    // Old-style tributing.
+                    case self::COMMAND_GIVE_ATTRIBUTE:
+                        $playerIdFrom = ord($this->body[$this->position++]);
+                        $playerIdTo = ord($this->body[$this->position++]);
+                        $resourceId = ord($this->body[$this->position++]);
+                        $amount = $this->readBody('f', 4);
+                        // Market fees only apply to COMMAND_GIVE_ATTRIBUTE2.
+                        $marketFee = 0.0;
+
+                        $this->push(new Actions\GiveAttributeAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerIdFrom,
+                            $playerIdTo,
+                            $resourceId,
+                            $amount,
+                            $marketFee
                         ));
                         break;
                     // player resign
@@ -361,8 +384,29 @@ class BodyAnalyzer extends Analyzer
                             $this->chatMessages[] = new ChatMessage($this->currentTime, null, $message);
                         }
                         break;
+                    case self::COMMAND_UNIT_AI_STATE:
+                        $numUnits = ord($this->body[$this->position++]);
+                        $stance = ord($this->body[$this->position++]);
+                        $this->push(new Actions\UnitAiStateAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $stance,
+                            $this->readUnits($numUnits)
+                        ));
+                        break;
+                    case self::COMMAND_FOLLOW:
+                        $numUnits = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $target = $this->readBody('l', 4);
+
+                        $this->push(new Actions\FollowAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $target,
+                            $this->readUnits($numUnits)
+                        ));
+                        break;
                     case self::COMMAND_PATROL:
-                        $start = $this->position - 1;
                         $numUnits = ord($this->body[$this->position++]);
                         $numWaypoints = ord($this->body[$this->position++]);
                         $this->position++;
@@ -498,6 +542,19 @@ class BodyAnalyzer extends Analyzer
                             $this->currentTime,
                             $playerId,
                             $objectId
+                        ));
+                        break;
+                    case self::COMMAND_ATTACK_GROUND:
+                        $count = ord($this->body[$this->position++]);
+                        $this->position += 2;
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+                        $this->push(new Actions\AttackGroundAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $x,
+                            $y,
+                            $this->readUnits($count)
                         ));
                         break;
                     // AI trains unit
@@ -680,6 +737,18 @@ class BodyAnalyzer extends Analyzer
                             $resourceType,
                             $amount,
                             $marketId
+                        ));
+                        break;
+                    case self::COMMAND_TOWN_BELL:
+                        $this->position += 3;
+                        $unitId = $this->readBody('l', 4);
+                        $active = $this->readBody('l', 4);
+
+                        $this->push(new Actions\TownBellAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $unitId,
+                            $active
                         ));
                         break;
                     case self::COMMAND_GO_BACK_TO_WORK:
