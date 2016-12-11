@@ -89,24 +89,29 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         $gaia = new Player($this->rec);
         $gaia->name = 'GAIA';
 
-        for ($i = -1; $i < count($players); $i++) { // first is GAIA
-            // skip GAIA playername
-            $player = $i >= 0 ? $players[$i] : $gaia;
-            // skip cooping player, they have no data in Player_info
-            $coopPlayer = $i >= 0 ? $playersByIndex[$player->index] : null;
+        // Save co-op player groups beforehand. The first one in this list will
+        // be the "main" co-op player.
+        $coopPartners = [];
+        foreach ($players as $player) {
+            $coopPartners[$player->index][] = $player;
+        }
+        foreach ($players as $player) {
+            $player->setCoopPartners($coopPartners[$player->index]);
+        }
 
-            if ($coopPlayer && ($coopPlayer !== $player)
-                // TODO is this necessary? Seems like order of player infos
-                // is not consistent, so we can't assume the other player
-                // has been read yet.
-                // && $coopPlayer->civId
-            ) {
-                $player->civId = $coopPlayer->civId;
-                $player->colorId = $coopPlayer->colorId;
-                $player->team = $coopPlayer->team;
-                $player->isCooping = true;
+        // Player -1 is GAIA.
+        $playersWithGaia = $players;
+        array_unshift($playersWithGaia, $gaia);
+        foreach ($playersWithGaia as $player) {
+            // Co-op partners do not have an info block.
+            if ($player->isCoopPartner()) {
+                $coopMain = $player->getCoopMain();
+                $player->civId = $coopMain->civId;
+                $player->colorId = $coopMain->colorId;
+                $player->team = $coopMain->team;
                 continue;
             }
+
             if ($version->isTrial) {
                 $this->position += 4;
             }
