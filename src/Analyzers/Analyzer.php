@@ -111,7 +111,7 @@ abstract class Analyzer
      */
     protected function readBody($type, $size)
     {
-        $data = unpack($type, substr($this->body, $this->position, 4));
+        $data = unpack($type, substr($this->body, $this->position, $size));
         $this->position += $size;
         return $data[1];
     }

@@ -199,7 +199,17 @@ class BodyAnalyzer extends Analyzer
                     $this->processChatMessage();
                 }
             } else if ($operationType === self::OP_SYNC) {
-                $this->processSync();
+                // There are a lot of sync packets, so we get a significant
+                // speedup just from doing this inline (and not in a separate
+                // method), and by using `unpack` and manual position increments
+                // instead of `readBody`.
+                $data = unpack('l2', substr($this->body, $this->position, 8));
+                $this->currentTime += $data[1]; // $this->readBody('l', 4);
+                $unknown = $data[2]; // $this->readBody('L', 4);
+                if ($unknown === 0) {
+                    $this->position += 28;
+                }
+                $this->position += 20;
             } else if ($operationType === self::OP_COMMAND) {
                 $length = $this->readBody('l', 4);
                 $next = $this->position + $length;
@@ -394,18 +404,5 @@ class BodyAnalyzer extends Analyzer
                 substr($chat, 3)
             );
         }
-    }
-
-    /**
-     * Read a Sync packet.
-     */
-    private function processSync()
-    {
-        $this->currentTime += $this->readBody('l', 4);
-        $unknown = $this->readBody('L', 4);
-        if ($unknown === 0) {
-            $this->position += 28;
-        }
-        $this->position += 12;
     }
 }
