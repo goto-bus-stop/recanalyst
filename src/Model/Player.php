@@ -36,6 +36,17 @@ class Player
     public $index = -1;
 
     /**
+     * The player number. This is different from the index. The player number
+     * is always a sequential unique ID. The player index is the same for
+     * multiple players in the case of a co-op game.
+     *
+     * @var int
+     * @internal Might be public later, but should just be used internally for
+     *           now.
+     */
+    public $number = -1;
+
+    /**
      * Defines if the player is a human.
      *
      * @var bool

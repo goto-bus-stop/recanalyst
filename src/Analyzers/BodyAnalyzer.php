@@ -175,11 +175,17 @@ class BodyAnalyzer extends Analyzer
         $version = $this->version;
 
         $players = $this->get(PlayerMetaAnalyzer::class);
+
+        // The player number is used for chat messages.
+        $playersByNumber = [];
+        // The player index is used for game actions.
         $playersByIndex = [];
         foreach ($players as $player) {
+            $playersByNumber[$player->number] = $player;
             $playersByIndex[$player->index] = $player;
         }
-        $this->playersByIndex = $playersByIndex;
+
+        $this->playersByNumber = $playersByNumber;
 
         $size = strlen($this->body);
         $this->position = 0;
@@ -392,10 +398,12 @@ class BodyAnalyzer extends Analyzer
             if (substr($chat, 3, 2) == '--' && substr($chat, -2) == '--') {
                 // Skip messages like "--Warning: You are under attack... --"
                 return;
-            } else if (!empty($this->playersByIndex[$chat[2]])) {
-                $player = $this->playersByIndex[$chat[2]];
+            } else if (!empty($this->playersByNumber[$chat[2]])) {
+                $player = $this->playersByNumber[$chat[2]];
             } else {
-                // This player left before the game started.
+                // Shouldn't happen, but we'll let the ChatMessage factory
+                // create a fake player for this message.
+                // TODO that auto-create behaviour is probably not desirable…
                 $player = null;
             }
             $this->chatMessages[] = ChatMessage::create(

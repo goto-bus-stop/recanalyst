@@ -27,7 +27,7 @@ class PlayerMetaAnalyzer extends Analyzer
 
         $players = [];
         for ($i = 0; $i <= 8; $i += 1) {
-            $player = $this->readPlayerMeta();
+            $player = $this->readPlayerMeta($i);
             if ($player->humanRaw === 0 || $player->humanRaw === 1) {
                 continue;
             }
@@ -51,9 +51,10 @@ class PlayerMetaAnalyzer extends Analyzer
      *
      * @return \RecAnalyst\Model\Player
      */
-    protected function readPlayerMeta()
+    protected function readPlayerMeta($i)
     {
         $player = new Player($this->rec);
+        $player->number = $i;
         $player->index = $this->readHeader('l', 4);
         $human = $this->readHeader('l', 4);
         $length = $this->readHeader('L', 4);
