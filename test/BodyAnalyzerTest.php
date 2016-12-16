@@ -64,6 +64,18 @@ class BodyAnalyzerTest extends TestCase
         $this->assertAttributeEquals(9484, 'score', $rec->getPlayer(2)->achievements());
     }
 
+    public function testCoopChat()
+    {
+        $rec = new RecordedGame(Path::join(__DIR__, 'recs/FluffyFur+yousifr+TheBlackWinds+Mobius_One[Chinese]=VS=MOD3000+Chrazini+ClosedLoop+ [AGM]Wineup[Britons]_1v1_8PlayerCo-op_01222015.mgx2'));
+        $messages = $rec->body()->chatMessages;
+
+        // All these players are co-oping, so they share a player index.
+        // They can all chat separately, though.
+        $this->assertAttributeEquals('yousifr', 'name', $messages[0]->player);
+        $this->assertAttributeEquals('TheBlackWinds', 'name', $messages[3]->player);
+        $this->assertAttributeEquals('Mobius One', 'name', $messages[4]->player);
+    }
+
     public function recordsProvider()
     {
         return [
