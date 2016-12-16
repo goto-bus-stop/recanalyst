@@ -92,6 +92,18 @@ class StreamExtractor
     }
 
     /**
+     * Get the total size of the file.
+     *
+     * @return int
+     */
+    private function getFileSize()
+    {
+        fseek($this->fp, 0, SEEK_END);
+
+        return ftell($this->fp);
+    }
+
+    /**
      * Find the header length.
      */
     private function determineHeaderLength()
@@ -113,14 +125,16 @@ class StreamExtractor
                 RecAnalystException::EMPTY_HEADER
             );
         }
-        $rawRead = fread($this->fp, 4);
-
         // In MGL files, the header starts immediately after the header length
         // bytes. In MGX files, another int32 is stored first, possibly indicating
         // the position of possible further headers(? something for saved chapters,
         // at least, or perhaps saved & restored games).
-        $headerStart = pack('c*', 0xEC, 0x7D, 0x09);
-        $hasNextPos = substr($rawRead, 0, 3) !== $headerStart;
+        // The gzip-compressed header always starts with a series of bytes that
+        // decodes to a really high number. So if the next 4 bytes _don't_
+        // encode to a really high number, they must refer to the next header.
+        $rawRead = fread($this->fp, 4);
+        list (, $nextPos) = unpack('V', $rawRead);
+        $hasNextPos = $nextPos === 0 || $nextPos < $this->getFileSize();
 
         $this->headerStart = $hasNextPos ? 8 : 4;
         $this->headerLen -= $this->headerStart;
