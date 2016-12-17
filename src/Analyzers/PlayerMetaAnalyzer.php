@@ -26,12 +26,19 @@ class PlayerMetaAnalyzer extends Analyzer
         }
 
         $players = [];
+        // The first player in this list will be the "main" co-op player.
+        $coopPartners = [];
         for ($i = 0; $i <= 8; $i += 1) {
             $player = $this->readPlayerMeta($i);
             if ($player->humanRaw === 0 || $player->humanRaw === 1) {
                 continue;
             }
             $players[] = $player;
+            $coopPartners[$player->index][] = $player;
+        }
+
+        foreach ($players as $player) {
+            $player->setCoopPartners($coopPartners[$player->index]);
         }
 
         return $players;

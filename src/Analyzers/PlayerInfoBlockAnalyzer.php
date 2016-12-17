@@ -89,16 +89,6 @@ class PlayerInfoBlockAnalyzer extends Analyzer
         $gaia = new Player($this->rec);
         $gaia->name = 'GAIA';
 
-        // Save co-op player groups beforehand. The first one in this list will
-        // be the "main" co-op player.
-        $coopPartners = [];
-        foreach ($players as $player) {
-            $coopPartners[$player->index][] = $player;
-        }
-        foreach ($players as $player) {
-            $player->setCoopPartners($coopPartners[$player->index]);
-        }
-
         // Player -1 is GAIA.
         $playersWithGaia = $players;
         array_unshift($playersWithGaia, $gaia);
