@@ -17,7 +17,7 @@ recorded game, in a language of user choice.
 
 ```bash
 php examples/simple-localized.php # Default language (French, for this script).
-php examples/simple-localized.php br # Use Brazilian
+php examples/simple-localized.php br # Use Brazilian Portuguese
 ```
 
 ## [Tabbed](./tabbed/)

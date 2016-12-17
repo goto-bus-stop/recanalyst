@@ -7,7 +7,7 @@
  *
  * Usage:
  *    php examples/simple-localized.php # Default language (French).
- *    php examples/simple-localized.php br # Use Brazilian
+ *    php examples/simple-localized.php br # Use Brazilian Portuguese
  *    php examples/simple-localized.php fake # Nonexistent language, falls back
  *                                           # to RecAnalyst's default (English)
  */
