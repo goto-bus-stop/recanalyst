@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>RecAnalyst\Model\Player | RecAnalyst API</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:RecAnalyst_Model_Player" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                    <form action="#" method="GET">
+                <select id="version-switcher" name="version">
+                                            <option value="../../../v4.0.0/index.html">v4.0.0</option>
+                                            <option value="../../../v4.0.1/index.html">v4.0.1</option>
+                                            <option value="../../../v4.0.2/index.html">v4.0.2</option>
+                                            <option value="../../../v4.0.3/index.html">v4.0.3</option>
+                                            <option value="../../../v4.0.4/index.html">v4.0.4</option>
+                                            <option value="../../../v4.1.0/index.html">v4.1.0</option>
+                                            <option value="../../../v4.1.1/index.html" selected>v4.1.1</option>
+                                            <option value="../../../v4.1.2/index.html">v4.1.2</option>
+                                            <option value="../../../master/index.html">master branch</option>
+                                    </select>
+            </form>
+                <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">RecAnalyst API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../RecAnalyst.html">RecAnalyst</a></li>
+                                        <li><a href="../../RecAnalyst/Model.html">Model</a></li>
+    
+                <li>Player</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            Player
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>Player</strong>        (<a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php">View source</a>)
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>The Player class represents a player in the game. This includes co-op players.</p>            <p>It does not include players who joined the lobby but didn't launch into
+the actual game.</p>        </div>
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_name">
+                                                                                string
+                </td>
+                <td>$name</td>
+                <td class="last">The player's name.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_index">
+                                                                                int
+                </td>
+                <td>$index</td>
+                <td class="last">The player's index.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_human">
+                                                                                bool
+                </td>
+                <td>$human</td>
+                <td class="last">Defines if the player is a human.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_spectator">
+                                                                                bool
+                </td>
+                <td>$spectator</td>
+                <td class="last">Defines if the player is a spectator.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_teamIndex">
+                                                                                int
+                </td>
+                <td>$teamIndex</td>
+                <td class="last">Defines player's team index (0 = no team).</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_owner">
+                                                                                bool
+                </td>
+                <td>$owner</td>
+                <td class="last">Defines if player is an owner of the game.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_civId">
+                                                                                int
+                </td>
+                <td>$civId</td>
+                <td class="last">ID of the player's civilization.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_colorId">
+                                                                                int
+                </td>
+                <td>$colorId</td>
+                <td class="last">Player color ID.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_isCooping">
+                                                                                bool
+                </td>
+                <td>$isCooping</td>
+                <td class="last">Indicates if the player is cooping in the game.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_feudalTime">
+                                                                                int
+                </td>
+                <td>$feudalTime</td>
+                <td class="last">Player's feudal time (in ms, 0 if hasn't been reached).</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_castleTime">
+                                                                                int
+                </td>
+                <td>$castleTime</td>
+                <td class="last">Player's castle time (in ms).</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_imperialTime">
+                                                                                int
+                </td>
+                <td>$imperialTime</td>
+                <td class="last">Player's imperial time (in ms).</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_resignTime">
+                                                                                int
+                </td>
+                <td>$resignTime</td>
+                <td class="last">Player's resign time (in ms) or 0 if player hasn't resigned.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_initialState">
+                                                                                <a href="../../RecAnalyst/Model/InitialState.html"><abbr title="RecAnalyst\Model\InitialState">InitialState</abbr></a>
+                </td>
+                <td>$initialState</td>
+                <td class="last">Contains the player's initial state, such as starting resources
+and population.</td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a> $rec = null)
+        
+                                            <p>Class constructor.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    boolean
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isHuman">isHuman</a>()
+        
+                                            <p>Returns whether the player is a human player.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../RecAnalyst/Model/Team.html"><abbr title="RecAnalyst\Model\Team">Team</abbr></a>|null
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_team">team</a>()
+        
+                                            <p>Get the player's team.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_setCoopPartners">setCoopPartners</a>(array $partners)
+        
+                                            <p>Set the player's co-op partner group.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isCoopMain">isCoopMain</a>()
+        
+                                            <p>Check whether the player is the main player in a co-op group.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getCoopMain">getCoopMain</a>()
+        
+                                            <p>Get the main player of this player's co-op group.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isCoopPartner">isCoopPartner</a>()
+        
+                                            <p>Check whether the player is a partner, and thus not the main player, in a
+co-op group.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>[]
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getCoopPartners">getCoopPartners</a>()
+        
+                                            <p>Get co-op partners of this player.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    boolean
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isCooping">isCooping</a>()
+        
+                                            <p>Returns whether the player is co-oping.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isSpectator">isSpectator</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_color">color</a>()
+        
+                                            <p>Get the hex color of this player.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>|null
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_achievements">achievements</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_addResearch">addResearch</a>(int $id, int $time)
+        
+                                            <p>Add a research action.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../RecAnalyst/Model/Research.html"><abbr title="RecAnalyst\Model\Research">Research</abbr></a>[]
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_researches">researches</a>()
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_civName">civName</a>()
+        
+                                            <p>Get the name of this player's civilization.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_startingAge">startingAge</a>()
+        
+                                            <p>Get the player's starting age.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    int[]
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_position">position</a>()
+        
+                                            <p>Get the player's starting position.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L145">line 145</a></div>
+        <code>                    void
+    <strong>__construct</strong>(<a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a> $rec = null)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Class constructor.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a></td>
+                <td>$rec</td>
+                <td>Recorded game instance.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isHuman">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L156">line 156</a></div>
+        <code>                    boolean
+    <strong>isHuman</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Returns whether the player is a human player.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>boolean</td>
+            <td>True if human, false if AI.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_team">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L166">line 166</a></div>
+        <code>                    <a href="../../RecAnalyst/Model/Team.html"><abbr title="RecAnalyst\Model\Team">Team</abbr></a>|null
+    <strong>team</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the player's team.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../RecAnalyst/Model/Team.html"><abbr title="RecAnalyst\Model\Team">Team</abbr></a>|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_setCoopPartners">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L182">line 182</a></div>
+        <code>                    
+    <strong>setCoopPartners</strong>(array $partners)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Set the player's co-op partner group.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$partners</td>
+                <td>Players in this group, including this player.</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isCoopMain">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L194">line 194</a></div>
+        <code>                    bool
+    <strong>isCoopMain</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check whether the player is the main player in a co-op group.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getCoopMain">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L204">line 204</a></div>
+        <code>                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>
+    <strong>getCoopMain</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the main player of this player's co-op group.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isCoopPartner">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L215">line 215</a></div>
+        <code>                    bool
+    <strong>isCoopPartner</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check whether the player is a partner, and thus not the main player, in a
+co-op group.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getCoopPartners">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L225">line 225</a></div>
+        <code>                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>[]
+    <strong>getCoopPartners</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get co-op partners of this player.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>[]</td>
+            <td>Array of co-op partners.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isCooping">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L237">line 237</a></div>
+        <code>                    boolean
+    <strong>isCooping</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Returns whether the player is co-oping.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>boolean</td>
+            <td>True if the player is co-oping, false otherwise.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isSpectator">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L242">line 242</a></div>
+        <code>                    
+    <strong>isSpectator</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_color">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L252">line 252</a></div>
+        <code>                    string
+    <strong>color</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the hex color of this player.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Hexadecimal representation of this player's color.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_achievements">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L264">line 264</a></div>
+        <code>                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>|null
+    <strong>achievements</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a target="_blank" href="http://php.net/StdClass">StdClass</a>|null</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_addResearch">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L282">line 282</a></div>
+        <code>                    
+    <strong>addResearch</strong>(int $id, int $time)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Add a research action.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>int</td>
+                <td>$id</td>
+                <td>Research ID.</td>
+            </tr>
+                    <tr>
+                <td>int</td>
+                <td>$time</td>
+                <td>Research completion time.</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_researches">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L290">line 290</a></div>
+        <code>                    <a href="../../RecAnalyst/Model/Research.html"><abbr title="RecAnalyst\Model\Research">Research</abbr></a>[]
+    <strong>researches</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../RecAnalyst/Model/Research.html"><abbr title="RecAnalyst\Model\Research">Research</abbr></a>[]</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_civName">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L300">line 300</a></div>
+        <code>                    string
+    <strong>civName</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the name of this player's civilization.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_startingAge">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L315">line 315</a></div>
+        <code>                    string
+    <strong>startingAge</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the player's starting age.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>Name of the starting age.</td>
+        </tr>
+    </table>
+
+            
+            
+                            <h4>See also</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>\RecAnalyst\Model\InitialState::$startingAge</td>
+                <td></td>
+            </tr>
+            </table>
+
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_position">
+        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L328">line 328</a></div>
+        <code>                    int[]
+    <strong>position</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the player's starting position.</p>                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>int[]</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
