@@ -1,7 +1,7 @@
 # RecAnalyst
 
-[![Packagist](https://img.shields.io/packagist/v/recanalyst/recanalyst.svg)](https://packagist.org/recanalyst/recanalyst)
-[![License](https://img.shields.io/packagist/l/recanalyst/recanalyst.svg)](https://packagist.org/recanalyst/recanalyst)
+[![Packagist](https://img.shields.io/packagist/v/recanalyst/recanalyst.svg)](https://packagist.org/packages/recanalyst/recanalyst)
+[![License](https://img.shields.io/packagist/l/recanalyst/recanalyst.svg)](https://packagist.org/packages/recanalyst/recanalyst)
 [![Build Status](https://travis-ci.org/goto-bus-stop/recanalyst.svg?branch=master)](https://travis-ci.org/goto-bus-stop/recanalyst)
 [![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
