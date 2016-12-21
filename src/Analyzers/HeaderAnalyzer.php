@@ -180,58 +180,10 @@ class HeaderAnalyzer extends Analyzer
         $gameMode = $this->readHeader('v', 2);
 
         $this->position += 58;
-        $mapSizeX = $this->readHeader('l', 4);
-        $mapSizeY = $this->readHeader('l', 4);
-        $analysis->mapSize = [$mapSizeX, $mapSizeY];
 
-        // If we went wrong somewhere, throw now so we don't end up in a near-
-        // infinite loop later.
-        if ($mapSizeX > 10000 || $mapSizeY > 10000) {
-            throw new \Exception('Got invalid map size');
-        }
+        $mapData = $this->read(MapDataAnalyzer::class);
+        $analysis->mapSize = $mapData->mapSize;
 
-        $numMapZones = $this->readHeader('l', 4);
-        for ($i = 0; $i < $numMapZones; $i += 1) {
-            if ($version->subVersion >= 11.93) {
-                $this->position += 2048 + $mapSizeX * $mapSizeY * 2;
-            } else {
-                $this->position += 1275 + $mapSizeX * $mapSizeY;
-            }
-            $numFloats = $this->readHeader('l', 4);
-            $this->position += ($numFloats * 4) + 4;
-        }
-
-        $this->position += 1; // Map visibility flag
-        $this->position += 1; // Fog of War flag
-
-        $mapData = [];
-        for ($y = 0; $y < $mapSizeY; $y += 1) {
-            $mapData[$y] = [];
-            for ($x = 0; $x < $mapSizeX; $x += 1) {
-                $mapData[$y][$x] = new Tile(
-                    $x,
-                    $y,
-                    /* terrainId */ ord($this->header[$this->position]),
-                    /* elevation */ ord($this->header[$this->position + 1])
-                );
-                $this->position += 2;
-            }
-        }
-
-        $numData = $this->readHeader('l', 4);
-        $this->position += 4; // Some ID relating to the previous line...
-        $this->position += $numData * 4;
-        for ($i = 0; $i < $numData; $i += 1) {
-            $numObstructions = $this->readHeader('l', 4);
-            $this->position += $numObstructions * 8;
-        }
-        $mapSizeX2 = $this->readHeader('l', 4);
-        $mapSizeY2 = $this->readHeader('l', 4);
-        // Visibility map. Can we use this for something?
-        $this->position += $mapSizeX2 * $mapSizeY2 * 4;
-        $this->position += 4;
-        $numData = $this->readHeader('l', 4);
-        $this->position += $numData * 27;
         // int. Value is 10060 in AoK recorded games, 40600 in AoC and on.
         $this->position += 4;
 
@@ -276,7 +228,7 @@ class HeaderAnalyzer extends Analyzer
 
         $gameInfo = new GameInfo($this->rec);
 
-        $analysis->mapData = $mapData;
+        $analysis->mapData = $mapData->terrain;
         $analysis->pregameChat = $pregameChat;
         $analysis->gameSettings = new GameSettings($this->rec, $gameSettings);
         $analysis->gameInfo = $gameInfo;
