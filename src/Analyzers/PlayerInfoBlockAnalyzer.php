@@ -106,6 +106,9 @@ class PlayerInfoBlockAnalyzer extends Analyzer
                 $this->position += 4;
             }
             $this->position += $numPlayers + 43;
+            if ($version->subVersion >= 12.50) {
+                $this->position += 9;
+            }
 
             // skip playername
             $playerNameLen = $this->readHeader('v', 2);
