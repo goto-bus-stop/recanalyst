@@ -123,7 +123,7 @@ function generateLanguageFiles($agedir, $data)
         'resources' => range(4301, 4304),
         'game_speeds' => range(9432, 9434),
         'reveal_map' => range(9755, 9757),
-        'civilizations' => range(10220, 10247),
+        'civilizations' => range(10270, 10318),
         'map_sizes' => range(10611, 10617),
         'difficulties' => range(11216, 11220),
     ];
@@ -272,6 +272,9 @@ function generateImages($agedir, $data)
             mkdir($civsDir . '/' . $color, 0777, true);
         }
         foreach ($civNames as $id => $civName) {
+            if (!isset($uniqueUnits[$civName])) {
+                continue;
+            }
             $unitIconId = $uniqueUnits[$civName];
             $in = $tempDir . '/' . $unitIconId . '.png';
             $out = $civsDir . '/' . $color . '/' . $id . '.png';
