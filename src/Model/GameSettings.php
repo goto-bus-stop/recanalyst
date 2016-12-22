@@ -7,15 +7,20 @@ use RecAnalyst\Processors\MapName as MapNameExtractor;
 
 class GameSettings
 {
-    const TYPE_RANDOMMAP  = 0;
-    const TYPE_REGICIDE   = 1;
-    const TYPE_DEATHMATCH = 2;
-    const TYPE_SCENARIO   = 3;
-    const TYPE_CAMPAIGN   = 4;
+    const TYPE_RANDOMMAP       = 0;
+    const TYPE_REGICIDE        = 1;
+    const TYPE_DEATHMATCH      = 2;
+    const TYPE_SCENARIO        = 3;
+    const TYPE_CAMPAIGN        = 4;
+    const TYPE_KINGOFTHEHILL   = 5;
+    const TYPE_WONDERRACE      = 6;
+    const TYPE_DEFENDTHEWONDER = 7;
+    const TYPE_TURBORANDOMMAP  = 8;
 
     const MAPSTYLE_STANDARD  = 0;
     const MAPSTYLE_REALWORLD = 1;
     const MAPSTYLE_CUSTOM    = 2;
+    const MAPSTYLE_SPECIAL   = 3;
 
     const LEVEL_HARDEST  = 0;
     const LEVEL_HARD     = 1;
