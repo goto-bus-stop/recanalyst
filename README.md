@@ -9,6 +9,10 @@ RecAnalyst is a PHP package for analyzing Age of Empires II recorded games. It
 supports recorded game files from Age of Kings, The Conquerors, UserPatch,
 Forgotten Empires, and HD Edition (optionally with expansions).
 
+> Note: Games recorded in the newly released HD Edition versions 4.8 and up are
+> not yet supported.  See [#41](https://github.com/goto-bus-stop/recanalyst/pull/41)
+> for progress.
+
 [License][] - [Credits][] - [Requirements][] - [Installation][] -
 [Configuration][] - [Usage Examples][] - [API Documentation][] -
 [Limitations][]
@@ -61,8 +65,8 @@ Without Composer:
 RecAnalyst ships with translations and image files for researches and
 civilizations.
 
-> If you're using RecAnalyst with Laravel, scroll down to learn about [Laravel
-> integration][].
+> If you're using RecAnalyst with Laravel, scroll down to learn about
+> [Laravel integration][].
 
 RecAnalyst contains a basic Translator class for standalone use. By default,
 RecAnalyst uses the English language files from Age of Empires II: HD Edition.
@@ -72,10 +76,10 @@ RecAnalyst contains icons for civilizations, units and researches in the
 use the icons, you can copy that folder into your own project. You can then
 refer to the different categories of icons in the following ways:
 
-| Category | URL |
-|----------|-----|
+| Category      | URL |
+|---------------|-----|
 | Civilizations | `'/path/to/resources/images/civs/'.$colorId.'/'.$civId.'.png'` |
-| Researches | `'/path/to/resources/images/researches/'.$researchId.'.png'` |
+| Researches    | `'/path/to/resources/images/researches/'.$researchId.'.png'`   |
 
 ### Laravel
 
@@ -98,10 +102,10 @@ php artisan vendor:publish --tag=public
 
 You can then refer to the different categories of icons in the following ways:
 
-| Category | URL |
-|----------|-----|
+| Category      | URL |
+|---------------|-----|
 | Civilizations | `public_path('vendor/recanalyst/civs/'.$colorId.'/'.$civId.'.png')` |
-| Researches | `public_path('vendor/recanalyst/researches/'.$researchId.'.png')` |
+| Researches    | `public_path('vendor/recanalyst/researches/'.$researchId.'.png')`   |
 
 ## API Documentation
 
