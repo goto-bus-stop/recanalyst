@@ -11,15 +11,21 @@ necessary HTML.
      ```
      git clone https://github.com/goto-bus-stop/recanalyst
      ```
+
   2. Move into this directory:
+
      ```
      cd examples/tabbed
      ```
+
   3. Install dependencies:
+
      ```
      composer install
      ```
+
   4. Run demo server:
+
      ```
      composer run-script serve
      # Or:

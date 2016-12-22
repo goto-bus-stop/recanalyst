@@ -10,11 +10,15 @@ with different tabs for different kinds of data.
      ```
      git clone https://github.com/goto-bus-stop/recanalyst
      ```
+
   2. Move into this directory:
+
      ```
      cd examples/tabbed-native
      ```
+
   4. Run demo server:
+
      ```
      composer run-script serve
      # Or:
