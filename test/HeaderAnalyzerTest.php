@@ -113,6 +113,24 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertCount($expectedCount, $analysis->pregameChat);
     }
 
+    public function testCoopChats()
+    {
+        $rec = $this->load('recs/chat/TCC R5 Team Picon vs Combat Wombats G3.mgx2');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        $l = count($analysis->pregameChat) - 1;
+
+        // Three performance warning notifications from different players:
+        for ($i = 2; $i < 5; $i += 1) {
+            $this->assertStringMatchesFormat(
+                'Performance warning: There is moderate latency between %s and %s. This will hinder the speed of the match.',
+                $analysis->pregameChat[$l - $i]->msg
+            );
+        }
+
+        $this->assertAttributeEquals('hf gl', 'msg', $analysis->pregameChat[$l - 1]);
+        $this->assertAttributeEquals('gl hf', 'msg', $analysis->pregameChat[$l]);
+    }
+
     public function testCoops()
     {
         $rec = $this->load('recs/coop/coop.mgx');

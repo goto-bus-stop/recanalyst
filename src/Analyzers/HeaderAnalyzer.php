@@ -118,7 +118,7 @@ class HeaderAnalyzer extends Analyzer
 
         $pregameChat = [];
         if ($version->isMgx) {
-            $pregameChat = $this->readChat($playersByIndex);
+            $pregameChat = $this->readChat($players);
         }
 
         if ($version->isAoe2Record) {
@@ -255,6 +255,11 @@ class HeaderAnalyzer extends Analyzer
      */
     protected function readChat(array $players)
     {
+        $playersByNumber = [];
+        foreach ($players as $player) {
+            $playersByNumber[$player->number] = $player;
+        }
+
         $messages = [];
         $messageCount = $this->readHeader('l', 4);
         for ($i = 0; $i < $messageCount; $i += 1) {
@@ -269,8 +274,8 @@ class HeaderAnalyzer extends Analyzer
             // colour)
             if ($chat[0] == '@' && $chat[1] == '#' && $chat[2] >= '1' && $chat[2] <= '8') {
                 $chat = rtrim($chat); // throw null-termination character
-                if (!empty($players[$chat[2]])) {
-                    $player = $players[$chat[2]];
+                if (!empty($playersByNumber[$chat[2]])) {
+                    $player = $playersByNumber[$chat[2]];
                 } else {
                     // this player left before the game started
                     $player = null;
