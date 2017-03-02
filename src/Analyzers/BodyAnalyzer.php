@@ -670,6 +670,40 @@ class BodyAnalyzer extends Analyzer
                             $this->readUnits($count)
                         ));
                         break;
+                    case self::COMMAND_FLARE:
+                        $this->position += 3;
+                        // Is this always 0xFF FF FF FF?
+                        $ffffffff = $this->readBody('l', 4);
+                        $this->position += 1;
+
+                        // Whether each player can receive the flare.
+                        $visible = [];
+                        for ($i = 0; $i < 8; $i++) {
+                            $visible[$i] = ord($this->body[$this->position++]) !== 0;
+                        }
+
+                        $this->position += 3;
+
+                        // Flare location.
+                        $x = $this->readBody('f', 4);
+                        $y = $this->readBody('f', 4);
+
+                        // Multiple players have the same player number (and color)
+                        // in coop games.
+                        $playerNumber = ord($this->body[$this->position++]);
+                        // But everyone has a unique player index.
+                        $playerIndex = ord($this->body[$this->position++]);
+
+                        $this->push(new Actions\FlareAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $playerNumber,
+                            $playerIndex,
+                            $x,
+                            $y,
+                            $visible
+                        ));
+                        break;
                     case self::COMMAND_UNIT_ORDER:
                         $count = ord($this->body[$this->position++]);
                         $this->position += 2;
