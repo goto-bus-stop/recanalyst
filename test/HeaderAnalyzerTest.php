@@ -104,6 +104,17 @@ class HeaderAnalyzerTest extends TestCase
     }
 
     /**
+     * Skipping AI in HD edition 5.0.
+     */
+    public function testAoe2RecordWithAi()
+    {
+        $rec = $this->load('recs/versions/SP Replay v5.0 @2016.12.21 111710.aoe2record');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        // Just check that we didn't crash.
+        $this->assertNotNull($analysis);
+    }
+
+    /**
      * @dataProvider chatCountsProvider
      */
     public function testChat($file, $expectedCount)

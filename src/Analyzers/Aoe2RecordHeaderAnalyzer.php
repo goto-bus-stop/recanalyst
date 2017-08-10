@@ -124,7 +124,7 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
 
         if ($version >= 1005.0) {
             $this->readAoe2RecordString();
-            $this->position += 16;
+            $this->position += 4;
         } else if ($version >= 1004.0) {
             $this->position += 8;
         }

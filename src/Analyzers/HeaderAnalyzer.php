@@ -65,6 +65,11 @@ class HeaderAnalyzer extends Analyzer
             $this->skipAi();
         }
 
+        // TODO what are these?
+        if ($version->subVersion >= 12.50) {
+            $this->position += 12;
+        }
+
         $this->position += 4;
         if ($version->isAoe2Record) {
             $this->position += 4;
