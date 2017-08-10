@@ -192,7 +192,9 @@ class HeaderAnalyzer extends Analyzer
         $this->analysis->scenarioFilename = null;
         if ($scenarioHeaderPos > 0) {
             $this->position = $scenarioHeaderPos;
-            $this->readScenarioHeader();
+            $nextUnitId = $this->readHeader('l', 4);
+            $sceneryVersion = $this->readHeader('f', 4);
+            $this->readScenarioHeader($sceneryVersion);
             // Set game type now if it wasn't known. (Game type data is not
             // included in MGL files.)
             if ($gameType === -1) {
@@ -200,7 +202,7 @@ class HeaderAnalyzer extends Analyzer
             }
         }
 
-        $analysis->messages = $this->readMessages();
+        $analysis->messages = $this->readMessages($sceneryVersion);
 
         // Skip two separators to find the victory condition block.
         $this->position = strpos($this->header, $separator, $this->position);
@@ -355,31 +357,37 @@ class HeaderAnalyzer extends Analyzer
     }
 
     /**
+     * The trigger effect data offset for the number of units selected.
+     */
+    const TRIGGER_EFFECT_DATA_OFFSET_UNITS = 0x05;
+
+    /**
      * Skip a scenario triggers info block. See ScenarioTriggersAnalyzer for
      * contents of a trigger block.
      */
-    protected function skipTriggerInfo()
+    protected function skipTriggerInfo($triggersVersion = 1.6)
     {
-        // Effects and triggers are of variable size, but conditions are
-        // constant.
-        $conditionSize = (
-            (11 * 4) + // 11 ints
-            (4 * 4) + // area (4 ints)
-            (3 * 4) // 3 ints
-        );
+        // refer to decompiled AOC 00.07.26.0809 sub_438720.
+        // TODO: read triggers version correctly for future patches.
+        // 1.6 -> 0x3FF999999999999
 
+        // TODO: find out if HD patch uses triggers version 1.7.
         if ($this->version->isHDPatch4) {
             $conditionSize += 2 * 4; // 2 ints
         }
 
         $numTriggers = $this->readHeader('l', 4);
         for ($i = 0; $i < $numTriggers; $i += 1) {
-            $this->position += 4 + (2 * 1) + (3 * 4); // int, 2 bools, 3 ints
+            $this->position +=
+                4 + // int status (0=off, 1=ready, 2=running, 3=expired)
+                1 + // bool looping
+                4 + // int timer
+                1 + // bool objectiveState
+                4 ; // int objectiveOrder
+            if ($triggersVersion >= 1.6) {
+                $this->position += 4; // int objectStringId
+            }
             $descriptionLength = $this->readHeader('l', 4);
-            // HD edition 4.x saves a length of -1 when the string is absent,
-            // whereas older versions would use 0. That used to work fine
-            // without this guard, but now we should only skip if the length is
-            // positive.
             if ($descriptionLength > 0) {
                 $this->position += $descriptionLength;
             }
@@ -389,18 +397,13 @@ class HeaderAnalyzer extends Analyzer
             }
             $numEffects = $this->readHeader('l', 4);
             for ($j = 0; $j < $numEffects; $j += 1) {
-                $this->position += 6 * 4; // 6 ints
-                $numSelectedObjects = $this->readHeader('l', 4);
-                if ($numSelectedObjects === -1) {
-                    $numSelectedObjects = 0;
+                $this->position += 4; // int type
+                if ($triggersVersion > 1.0) {
+                    $countEffectData = $this->readHeader('l', 4);
+                } else {
+                    $countEffectData = 16; // fixed size in older version
                 }
-                $this->position += 9 * 4; // 9 ints
-                $this->position += 2 * 4; // location (2 ints)
-                $this->position += 4 * 4; // area (2 locations)
-                $this->position += 3 * 4; // 3 ints
-                if ($this->version->isHDPatch4) {
-                    $this->position += 4; // int for the new Attack Stance effect
-                }
+                $effectData = $this->readHeaderArray('l', $countEffectData);
                 $textLength = $this->readHeader('l', 4);
                 if ($textLength > 0) {
                     $this->position += $textLength;
@@ -409,17 +412,34 @@ class HeaderAnalyzer extends Analyzer
                 if ($soundFileNameLength > 0) {
                     $this->position += $soundFileNameLength;
                 }
-                $this->position += $numSelectedObjects * 4; // unit IDs (one int each)
+                // the number of selected objects was once a single object-id, later replaced by a length
+                if ($triggersVersion > 1.1) {
+                    $numSelectedObjects = $effectData[self::TRIGGER_EFFECT_DATA_OFFSET_UNITS];
+                    if ($numSelectedObjects > 0) {
+                        $this->position += $numSelectedObjects * 4; // unit IDs (one int each)
+                    }
+                }
             }
-            $this->position += $numEffects * 4; // effect order (list of ints)
+            if ($numEffects > 0 && $triggersVersion >= 1.3) {
+                $this->position += $numEffects * 4; // effect order (list of ints)
+            }
             $numConditions = $this->readHeader('l', 4);
-            $this->position += $numConditions * $conditionSize; // conditions
-            $this->position += $numConditions * 4; // conditions order (list of ints)
+            for ($j = 0; $j < $numConditions; $j += 1) {
+                $this->position += 4; // int type
+                if ($triggersVersion > 1.0) {
+                    $numConditionsData = $this->readHeader('l', 4);
+                } else {
+                    $numConditionsData = 13; // fixed size in older version
+                }
+                $this->position += $numConditionsData * 4;
+            }
+            if ($numConditions > 0 && $triggersVersion >= 1.3) {
+                $this->position += $numConditions * 4; // conditions order (list of ints)
+            }
         }
 
-        if ($numTriggers > 0) {
+        if ($numTriggers > 0 && $triggersVersion >= 1.4) {
             $this->position += $numTriggers * 4; // trigger order (list of ints)
-            // TODO perhaps also set game type to Scenario here?
         }
     }
 
@@ -429,36 +449,36 @@ class HeaderAnalyzer extends Analyzer
      *
      * @return void
      */
-    protected function readScenarioHeader()
+    protected function readScenarioHeader( $sceneryVersion)
     {
-        $nextUnitId = $this->readHeader('l', 4);
-        $this->position += 4;
         // Player names
         for ($i = 0; $i < 16; $i++) {
             $this->position += 256; // rtrim(readHeaderRaw(), \0)
         }
         // Player names (string table)
-        for ($i = 0; $i < 16; $i++) {
-            $this->position += 4; // int
-        }
+        if ($sceneryVersion >= 1.16)
+            for ($i = 0; $i < 16; $i++) {
+                $this->position += 4; // int
+            }
         for ($i = 0; $i < 16; $i++) {
             $this->position += 4; // bool isActive
             $this->position += 4; // bool isHuman
             $this->position += 4; // int civilization
             $this->position += 4; // const 0x00000004
         }
-        $this->position += 5;
-
-        $elapsedTime = $this->readHeader('f', 4);
+        if ($sceneryVersion >= 1.07)
+            $this->position += 1; // bool victoryConquest
+        $numTimelineEntries = $this->readHeader('s', 2);
+        if ($numTimelineEntries > 0)
+            $this->position += $numTimelineEntries * 30; // timelineEntries
+        $elapsedTime = $this->readHeader('f', 4); // timelineTimer
         $nameLen = $this->readHeader('v', 2);
         $filename = $this->readHeaderRaw($nameLen);
 
-        // These should be string IDs for messages?
-        if ($this->version->isMgl) {
-            $this->position += 20;
-        } else {
-            $this->position += 24;
-        }
+        // string IDs
+        $this->position += 20;
+        if ($sceneryVersion >= 1.22)
+            $this->position += 4;
 
         $this->analysis->scenarioFilename = $filename;
     }
@@ -468,7 +488,7 @@ class HeaderAnalyzer extends Analyzer
      *
      * @return \StdClass
      */
-    protected function readMessages()
+    protected function readMessages($sceneryVersion)
     {
         $len = $this->readHeader('v', 2);
         $instructions = rtrim($this->readHeaderRaw($len), "\0");
@@ -480,8 +500,12 @@ class HeaderAnalyzer extends Analyzer
         $loss = rtrim($this->readHeaderRaw($len), "\0");
         $len = $this->readHeader('v', 2);
         $history = rtrim($this->readHeaderRaw($len), "\0");
-        $len = $this->readHeader('v', 2);
-        $scouts = rtrim($this->readHeaderRaw($len), "\0");
+        if ($sceneryVersion >= 1.22) {
+            $len = $this->readHeader('v', 2);
+            $scouts = rtrim($this->readHeaderRaw($len), "\0");
+        } else {
+            $scouts = '';
+        }
         return (object) [
             'instructions' => $instructions,
             'hints' => $hints,
