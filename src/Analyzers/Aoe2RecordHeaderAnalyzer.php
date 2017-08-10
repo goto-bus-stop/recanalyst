@@ -1,10 +1,10 @@
 <?php
 
-namespace RecAnalyst\Analyzers\Aoe2RecordHeader;
+namespace RecAnalyst\Analyzers;
 
 use RecAnalyst\Analyzers\Analyzer;
 
-class Version1250 extends Analyzer
+class Aoe2RecordHeaderAnalyzer extends Analyzer
 {
     public function run()
     {

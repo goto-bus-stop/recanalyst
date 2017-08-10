@@ -57,7 +57,7 @@ class HeaderAnalyzer extends Analyzer
         }
 
         if ($version->isAoe2Record) {
-            $aoe2recordHeader = $this->read(Aoe2RecordHeader\Version1250::class);
+            $aoe2recordHeader = $this->read(Aoe2RecordHeaderAnalyzer::class);
         }
 
         $includeAi = $this->readHeader('L', 4);
