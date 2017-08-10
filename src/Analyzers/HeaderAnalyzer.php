@@ -152,6 +152,19 @@ class HeaderAnalyzer extends Analyzer
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
         }
+
+        // Merge in player from the aoe2record header if it exists.
+        // In some cases (eg. civId) the places where the data was originally stored is now empty,
+        // with the data instead only being stored in the aoe2record header.
+        // Other player analyzers will fall back to this data in those cases.
+        if ($version->isAoe2Record && array_key_exists('players', $aoe2recordHeader)) {
+            foreach ($players as $i => $player) {
+                foreach ($aoe2recordHeader['players'][$i] as $key => $value) {
+                    $player->$key = $value;
+                }
+            }
+        }
+
         $analysis->players = $players;
 
         $this->position = $triggerInfoPos + 1;
