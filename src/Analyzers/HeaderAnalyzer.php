@@ -86,6 +86,7 @@ class HeaderAnalyzer extends Analyzer
             $this->position += 5;
         } else {
             $numPlayers = ord($this->header[$this->position++]);
+            $numPlayers -= 1;
             // - 1, because player #0 is GAIA.
             if ($version->isMgx) {
                 $this->position += 1; // Is instant building enabled? (cheat "aegis")
@@ -94,9 +95,9 @@ class HeaderAnalyzer extends Analyzer
             $gameMode = $this->readHeader('v', 2);
         }
 
-        $analysis->numPlayers = $numPlayers - 1;
+        $analysis->numPlayers = $numPlayers;
 
-        if ($version->isAoe2Record) {
+        if ($version->isAoe2Record && $version->subVersion >= 12.50) {
             $this->position += 46;
         } else {
             $this->position += 58;

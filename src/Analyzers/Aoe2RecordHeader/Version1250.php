@@ -8,7 +8,9 @@ class Version1250 extends Analyzer
 {
     public function run()
     {
-        $idk = $this->readHeader('f', 4); // float 1000, 1004, 1005...
+        $data = [];
+
+        $version = $this->readHeader('f', 4); // float 1000, 1004, 1005...
         $this->position += 4; // int 1000
 
         // Unknown, AoK HD.exe string "mrefDlcOptions" may be related.
@@ -20,25 +22,35 @@ class Version1250 extends Analyzer
             // Not sure what these stand for yet.
             $datasets[] = $this->readHeader('l', 4);
         }
+        $data['datasets'] = $datasets;
 
-        $difficulty = $this->readHeader('l', 4);
-        $mapSize = $this->readHeader('l', 4);
-        $mapId = $this->readHeader('l', 4);
-        $revealMap = $this->readHeader('l', 4);
-        $victoryType = $this->readHeader('l', 4);
-        $startingResources = $this->readHeader('l', 4);
-        $startingAge = $this->readHeader('l', 4);
-        $endingAge = $this->readHeader('l', 4);
-        $gameType = $this->readHeader('l', 4);
+        $data['difficulty'] = $this->readHeader('l', 4);
+        $data['mapSize'] = $this->readHeader('l', 4);
+        $data['mapId'] = $this->readHeader('l', 4);
+        $data['revealMap'] = $this->readHeader('l', 4);
+        $data['victoryType'] = $this->readHeader('l', 4);
+        $data['startingResources'] = $this->readHeader('l', 4);
+        $data['startingAge'] = $this->readHeader('l', 4);
+        $data['endingAge'] = $this->readHeader('l', 4);
+        $data['gameType'] = $this->readHeader('l', 4);
 
-        // Separator, twice.
+        // Separator
         $this->position += 4;
+
+        if ($version === 1000.0) {
+            $mapName = $this->readAoe2RecordString();
+            $this->readAoe2RecordString();
+        }
+
+        // Separator again
         $this->position += 4;
 
-        $gameSpeed = $this->readHeader('f', 4);
-        $treatyLength = $this->readHeader('l', 4);
-        $popLimit = $this->readHeader('l', 4);
-        $numPlayers = $this->readHeader('l', 4);
+        $data['gameSpeed'] = $this->readHeader('f', 4);
+        $data['treatyLength'] = $this->readHeader('l', 4);
+        $data['popLimit'] = $this->readHeader('l', 4);
+        $data['numPlayers'] = $this->readHeader('l', 4);
+
+        $numPlayers = $data['numPlayers'];
 
         /* Maybe:
             unusedPlayerColor ← 8 one-byte flags?
@@ -49,18 +61,18 @@ class Version1250 extends Analyzer
         // Separator.
         $this->position += 4;
 
-        $tradingEnabled = ord($this->header[$this->position++]) !== 0;
-        $teamBonusesDisabled = ord($this->header[$this->position++]) !== 0;
-        $randomizePositions = ord($this->header[$this->position++]) !== 0;
-        $fullTechTreeEnabled = ord($this->header[$this->position++]) !== 0;
-        $numberOfStartingUnits = ord($this->header[$this->position++]) !== 0;
-        $teamsLocked = ord($this->header[$this->position++]) !== 0;
-        $speedLocked = ord($this->header[$this->position++]) !== 0;
-        $isMultiPlayer = ord($this->header[$this->position++]) !== 0;
-        $cheatsEnabled = ord($this->header[$this->position++]) !== 0;
-        $recordGameEnabled = ord($this->header[$this->position++]) !== 0;
-        $animalsEnabled = ord($this->header[$this->position++]) !== 0;
-        $predatorsEnabled = ord($this->header[$this->position++]) !== 0;
+        $data['tradingEnabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['teamBonusesDisabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['randomizePositions'] = ord($this->header[$this->position++]) !== 0;
+        $data['fullTechTreeEnabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['numberOfStartingUnits'] = ord($this->header[$this->position++]) !== 0;
+        $data['teamsLocked'] = ord($this->header[$this->position++]) !== 0;
+        $data['speedLocked'] = ord($this->header[$this->position++]) !== 0;
+        $data['isMultiPlayer'] = ord($this->header[$this->position++]) !== 0;
+        $data['cheatsEnabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['recordGameEnabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['animalsEnabled'] = ord($this->header[$this->position++]) !== 0;
+        $data['predatorsEnabled'] = ord($this->header[$this->position++]) !== 0;
 
         // Separator.
         $this->position += 4;
@@ -68,6 +80,56 @@ class Version1250 extends Analyzer
         // Unknowns.
         $this->position += 8;
 
+         if ($version === 1005.0) {
+             // Version 12.50, maybe others.
+            $players = $this->readPlayers1005($numPlayers);
+        } else {
+            $separator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
+            $this->position = strpos($this->header, $separator, $this->position) + 4;
+            $this->position = strpos($this->header, $separator, $this->position) + 4;
+            $this->position += 10;
+            return $data;
+        }
+        $data['players'] = $players;
+
+        // Unknown flag.
+        $this->position++;
+
+        $data['fogOfWarEnabled'] = ord($this->header[$this->position++]);
+        $data['cheatNotificationsEnabled'] = ord($this->header[$this->position++]);
+        $data['coloredChatEnabled'] = ord($this->header[$this->position++]);
+
+        // Separator.
+        $this->position += 4;
+
+        $data['isRanked'] = ord($this->header[$this->position++]);
+        $data['allowSpectators'] = ord($this->header[$this->position++]);
+
+        $data['lobbyVisibility'] = $this->readHeader('l', 4);
+        $data['customRandomMapFileCrc'] = $this->readHeader('l', 4);
+
+        // Few unknown-ishes.
+        $this->readAoe2RecordString(); // customScenarioOrCampaignFile
+        $this->position += 8;
+        $this->readAoe2RecordString(); // customRandomMapFile
+        $this->position += 8;
+        $this->readAoe2RecordString(); // customRandomMapScenarioFile
+        $this->position += 8;
+
+        $data['guid'] = $this->readGuid();
+        $data['gameTitle'] = $this->readAoe2RecordString();
+        $data['moddedDatasetTitle'] = $this->readAoe2RecordString();
+        $data['moddedDatasetWorkshopId'] = $this->readHeader('P', 8);
+
+        $this->readAoe2RecordString();
+        $this->position += 16;
+
+        // TODO decide on a format to output this stuff.
+        return $data;
+    }
+
+    private function readPlayers1005($numPlayers)
+    {
         $players = [];
         for ($i = 0; $i < 8; $i++) {
             if ($i >= $numPlayers) {
@@ -108,80 +170,7 @@ class Version1250 extends Analyzer
                 'scenarioIndex' => $scenarioIndex,
             ];
         }
-
-        // Unknown flag.
-        $this->position++;
-
-        $fogOfWarEnabled = ord($this->header[$this->position++]);
-        $cheatNotificationsEnabled = ord($this->header[$this->position++]);
-        $coloredChatEnabled = ord($this->header[$this->position++]);
-
-        // Separator.
-        $this->position += 4;
-
-        $isRanked = ord($this->header[$this->position++]);
-        $allowSpectators = ord($this->header[$this->position++]);
-
-        $lobbyVisibility = $this->readHeader('l', 4);
-        $customRandomMapFileCrc = $this->readHeader('l', 4);
-
-        // Few unknown-ishes.
-        $this->readAoe2RecordString(); // customScenarioOrCampaignFile
-        $this->position += 8;
-        $this->readAoe2RecordString(); // customRandomMapFile
-        $this->position += 8;
-        $this->readAoe2RecordString(); // customRandomMapScenarioFile
-        $this->position += 8;
-
-        $guid = $this->readGuid();
-        $gameTitle = $this->readAoe2RecordString();
-        $moddedDatasetTitle = $this->readAoe2RecordString();
-        $moddedDatasetWorkshopId = $this->readHeader('P', 8);
-
-        $this->readAoe2RecordString();
-        $this->position += 16;
-
-        // TODO decide on a format to output this stuff.
-        return [
-            'datasets' => $datasets,
-            'difficulty' => $difficulty,
-            'mapSize' => $mapSize,
-            'mapId' => $mapId,
-            'revealMap' => $revealMap,
-            'victoryType' => $victoryType,
-            'startingResources' => $startingResources,
-            'startingAge' => $startingAge,
-            'endingAge' => $endingAge,
-            'gameType' => $gameType,
-            'gameSpeed' => $gameSpeed,
-            'treatyLength' => $treatyLength,
-            'popLimit' => $popLimit,
-            'numPlayers' => $numPlayers,
-            'tradingEnabled' => $tradingEnabled,
-            'teamBonusesDisabled' => $teamBonusesDisabled,
-            'randomizePositions' => $randomizePositions,
-            'fullTechTreeEnabled' => $fullTechTreeEnabled,
-            'numberOfStartingUnits' => $numberOfStartingUnits,
-            'teamsLocked' => $teamsLocked,
-            'speedLocked' => $speedLocked,
-            'isMultiPlayer' => $isMultiPlayer,
-            'cheatsEnabled' => $cheatsEnabled,
-            'recordGameEnabled' => $recordGameEnabled,
-            'animalsEnabled' => $animalsEnabled,
-            'predatorsEnabled' => $predatorsEnabled,
-            'fogOfWarEnabled' => $fogOfWarEnabled,
-            'cheatNotificationsEnabled' => $cheatNotificationsEnabled,
-            'coloredChatEnabled' => $coloredChatEnabled,
-            'isRanked' => $isRanked,
-            'allowSpectators' => $allowSpectators,
-            'lobbyVisibility' => $lobbyVisibility,
-            'customRandomMapFileCrc' => $customRandomMapFileCrc,
-            'guid' => $guid,
-            'gameTitle' => $gameTitle,
-            'moddedDatasetTitle' => $moddedDatasetTitle,
-            'moddedDatasetWorkshopId' => $moddedDatasetWorkshopId,
-            'players' => $players,
-        ];
+        return $players;
     }
 
     private function readAoe2RecordString()
