@@ -80,9 +80,9 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         // Unknowns.
         $this->position += 8;
 
-         if ($version === 1005.0) {
-             // Version 12.50, maybe others.
-            $players = $this->readPlayers1005($numPlayers);
+         if ($version >= 1004.0) {
+             // Version 12.49, 12.50, maybe others.
+            $players = $this->readPlayers1004($version, $numPlayers);
         } else {
             $separator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
             $this->position = strpos($this->header, $separator, $this->position) + 4;
@@ -119,22 +119,30 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         $data['guid'] = $this->readGuid();
         $data['gameTitle'] = $this->readAoe2RecordString();
         $data['moddedDatasetTitle'] = $this->readAoe2RecordString();
+        // Not sure if this should be inside the v1005.0 `if`.
         $data['moddedDatasetWorkshopId'] = $this->readHeader('P', 8);
 
-        $this->readAoe2RecordString();
-        $this->position += 16;
+        if ($version >= 1005.0) {
+            $this->readAoe2RecordString();
+            $this->position += 16;
+        } else if ($version >= 1004.0) {
+            $this->position += 8;
+        }
 
         // TODO decide on a format to output this stuff.
         return $data;
     }
 
-    private function readPlayers1005($numPlayers)
+    private function readPlayers1004($version, $numPlayers)
     {
         $players = [];
         for ($i = 0; $i < 8; $i++) {
             if ($i >= $numPlayers) {
                 // Skip empty players.
-                $this->position += 52;
+                $this->position += 48;
+                if ($version >= 1005.0) {
+                    $this->position += 4;
+                }
                 continue;
             }
 
@@ -146,7 +154,10 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
             $civId = $this->readHeader('l', 4);
             $aiBaseName = $this->readAoe2RecordString();
             $aiCivNameIndex = ord($this->header[$this->position++]);
-            $unknownName = $this->readAoe2RecordString();
+            $unknownName = null;
+            if ($version >= 1005.0) {
+                $unknownName = $this->readAoe2RecordString();
+            }
             $playerName = $this->readAoe2RecordString();
             $humanity = $this->readHeader('l', 4);
             $steamId = $this->readHeader('P', 8);

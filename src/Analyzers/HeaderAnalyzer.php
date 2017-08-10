@@ -97,7 +97,7 @@ class HeaderAnalyzer extends Analyzer
 
         $analysis->numPlayers = $numPlayers;
 
-        if ($version->isAoe2Record && $version->subVersion >= 12.50) {
+        if ($version->isAoe2Record && $version->subVersion >= 12.49) {
             $this->position += 46;
         } else {
             $this->position += 58;

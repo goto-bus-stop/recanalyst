@@ -224,6 +224,10 @@ class HeaderAnalyzerTest extends TestCase
                 ['civId' => 1, 'name' => 'Idle Beaver'],
                 ['civId' => 1, 'name' => 'Duke of Normandy (AI)'],
             ], 2],
+            ['./recs/versions/MP_Replay_v4.8_2016.11.03_221821_2.aoe2record', [
+                ['civId' => 6, 'name' => 'Nobody'],
+                ['civId' => 25, 'name' => 'TWest'],
+            ], 2],
             ['./recs/versions/HD Tourney Winner Final robo vs Klavskis g1.aoe2record', [
                 ['civId' => 11, 'name' => 'robo_boro'],
                 ['civId' => 11, 'name' => 'Klavskis'],

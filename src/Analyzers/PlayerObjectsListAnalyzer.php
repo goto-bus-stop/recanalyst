@@ -272,7 +272,7 @@ class PlayerObjectsListAnalyzer extends Analyzer
         if ($this->version->isHDEdition) {
             $this->position += 3;
         }
-        if ($this->version->subVersion >= 12.50) {
+        if ($this->version->subVersion >= 12.49) {
             $this->position += 4;
         }
         if ($this->version->isMgl) {
@@ -304,7 +304,7 @@ class PlayerObjectsListAnalyzer extends Analyzer
         if ($this->version->isHDEdition) {
             $this->position += 3;
         }
-        if ($this->version->subVersion >= 12.50) {
+        if ($this->version->subVersion >= 12.49) {
             $this->position += 4;
         }
         if (!$this->version->isMgx) {
