@@ -224,10 +224,10 @@ class PlayerObjectsListAnalyzer extends Analyzer
                 case self::UT_BUILDING:
                     $this->readBuilding();
                     break;
-                case 00:
+                case 0:
                     $this->position -= 4;
-                    $buff = $this->readHeaderRaw(strlen($this->playerInfoEndSeparator));
 
+                    $buff = $this->readHeaderRaw(strlen($this->playerInfoEndSeparator));
                     if ($buff === $this->playerInfoEndSeparator) {
                         $done = true;
                         break;
@@ -303,6 +303,9 @@ class PlayerObjectsListAnalyzer extends Analyzer
         // TODO what's this?
         if ($this->version->isHDEdition) {
             $this->position += 3;
+        }
+        if ($this->version->subVersion >= 12.50) {
+            $this->position += 4;
         }
         if (!$this->version->isMgx) {
             $this->position += 1;
