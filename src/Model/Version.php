@@ -140,6 +140,13 @@ class Version
     const VERSION_HD48 = 18;
 
     /**
+     * Version ID for HD Edition patch 5.0.
+     *
+     * @var int
+     */
+    const VERSION_HD50 = 19;
+
+    /**
      * Recorded game instance.
      *
      * @var \RecAnalyst\RecordedGame

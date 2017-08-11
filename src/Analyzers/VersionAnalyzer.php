@@ -69,6 +69,7 @@ class VersionAnalyzer extends Analyzer
         // easily detect which one it is.
         Version::VERSION_HD47,
         Version::VERSION_HD48,
+        Version::VERSION_HD50
     ];
 
 
@@ -131,6 +132,9 @@ class VersionAnalyzer extends Analyzer
             case 'VER 9.3':
                 return Version::VERSION_AOK;
             case 'VER 9.4':
+                if ($subVersion >= 12.50) {
+                    return Version::VERSION_HD50;
+                }
                 if ($subVersion >= 12.49) {
                     return Version::VERSION_HD48;
                 }
