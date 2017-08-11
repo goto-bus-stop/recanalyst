@@ -150,7 +150,9 @@ class PlayerInfoBlockAnalyzer extends Analyzer
             $this->position += 3;
             $playerColor = ord($this->header[$this->position++]);
 
-            $player->civId = $civilization;
+            if ($player->civId === -1) {
+                $player->civId = $civilization;
+            }
             $player->colorId = $playerColor;
             $player->initialState->position = [round($initCameraX), round($initCameraY)];
             $player->initialState->food = round($food);

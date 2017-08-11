@@ -34,6 +34,7 @@ class HeaderAnalyzer extends Analyzer
         $analysis = $this->analysis;
 
         $playersByIndex = [];
+        $gameType = -1;
 
         $size = strlen($this->header);
         $this->position = 0;
@@ -55,6 +56,84 @@ class HeaderAnalyzer extends Analyzer
             $scenarioHeaderPos -= 4;
         }
 
+        if ($version->isAoe2Record) {
+            $aoe2recordHeader = $this->read(Aoe2RecordHeaderAnalyzer::class);
+        }
+
+        $includeAi = $this->readHeader('L', 4);
+        if ($includeAi !== 0) {
+            $this->skipAi();
+        }
+
+        // TODO what are these?
+        if ($version->subVersion >= 12.50) {
+            $this->position += 12;
+        }
+
+        $this->position += 4;
+        if ($version->isAoe2Record) {
+            $this->position += 4;
+            $gameSpeed = $aoe2recordHeader['gameSpeed'];
+        } else {
+            $gameSpeed = $this->readHeader('l', 4);
+        }
+        // These bytes contain the game speed again several times over, as ints
+        // and as floats (On normal speed: 150, 1.5 and 0.15). Why?!
+        $this->position += 37;
+        $pov = $this->readHeader('v', 2);
+        if (array_key_exists($pov, $playersByIndex)) {
+            $owner = $playersByIndex[$pov];
+            $owner->owner = true;
+        }
+        if ($version->isAoe2Record) {
+            $numPlayers = $aoe2recordHeader['numPlayers'];
+            $gameMode = $aoe2recordHeader['isMultiPlayer'];
+            $this->position += 5;
+        } else {
+            $numPlayers = ord($this->header[$this->position++]);
+            $numPlayers -= 1;
+            // - 1, because player #0 is GAIA.
+            if ($version->isMgx) {
+                $this->position += 1; // Is instant building enabled? (cheat "aegis")
+                $this->position += 1; // Are cheats enabled?
+            }
+            $gameMode = $this->readHeader('v', 2);
+        }
+
+        $analysis->numPlayers = $numPlayers;
+
+        if ($version->isAoe2Record && $version->subVersion >= 12.49) {
+            $this->position += 46;
+        } else {
+            $this->position += 58;
+        }
+
+        $mapData = $this->read(MapDataAnalyzer::class);
+        $analysis->mapSize = $mapData->mapSize;
+
+        // int. Value is 10060 in AoK recorded games, 40600 in AoC and on.
+        $this->position += 4;
+
+        $playerInfoPos = $this->position;
+
+        $this->analysis->scenarioFilename = null;
+        if ($scenarioHeaderPos > 0) {
+            $this->position = $scenarioHeaderPos;
+            $this->readScenarioHeader();
+            // Set game type here, it will be overwritten by data from the
+            // recorded game settings later. In MGL files there is no game
+            // type field in the recorded game, so this one will be used.
+            $gameType = GameSettings::TYPE_SCENARIO;
+        }
+
+        $analysis->messages = $this->readMessages();
+
+        // Skip two separators to find the victory condition block.
+        $this->position = strpos($this->header, $separator, $this->position);
+        $this->position = strpos($this->header, $separator, $this->position + 4);
+
+        $analysis->victory = $this->read(VictorySettingsAnalyzer::class);
+
         $this->position = $gameSettingsPos + 8;
 
         // TODO Is 12.3 the correct cutoff point?
@@ -67,6 +146,7 @@ class HeaderAnalyzer extends Analyzer
             // Always 0? Map ID is now in the aoe2record front matter and gets
             // parsed below.
             $this->position += 4;
+            $mapId = $aoe2recordHeader['mapId'];
         } else if (!$version->isAoK) {
             $mapId = $this->readHeader('l', 4);
         }
@@ -77,6 +157,19 @@ class HeaderAnalyzer extends Analyzer
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
         }
+
+        // Merge in player from the aoe2record header if it exists.
+        // In some cases (eg. civId) the places where the data was originally stored is now empty,
+        // with the data instead only being stored in the aoe2record header.
+        // Other player analyzers will fall back to this data in those cases.
+        if ($version->isAoe2Record && array_key_exists('players', $aoe2recordHeader)) {
+            foreach ($players as $i => $player) {
+                foreach ($aoe2recordHeader['players'][$i] as $key => $value) {
+                    $player->$key = $value;
+                }
+            }
+        }
+
         $analysis->players = $players;
 
         $this->position = $triggerInfoPos + 1;
@@ -92,6 +185,13 @@ class HeaderAnalyzer extends Analyzer
             $player->team = $teamIndices[$i] - 1;
         }
 
+        $restore = $this->position;
+
+        $this->position = $playerInfoPos;
+        $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
+
+        $this->position = $restore;
+
         if ($version->subVersion < 12.3) {
             $this->position += 1;
         }
@@ -101,7 +201,6 @@ class HeaderAnalyzer extends Analyzer
         $mapSize = $this->readHeader('l', 4);
         $popLimit = $this->readHeader('l', 4);
 
-        $gameType = -1;
         if ($version->isMgx) {
             $gameType = ord($this->header[$this->position]);
             $lockDiplomacy = ord($this->header[$this->position + 1]);
@@ -120,93 +219,6 @@ class HeaderAnalyzer extends Analyzer
         if ($version->isMgx) {
             $pregameChat = $this->readChat($players);
         }
-
-        if ($version->isAoe2Record) {
-            // Skip aoe2record header.
-            // TODO this probably contains more version information, perhaps
-            // about expansion packs or mods. Should read that in
-            // VersionAnalyzer.
-            $this->position = 0x0c;
-            // Two 1000s: once as float, and once as int.
-            $this->position += 8;
-            // A boolean. Maybe Base=0, Expansions=1?
-            $this->position += 4;
-            // Not sure *exactly* what these ints stand for, but it might be
-            // metadata about the exact datasets used.
-            $numInts = $this->readHeader('l', 4);
-            $this->position += 4 * $numInts;
-            $this->position += 4 * 2;
-
-            $mapId = $this->readHeader('l', 4);
-            // There are more ints after this, but we got the data we need, so
-            // we'll just skip that.
-
-            // Skip 6 separators
-            for ($i = 0; $i < 6; $i++) {
-                $this->position = strpos($this->header, $aoe2recordHeaderSeparator, $this->position);
-                if ($this->position === false) {
-                    throw new \Exception('Unrecognized aoe2record header format.');
-                }
-                $this->position += strlen($aoe2recordHeaderSeparator); // length of separator
-            }
-            // Some unknown stuff
-            $this->position += 10;
-        } else {
-            $this->position = 0x0c;
-        }
-
-        $includeAi = $this->readHeader('L', 4);
-        if ($includeAi !== 0) {
-            $this->skipAi();
-        }
-
-        $this->position += 4;
-        $gameSpeed = $this->readHeader('l', 4);
-        // These bytes contain the game speed again several times over, as ints
-        // and as floats (On normal speed: 150, 1.5 and 0.15). Why?!
-        $this->position += 37;
-        $pov = $this->readHeader('v', 2);
-        if (array_key_exists($pov, $playersByIndex)) {
-            $owner = $playersByIndex[$pov];
-            $owner->owner = true;
-        }
-        $numPlayers = ord($this->header[$this->position++]);
-        // - 1, because player #0 is GAIA.
-        $analysis->numPlayers = $numPlayers - 1;
-        if ($version->isMgx) {
-            $this->position += 1; // Is instant building enabled? (cheat "aegis")
-            $this->position += 1; // Are cheats enabled?
-        }
-        $gameMode = $this->readHeader('v', 2);
-
-        $this->position += 58;
-
-        $mapData = $this->read(MapDataAnalyzer::class);
-        $analysis->mapSize = $mapData->mapSize;
-
-        // int. Value is 10060 in AoK recorded games, 40600 in AoC and on.
-        $this->position += 4;
-
-        $playerInfo = $this->read(PlayerInfoBlockAnalyzer::class, $analysis);
-
-        $this->analysis->scenarioFilename = null;
-        if ($scenarioHeaderPos > 0) {
-            $this->position = $scenarioHeaderPos;
-            $this->readScenarioHeader();
-            // Set game type now if it wasn't known. (Game type data is not
-            // included in MGL files.)
-            if ($gameType === -1) {
-                $gameType = GameSettings::TYPE_SCENARIO;
-            }
-        }
-
-        $analysis->messages = $this->readMessages();
-
-        // Skip two separators to find the victory condition block.
-        $this->position = strpos($this->header, $separator, $this->position);
-        $this->position = strpos($this->header, $separator, $this->position + 4);
-
-        $analysis->victory = $this->read(VictorySettingsAnalyzer::class);
 
         $analysis->teams = $this->buildTeams($players);
 

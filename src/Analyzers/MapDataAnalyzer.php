@@ -26,19 +26,7 @@ class MapDataAnalyzer extends Analyzer
         $allVisible = $this->readHeader('c', 1);
         $fogOfWar = $this->readHeader('c', 1);
 
-        $mapData = [];
-        for ($y = 0; $y < $mapSizeY; $y += 1) {
-            $mapData[$y] = [];
-            for ($x = 0; $x < $mapSizeX; $x += 1) {
-                $mapData[$y][$x] = new Tile(
-                    $x,
-                    $y,
-                    /* terrainId */ ord($this->header[$this->position]),
-                    /* elevation */ ord($this->header[$this->position + 1])
-                );
-                $this->position += 2;
-            }
-        }
+        $terrain = $this->read(TerrainAnalyzer::class, [$mapSizeX, $mapSizeY]);
 
         $this->skipObstructions();
         $this->skipVisibilityMap();
@@ -51,18 +39,19 @@ class MapDataAnalyzer extends Analyzer
             'mapSize' => [$mapSizeX, $mapSizeY],
             'allVisible' => $allVisible,
             'fogOfWar' => $fogOfWar,
-            'terrain' => $mapData,
+            'terrain' => $terrain,
         ];
     }
 
     private function skipZones()
     {
         $numMapZones = $this->readHeader('l', 4);
+        $size = $this->mapSizeX * $this->mapSizeY;
         for ($i = 0; $i < $numMapZones; $i += 1) {
             if ($this->version->subVersion >= 11.93) {
-                $this->position += 2048 + $this->mapSizeX * $this->mapSizeY * 2;
+                $this->position += 2048 + $size * 2;
             } else {
-                $this->position += 1275 + $this->mapSizeX * $this->mapSizeY;
+                $this->position += 1275 + $size;
             }
             $numFloats = $this->readHeader('l', 4);
             $this->position += ($numFloats * 4) + 4;
@@ -76,6 +65,7 @@ class MapDataAnalyzer extends Analyzer
         $this->position += $numData * 4;
         for ($i = 0; $i < $numData; $i += 1) {
             $numObstructions = $this->readHeader('l', 4);
+            // Two signed int32s.
             $this->position += $numObstructions * 8;
         }
     }

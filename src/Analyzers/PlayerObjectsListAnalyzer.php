@@ -189,16 +189,17 @@ class PlayerObjectsListAnalyzer extends Analyzer
 
         $done = false;
         while (!$done) {
-            $this->objectType = ord($this->header[$this->position]);
+            $this->objectType = $this->readHeader('c', 1);
 
             $this->owner = null;
             $this->ownerId = null;
             if ($this->objectType !== 0) {
-                $this->ownerId = ord($this->header[$this->position + 1]);
+                $this->ownerId = $this->readHeader('c', 1);
                 $this->owner = $this->players[$this->ownerId];
+            } else {
+                $this->position++;
             }
 
-            $this->position += 2;
             $this->unitId = $this->readHeader('v', 2);
 
             switch ($this->objectType) {
@@ -223,10 +224,10 @@ class PlayerObjectsListAnalyzer extends Analyzer
                 case self::UT_BUILDING:
                     $this->readBuilding();
                     break;
-                case 00:
+                case 0:
                     $this->position -= 4;
-                    $buff = $this->readHeaderRaw(strlen($this->playerInfoEndSeparator));
 
+                    $buff = $this->readHeaderRaw(strlen($this->playerInfoEndSeparator));
                     if ($buff === $this->playerInfoEndSeparator) {
                         $done = true;
                         break;
@@ -271,6 +272,9 @@ class PlayerObjectsListAnalyzer extends Analyzer
         if ($this->version->isHDEdition) {
             $this->position += 3;
         }
+        if ($this->version->subVersion >= 12.49) {
+            $this->position += 4;
+        }
         if ($this->version->isMgl) {
             $this->position += 1;
         }
@@ -299,6 +303,9 @@ class PlayerObjectsListAnalyzer extends Analyzer
         // TODO what's this?
         if ($this->version->isHDEdition) {
             $this->position += 3;
+        }
+        if ($this->version->subVersion >= 12.49) {
+            $this->position += 4;
         }
         if (!$this->version->isMgx) {
             $this->position += 1;

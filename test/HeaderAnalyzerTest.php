@@ -104,6 +104,17 @@ class HeaderAnalyzerTest extends TestCase
     }
 
     /**
+     * Skipping AI in HD edition 5.0.
+     */
+    public function testAoe2RecordWithAi()
+    {
+        $rec = $this->load('recs/versions/SP Replay v5.0 @2016.12.21 111710.aoe2record');
+        $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
+        // Just check that we didn't crash.
+        $this->assertNotNull($analysis);
+    }
+
+    /**
      * @dataProvider chatCountsProvider
      */
     public function testChat($file, $expectedCount)
@@ -223,6 +234,26 @@ class HeaderAnalyzerTest extends TestCase
             ['./recs/versions/Kingdoms Britons v Britons - SP Replay v4.6 @2016.05.05 130519.aoe2record', [
                 ['civId' => 1, 'name' => 'Idle Beaver'],
                 ['civId' => 1, 'name' => 'Duke of Normandy (AI)'],
+            ], 2],
+            ['./recs/versions/MP_Replay_v4.8_2016.11.03_221821_2.aoe2record', [
+                ['civId' => 6, 'name' => 'Nobody'],
+                ['civId' => 25, 'name' => 'TWest'],
+            ], 2],
+            ['./recs/versions/HD Tourney Winner Final robo vs Klavskis g1.aoe2record', [
+                ['civId' => 11, 'name' => 'robo_boro'],
+                ['civId' => 11, 'name' => 'Klavskis'],
+            ], 2],
+            ['./recs/versions/HD Tourney Winner Final robo vs Klavskis g2.aoe2record', [
+                ['civId' => 21, 'name' => 'robo_boro'],
+                ['civId' => 21, 'name' => 'Klavskis'],
+            ], 2],
+            ['./recs/versions/HD Tourney Winner Final robo vs Klavskis g3.aoe2record', [
+                ['civId' => 7, 'name' => 'robo_boro'],
+                ['civId' => 7, 'name' => 'Klavskis'],
+            ], 2],
+            ['./recs/versions/HD Tourney Winner Final robo vs Klavskis g4.aoe2record', [
+                ['civId' => 15, 'name' => 'robo_boro'],
+                ['civId' => 15, 'name' => 'Klavskis'],
             ], 2],
         ];
     }
