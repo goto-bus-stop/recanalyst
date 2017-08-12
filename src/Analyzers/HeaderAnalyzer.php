@@ -65,11 +65,6 @@ class HeaderAnalyzer extends Analyzer
             $this->skipAi();
         }
 
-        // TODO what are these?
-        if ($version->subVersion >= 12.50) {
-            $this->position += 12;
-        }
-
         $this->position += 4;
         if ($version->isAoe2Record) {
             $this->position += 4;
@@ -98,6 +93,11 @@ class HeaderAnalyzer extends Analyzer
                 $this->position += 1; // Are cheats enabled?
             }
             $gameMode = $this->readHeader('v', 2);
+        }
+
+        // TODO what are these?
+        if ($version->subVersion >= 12.50) {
+            $this->position += 12;
         }
 
         $analysis->numPlayers = $numPlayers;
