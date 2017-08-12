@@ -177,7 +177,6 @@ return array (
     29 => 'Malais',
     30 => 'Birmans',
     31 => 'Vietnamiens',
-    49 => 'Technologies',
   ),
   'map_sizes' => 
   array (

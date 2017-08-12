@@ -194,7 +194,6 @@ return array (
     46 => 'ReservedCivO',
     47 => 'ReservedCivP',
     48 => 'ReservedCivQ',
-    49 => 'Technologies',
   ),
   'map_sizes' => 
   array (

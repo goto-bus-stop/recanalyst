@@ -232,6 +232,10 @@ function generateImages($agedir, $data)
         'Ethiopians' => 195,
         'Malians' => 197,
         'Berbers' => 191,
+        'Burmese' => 230,
+        'Khmer' => 231,
+        'Vietnamese' => 232,
+        'Malay' => 233,
     ];
     $strings = require(__DIR__ . '/../resources/lang/en/ageofempires.php');
     $civNames = $strings['civilizations'];
