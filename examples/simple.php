@@ -20,7 +20,10 @@ echo 'Version: ' . $version->versionString . ' (' . $version->subVersion . ')' .
 // Display players and their civilizations.
 echo 'Players: ' . "\n";
 foreach ($rec->players() as $player) {
-    echo ' * ' . $player->name . ' (' . $player->civName(). ')' . "\n";
+    printf(" %s %s (%s)\n",
+        $player->owner ? '>' : '*',
+        $player->name,
+        $player->civName());
 }
 
 // Render a map image. Map images are instances of the \Intervention\Image
