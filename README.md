@@ -9,6 +9,8 @@ RecAnalyst is a PHP package for analyzing Age of Empires II recorded games. It
 supports recorded game files from Age of Kings, The Conquerors, UserPatch,
 Forgotten Empires, and HD Edition (optionally with expansions).
 
+A small demo application is hosted at http://idlebeaver.ninja/recanalyst.
+
 [License][] - [Credits][] - [Requirements][] - [Installation][] -
 [Configuration][] - [Usage Examples][] - [API Documentation][] -
 [Limitations][]
