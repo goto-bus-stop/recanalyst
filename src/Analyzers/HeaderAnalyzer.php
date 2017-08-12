@@ -76,10 +76,6 @@ class HeaderAnalyzer extends Analyzer
         // and as floats (On normal speed: 150, 1.5 and 0.15). Why?!
         $this->position += 37;
         $pov = $this->readHeader('v', 2);
-        if (array_key_exists($pov, $playersByIndex)) {
-            $owner = $playersByIndex[$pov];
-            $owner->owner = true;
-        }
         if ($version->isAoe2Record) {
             $numPlayers = $aoe2recordHeader['numPlayers'];
             $gameMode = $aoe2recordHeader['isMultiPlayer'];
@@ -96,7 +92,9 @@ class HeaderAnalyzer extends Analyzer
         }
 
         // TODO what are these?
-        if ($version->subVersion >= 12.50) {
+        // Something is up here because we do `+=46` just below which makes for `+=58` anyway.
+        // For some reason PHP runs out of memory if I do it differently…
+        if ($version->subVersion >= 12.49) {
             $this->position += 12;
         }
 
@@ -156,6 +154,9 @@ class HeaderAnalyzer extends Analyzer
         $players = $this->read(PlayerMetaAnalyzer::class);
         foreach ($players as $player) {
             $playersByIndex[$player->index] = $player;
+            if ($player->index === $pov) {
+                $player->owner = true;
+            }
         }
 
         // Merge in player from the aoe2record header if it exists.
