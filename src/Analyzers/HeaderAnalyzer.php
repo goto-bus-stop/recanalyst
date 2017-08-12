@@ -94,7 +94,7 @@ class HeaderAnalyzer extends Analyzer
         // TODO what are these?
         // Something is up here because we do `+=46` just below which makes for `+=58` anyway.
         // For some reason PHP runs out of memory if I do it differently…
-        if ($version->subVersion >= 12.49) {
+        if ($version->subVersion >= 12.50) {
             $this->position += 12;
         }
 
