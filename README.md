@@ -108,7 +108,7 @@ You can then refer to the different categories of icons in the following ways:
 To get started, the [Usage Examples][] might be helpful.
 
 Full API documentation is available at
-https://goto-bus-stop.github.io/recanalyst/doc/.
+https://goto-bus-stop.github.io/recanalyst/doc/v4.2.0.
 
 ## Limitations
 
@@ -141,7 +141,7 @@ with RecAnalyst:
 [Configuration]: #configuration
 [Laravel integration]: #laravel
 [Usage Examples]: ./examples#readme
-[API Documentation]: https://goto-bus-stop.github.io/recanalyst/doc/
+[API Documentation]: https://goto-bus-stop.github.io/recanalyst/doc/v4.2.0
 [Limitations]: #limitations
 
 [limitation/gameplay]: https://github.com/goto-bus-stop/recanalyst/issues/1
