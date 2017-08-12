@@ -25,18 +25,23 @@
                 <div id="control-panel">
                     <form action="#" method="GET">
                 <select id="version-switcher" name="version">
-                                            <option value="../../../v4.0.0/index.html">v4.0.0</option>
-                                            <option value="../../../v4.0.1/index.html">v4.0.1</option>
-                                            <option value="../../../v4.0.2/index.html">v4.0.2</option>
-                                            <option value="../../../v4.0.3/index.html">v4.0.3</option>
-                                            <option value="../../../v4.0.4/index.html">v4.0.4</option>
-                                            <option value="../../../v4.1.0/index.html">v4.1.0</option>
-                                            <option value="../../../v4.1.1/index.html" selected>v4.1.1</option>
-                                            <option value="../../../v4.1.2/index.html">v4.1.2</option>
-                                            <option value="../../../master/index.html">master branch</option>
+                                            <option value="../../../v4.0.0/index.html" data-version="v4.0.0">v4.0.0</option>
+                                            <option value="../../../v4.0.1/index.html" data-version="v4.0.1">v4.0.1</option>
+                                            <option value="../../../v4.0.2/index.html" data-version="v4.0.2">v4.0.2</option>
+                                            <option value="../../../v4.0.3/index.html" data-version="v4.0.3">v4.0.3</option>
+                                            <option value="../../../v4.0.4/index.html" data-version="v4.0.4">v4.0.4</option>
+                                            <option value="../../../v4.1.0/index.html" data-version="v4.1.0">v4.1.0</option>
+                                            <option value="../../../v4.1.1/index.html" data-version="v4.1.1">v4.1.1</option>
+                                            <option value="../../../v4.1.2/index.html" data-version="v4.1.2">v4.1.2</option>
+                                            <option value="../../../v4.1.3/index.html" data-version="v4.1.3">v4.1.3</option>
+                                            <option value="../../../v4.2.0/index.html" data-version="v4.2.0">v4.2.0</option>
+                                            <option value="../../../master/index.html" data-version="master">master branch</option>
                                     </select>
             </form>
-                <form id="search-form" action="../../search.html" method="GET">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../../search.html" method="GET">
             <span class="glyphicon glyphicon-search"></span>
             <input name="search"
                    class="typeahead form-control"
@@ -76,10 +81,7 @@
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
                 <li><span class="label label-default">class</span></li>
-                                                            <li><a href="../../RecAnalyst.html">RecAnalyst</a></li>
-                                        <li><a href="../../RecAnalyst/Model.html">Model</a></li>
-    
-                <li>Player</li>
+                        <li><a href="../../RecAnalyst.html">RecAnalyst</a></li><li class="backslash">\</li><li><a href="../../RecAnalyst/Model.html">Model</a></li><li class="backslash">\</li><li>Player</li>
             </ol>
         </div>
                 <div id="page-content">
@@ -100,7 +102,7 @@
 
             <div class="description">
             <p>The Player class represents a player in the game. This includes co-op players.</p>            <p>It does not include players who joined the lobby but didn't launch into
-the actual game.</p>        </div>
+the actual game.</p>                    </div>
     
     
     
@@ -408,7 +410,7 @@ co-op group.</p>                </div>
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L145">line 145</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L145">line 145</a></div>
         <code>                    void
     <strong>__construct</strong>(<a href="../../RecAnalyst/RecordedGame.html"><abbr title="RecAnalyst\RecordedGame">RecordedGame</abbr></a> $rec = null)
         </code>
@@ -418,7 +420,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Class constructor.</p>                                </div>
+                                    <p>Class constructor.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -448,7 +450,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isHuman">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L156">line 156</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L156">line 156</a></div>
         <code>                    boolean
     <strong>isHuman</strong>()
         </code>
@@ -458,7 +460,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Returns whether the player is a human player.</p>                                </div>
+                                    <p>Returns whether the player is a human player.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -478,7 +480,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_team">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L166">line 166</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L166">line 166</a></div>
         <code>                    <a href="../../RecAnalyst/Model/Team.html"><abbr title="RecAnalyst\Model\Team">Team</abbr></a>|null
     <strong>team</strong>()
         </code>
@@ -488,7 +490,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the player's team.</p>                                </div>
+                                    <p>Get the player's team.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -508,7 +510,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_setCoopPartners">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L182">line 182</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L182">line 182</a></div>
         <code>                    
     <strong>setCoopPartners</strong>(array $partners)
         </code>
@@ -518,7 +520,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Set the player's co-op partner group.</p>                                </div>
+                                    <p>Set the player's co-op partner group.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -539,7 +541,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isCoopMain">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L194">line 194</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L194">line 194</a></div>
         <code>                    bool
     <strong>isCoopMain</strong>()
         </code>
@@ -549,7 +551,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Check whether the player is the main player in a co-op group.</p>                                </div>
+                                    <p>Check whether the player is the main player in a co-op group.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -569,7 +571,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getCoopMain">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L204">line 204</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L204">line 204</a></div>
         <code>                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>
     <strong>getCoopMain</strong>()
         </code>
@@ -579,7 +581,7 @@ co-op group.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the main player of this player's co-op group.</p>                                </div>
+                                    <p>Get the main player of this player's co-op group.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -599,7 +601,7 @@ co-op group.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isCoopPartner">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L215">line 215</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L215">line 215</a></div>
         <code>                    bool
     <strong>isCoopPartner</strong>()
         </code>
@@ -610,7 +612,7 @@ co-op group.</p>                </div>
 
                     <div class="method-description">
                                     <p>Check whether the player is a partner, and thus not the main player, in a
-co-op group.</p>                                </div>
+co-op group.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -630,7 +632,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getCoopPartners">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L225">line 225</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L225">line 225</a></div>
         <code>                    <a href="../../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>[]
     <strong>getCoopPartners</strong>()
         </code>
@@ -640,7 +642,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get co-op partners of this player.</p>                                </div>
+                                    <p>Get co-op partners of this player.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -660,7 +662,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isCooping">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L237">line 237</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L237">line 237</a></div>
         <code>                    boolean
     <strong>isCooping</strong>()
         </code>
@@ -670,7 +672,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Returns whether the player is co-oping.</p>                                </div>
+                                    <p>Returns whether the player is co-oping.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -690,7 +692,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_isSpectator">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L242">line 242</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L242">line 242</a></div>
         <code>                    
     <strong>isSpectator</strong>()
         </code>
@@ -709,7 +711,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_color">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L252">line 252</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L252">line 252</a></div>
         <code>                    string
     <strong>color</strong>()
         </code>
@@ -719,7 +721,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the hex color of this player.</p>                                </div>
+                                    <p>Get the hex color of this player.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -739,7 +741,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_achievements">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L264">line 264</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L264">line 264</a></div>
         <code>                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>|null
     <strong>achievements</strong>()
         </code>
@@ -767,7 +769,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_addResearch">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L282">line 282</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L282">line 282</a></div>
         <code>                    
     <strong>addResearch</strong>(int $id, int $time)
         </code>
@@ -777,7 +779,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Add a research action.</p>                                </div>
+                                    <p>Add a research action.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -803,7 +805,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_researches">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L290">line 290</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L290">line 290</a></div>
         <code>                    <a href="../../RecAnalyst/Model/Research.html"><abbr title="RecAnalyst\Model\Research">Research</abbr></a>[]
     <strong>researches</strong>()
         </code>
@@ -831,7 +833,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_civName">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L300">line 300</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L300">line 300</a></div>
         <code>                    string
     <strong>civName</strong>()
         </code>
@@ -841,7 +843,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the name of this player's civilization.</p>                                </div>
+                                    <p>Get the name of this player's civilization.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -861,7 +863,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_startingAge">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L315">line 315</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L315">line 315</a></div>
         <code>                    string
     <strong>startingAge</strong>()
         </code>
@@ -871,7 +873,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the player's starting age.</p>                                </div>
+                                    <p>Get the player's starting age.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -900,7 +902,7 @@ co-op group.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_position">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L328">line 328</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.1.1/src/Model/Player.php#L328">line 328</a></div>
         <code>                    int[]
     <strong>position</strong>()
         </code>
@@ -910,7 +912,7 @@ co-op group.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the player's starting position.</p>                                </div>
+                                    <p>Get the player's starting position.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>

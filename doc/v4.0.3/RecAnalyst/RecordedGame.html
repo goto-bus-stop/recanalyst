@@ -25,18 +25,23 @@
                 <div id="control-panel">
                     <form action="#" method="GET">
                 <select id="version-switcher" name="version">
-                                            <option value="../../v4.0.0/index.html">v4.0.0</option>
-                                            <option value="../../v4.0.1/index.html">v4.0.1</option>
-                                            <option value="../../v4.0.2/index.html">v4.0.2</option>
-                                            <option value="../../v4.0.3/index.html" selected>v4.0.3</option>
-                                            <option value="../../v4.0.4/index.html">v4.0.4</option>
-                                            <option value="../../v4.1.0/index.html">v4.1.0</option>
-                                            <option value="../../v4.1.1/index.html">v4.1.1</option>
-                                            <option value="../../v4.1.2/index.html">v4.1.2</option>
-                                            <option value="../../master/index.html">master branch</option>
+                                            <option value="../../v4.0.0/index.html" data-version="v4.0.0">v4.0.0</option>
+                                            <option value="../../v4.0.1/index.html" data-version="v4.0.1">v4.0.1</option>
+                                            <option value="../../v4.0.2/index.html" data-version="v4.0.2">v4.0.2</option>
+                                            <option value="../../v4.0.3/index.html" data-version="v4.0.3">v4.0.3</option>
+                                            <option value="../../v4.0.4/index.html" data-version="v4.0.4">v4.0.4</option>
+                                            <option value="../../v4.1.0/index.html" data-version="v4.1.0">v4.1.0</option>
+                                            <option value="../../v4.1.1/index.html" data-version="v4.1.1">v4.1.1</option>
+                                            <option value="../../v4.1.2/index.html" data-version="v4.1.2">v4.1.2</option>
+                                            <option value="../../v4.1.3/index.html" data-version="v4.1.3">v4.1.3</option>
+                                            <option value="../../v4.2.0/index.html" data-version="v4.2.0">v4.2.0</option>
+                                            <option value="../../master/index.html" data-version="master">master branch</option>
                                     </select>
             </form>
-                <form id="search-form" action="../search.html" method="GET">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../search.html" method="GET">
             <span class="glyphicon glyphicon-search"></span>
             <input name="search"
                    class="typeahead form-control"
@@ -76,9 +81,7 @@
                         <div class="namespace-breadcrumbs">
             <ol class="breadcrumb">
                 <li><span class="label label-default">class</span></li>
-                                                            <li><a href="../RecAnalyst.html">RecAnalyst</a></li>
-    
-                <li>RecordedGame</li>
+                        <li><a href="../RecAnalyst.html">RecAnalyst</a></li><li class="backslash">\</li><li>RecordedGame</li>
             </ol>
         </div>
                 <div id="page-content">
@@ -98,10 +101,23 @@
     
 
             <div class="description">
-            <p>Represents a recorded game file.</p>                    </div>
+            <p>Represents a recorded game file.</p>                                </div>
     
     
     
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_analyses">
+                                        protected                                        array
+                </td>
+                <td>$analyses</td>
+                <td class="last">Completed analyses.</td>
+                <td></td>
+            </tr>
+            </table>
+
     
             <h2>Methods</h2>
 
@@ -111,7 +127,7 @@
                     void
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method___construct">__construct</a>(resource|string|<a target="_blank" href="http://php.net/SplFileInfo">SplFileInfo</a> $filename = null, array $options = array())
+                    <a href="#method___construct">__construct</a>(resource|string|<a target="_blank" href="http://php.net/SplFileInfo">SplFileInfo</a> $filename = null, array $options = [])
         
                                             <p>Create a recorded game analyser.</p>                </div>
                 <div class="col-md-2"></div>
@@ -221,7 +237,7 @@
                     <abbr title="Intervention\Image">Image</abbr>
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_mapImage">mapImage</a>(array $options = array())
+                    <a href="#method_mapImage">mapImage</a>(array $options = [])
         
                                             <p>Render a map image.</p>                </div>
                 <div class="col-md-2"></div>
@@ -262,7 +278,7 @@ file.</p>                </div>
                     
                 </div>
                 <div class="col-md-8 type">
-                    <a href="#method_achievements">achievements</a>(array $options = array())
+                    <a href="#method_achievements">achievements</a>(array $options = [])
         
                                             <p>Get the player achievements.</p>                </div>
                 <div class="col-md-2"></div>
@@ -297,9 +313,9 @@ file.</p>                </div>
             <div id="method-details">
                     <div class="method-item">
                     <h3 id="method___construct">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L55">line 55</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L55">line 55</a></div>
         <code>                    void
-    <strong>__construct</strong>(resource|string|<a target="_blank" href="http://php.net/SplFileInfo">SplFileInfo</a> $filename = null, array $options = array())
+    <strong>__construct</strong>(resource|string|<a target="_blank" href="http://php.net/SplFileInfo">SplFileInfo</a> $filename = null, array $options = [])
         </code>
     </h3>
     <div class="details">
@@ -307,7 +323,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Create a recorded game analyser.</p>                                </div>
+                                    <p>Create a recorded game analyser.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -342,7 +358,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getResourcePack">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L112">line 112</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L112">line 112</a></div>
         <code>                    <a href="../RecAnalyst/ResourcePacks/ResourcePack.html"><abbr title="RecAnalyst\ResourcePacks\ResourcePack">ResourcePack</abbr></a>
     <strong>getResourcePack</strong>()
         </code>
@@ -352,7 +368,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the current resource pack.</p>                                </div>
+                                    <p>Get the current resource pack.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -372,7 +388,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_runAnalyzer">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L123">line 123</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L123">line 123</a></div>
         <code>                    mixed
     <strong>runAnalyzer</strong>(<a href="../RecAnalyst/Analyzers/Analyzer.html"><abbr title="RecAnalyst\Analyzers\Analyzer">Analyzer</abbr></a> $analyzer)
         </code>
@@ -382,7 +398,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Run an analysis on the current game.</p>                                </div>
+                                    <p>Run an analysis on the current game.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -412,7 +428,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getAnalysis">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L136">line 136</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L136">line 136</a></div>
         <code>                    mixed
     <strong>getAnalysis</strong>(string $analyzerName, mixed $arg = null, int $startAt)
         </code>
@@ -422,7 +438,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get an analysis result for a specific analyzer, running it if necessary.</p>                                </div>
+                                    <p>Get an analysis result for a specific analyzer, running it if necessary.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -462,7 +478,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getHeaderContents">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L155">line 155</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L155">line 155</a></div>
         <code>                    string
     <strong>getHeaderContents</strong>()
         </code>
@@ -472,7 +488,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Return the raw decompressed header contents.</p>                                </div>
+                                    <p>Return the raw decompressed header contents.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -492,7 +508,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getBodyContents">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L165">line 165</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L165">line 165</a></div>
         <code>                    string
     <strong>getBodyContents</strong>()
         </code>
@@ -502,7 +518,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Return the raw body contents.</p>                                </div>
+                                    <p>Return the raw body contents.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -522,7 +538,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_version">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L175">line 175</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L175">line 175</a></div>
         <code>                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>
     <strong>version</strong>()
         </code>
@@ -532,7 +548,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the game version.</p>                                </div>
+                                    <p>Get the game version.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -552,7 +568,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_header">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L185">line 185</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L185">line 185</a></div>
         <code>                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>
     <strong>header</strong>()
         </code>
@@ -562,7 +578,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the result of analysis of the recorded game header.</p>                                </div>
+                                    <p>Get the result of analysis of the recorded game header.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -582,7 +598,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_gameSettings">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L195">line 195</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L195">line 195</a></div>
         <code>                    <a href="../RecAnalyst/Model/GameSettings.html"><abbr title="RecAnalyst\Model\GameSettings">GameSettings</abbr></a>
     <strong>gameSettings</strong>()
         </code>
@@ -592,7 +608,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the game settings used to play this recorded game.</p>                                </div>
+                                    <p>Get the game settings used to play this recorded game.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -612,7 +628,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_victorySettings">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L205">line 205</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L205">line 205</a></div>
         <code>                    <a href="../RecAnalyst/Model/VictorySettings.html"><abbr title="RecAnalyst\Model\VictorySettings">VictorySettings</abbr></a>
     <strong>victorySettings</strong>()
         </code>
@@ -622,7 +638,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the victory settings for this game.</p>                                </div>
+                                    <p>Get the victory settings for this game.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -642,7 +658,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_body">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L215">line 215</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L215">line 215</a></div>
         <code>                    <a target="_blank" href="http://php.net/StdClass">StdClass</a>
     <strong>body</strong>()
         </code>
@@ -652,7 +668,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the result of analysis of the recorded game body.</p>                                </div>
+                                    <p>Get the result of analysis of the recorded game body.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -672,9 +688,9 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_mapImage">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L227">line 227</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L227">line 227</a></div>
         <code>                    <abbr title="Intervention\Image">Image</abbr>
-    <strong>mapImage</strong>(array $options = array())
+    <strong>mapImage</strong>(array $options = [])
         </code>
     </h3>
     <div class="details">
@@ -682,7 +698,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Render a map image.</p>                                </div>
+                                    <p>Render a map image.</p>                                                </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -721,7 +737,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_teams">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L238">line 238</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L238">line 238</a></div>
         <code>                    <a href="../RecAnalyst/Model/Team.html"><abbr title="RecAnalyst\Model\Team">Team</abbr></a>[]
     <strong>teams</strong>()
         </code>
@@ -731,7 +747,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the teams that played in this recorded game.</p>                                </div>
+                                    <p>Get the teams that played in this recorded game.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -751,7 +767,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_players">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L248">line 248</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L248">line 248</a></div>
         <code>                    <a href="../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>[]
     <strong>players</strong>()
         </code>
@@ -761,7 +777,7 @@ file.</p>                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the players that played in this recorded game.</p>                                </div>
+                                    <p>Get the players that played in this recorded game.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -781,7 +797,7 @@ file.</p>                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_pov">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L259">line 259</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L259">line 259</a></div>
         <code>                    <a href="../RecAnalyst/Model/Player.html"><abbr title="RecAnalyst\Model\Player">Player</abbr></a>
     <strong>pov</strong>()
         </code>
@@ -792,7 +808,7 @@ file.</p>                </div>
 
                     <div class="method-description">
                                     <p>Get the POV player. This is the player that recorded this recorded game
-file.</p>                                </div>
+file.</p>                                                </div>
                 <div class="tags">
             
                             <h4>Return Value</h4>
@@ -812,9 +828,9 @@ file.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_achievements">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L273">line 273</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L273">line 273</a></div>
         <code>                    
-    <strong>achievements</strong>(array $options = array())
+    <strong>achievements</strong>(array $options = [])
         </code>
     </h3>
     <div class="details">
@@ -822,7 +838,7 @@ file.</p>                                </div>
     
 
                     <div class="method-description">
-                                    <p>Get the player achievements.</p>                    <p>return \StdClass[] Achievements for each player.</p>            </div>
+                                    <p>Get the player achievements.</p>                    <p>return \StdClass[] Achievements for each player.</p>                            </div>
                 <div class="tags">
                             <h4>Parameters</h4>
 
@@ -843,7 +859,7 @@ file.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_getTranslator">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L302">line 302</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L302">line 302</a></div>
         <code>                    
     <strong>getTranslator</strong>()
         </code>
@@ -862,7 +878,7 @@ file.</p>                                </div>
             </div>
                     <div class="method-item">
                     <h3 id="method_trans">
-        <div class="location">at line         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L310">line 310</a></div>
+        <div class="location">at         <a href="https://github.com/goto-bus-stop/recanalyst/blob/v4.0.3/src/RecordedGame.php#L310">line 310</a></div>
         <code>                    string
     <strong>trans</strong>()
         </code>

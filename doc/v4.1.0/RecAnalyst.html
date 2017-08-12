@@ -25,18 +25,23 @@
                 <div id="control-panel">
                     <form action="#" method="GET">
                 <select id="version-switcher" name="version">
-                                            <option value="../v4.0.0/index.html" selected>v4.0.0</option>
-                                            <option value="../v4.0.1/index.html">v4.0.1</option>
-                                            <option value="../v4.0.2/index.html">v4.0.2</option>
-                                            <option value="../v4.0.3/index.html">v4.0.3</option>
-                                            <option value="../v4.0.4/index.html">v4.0.4</option>
-                                            <option value="../v4.1.0/index.html">v4.1.0</option>
-                                            <option value="../v4.1.1/index.html">v4.1.1</option>
-                                            <option value="../v4.1.2/index.html">v4.1.2</option>
-                                            <option value="../master/index.html">master branch</option>
+                                            <option value="../v4.0.0/index.html" data-version="v4.0.0">v4.0.0</option>
+                                            <option value="../v4.0.1/index.html" data-version="v4.0.1">v4.0.1</option>
+                                            <option value="../v4.0.2/index.html" data-version="v4.0.2">v4.0.2</option>
+                                            <option value="../v4.0.3/index.html" data-version="v4.0.3">v4.0.3</option>
+                                            <option value="../v4.0.4/index.html" data-version="v4.0.4">v4.0.4</option>
+                                            <option value="../v4.1.0/index.html" data-version="v4.1.0">v4.1.0</option>
+                                            <option value="../v4.1.1/index.html" data-version="v4.1.1">v4.1.1</option>
+                                            <option value="../v4.1.2/index.html" data-version="v4.1.2">v4.1.2</option>
+                                            <option value="../v4.1.3/index.html" data-version="v4.1.3">v4.1.3</option>
+                                            <option value="../v4.2.0/index.html" data-version="v4.2.0">v4.2.0</option>
+                                            <option value="../master/index.html" data-version="master">master branch</option>
                                     </select>
             </form>
-                <form id="search-form" action="search.html" method="GET">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="search.html" method="GET">
             <span class="glyphicon glyphicon-search"></span>
             <input name="search"
                    class="typeahead form-control"
@@ -76,8 +81,7 @@
                 <div class="namespace-breadcrumbs">
         <ol class="breadcrumb">
             <li><span class="label label-default">Namespace</span></li>
-                                                        <li><a href="RecAnalyst.html">RecAnalyst</a></li>
-    
+                    <li><a href="RecAnalyst.html">RecAnalyst</a></li><li class="backslash">\</li>
         </ol>
     </div>
             <div id="page-content">
@@ -88,7 +92,7 @@
 
             <h2>Namespaces</h2>
         <div class="namespace-list">
-            <a href="RecAnalyst/Analyzers.html">RecAnalyst\Analyzers</a><a href="RecAnalyst/Laravel.html">RecAnalyst\Laravel</a><a href="RecAnalyst/Model.html">RecAnalyst\Model</a><a href="RecAnalyst/Processors.html">RecAnalyst\Processors</a><a href="RecAnalyst/ResourcePacks.html">RecAnalyst\ResourcePacks</a>        </div>
+            <a href="RecAnalyst/Analyzers.html">RecAnalyst\Analyzers</a><a href="RecAnalyst/Laravel.html">RecAnalyst\Laravel</a><a href="RecAnalyst/Model.html">RecAnalyst\Model</a><a href="RecAnalyst/Processors.html">RecAnalyst\Processors</a><a href="RecAnalyst/ResourcePacks.html">RecAnalyst\ResourcePacks</a><a href="RecAnalyst/Stream.html">RecAnalyst\Stream</a>        </div>
     
             <h2>Classes</h2>
         
@@ -109,6 +113,15 @@
                 </div>
                 <div class="col-md-6">
                     Represents a recorded game file.
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <a href="RecAnalyst/ServiceProvider.html"><abbr title="RecAnalyst\ServiceProvider">ServiceProvider</abbr></a>
+                                            
+                </div>
+                <div class="col-md-6">
+                    Service provider for use with Laravel.
                 </div>
             </div>
                     <div class="row">
