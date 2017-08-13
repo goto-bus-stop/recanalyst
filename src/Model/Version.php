@@ -105,6 +105,13 @@ class Version
     const VERSION_USERPATCH14 = 11;
 
     /**
+     * Version ID for UserPatch v1.5.
+     *
+     * @var int
+     */
+    const VERSION_USERPATCH15 = 20;
+
+    /**
      * Version ID for HD Edition.
      *
      * @var int

@@ -20,17 +20,21 @@ class TerrainAnalyzer extends Analyzer
 
     protected function run()
     {
+        $version = $this->get(VersionAnalyzer::class);
+
         $mapData = [];
         for ($y = 0; $y < $this->sizeY; $y += 1) {
             $mapData[$y] = [];
             for ($x = 0; $x < $this->sizeX; $x += 1) {
-                $mapData[$y][$x] = new Tile(
-                    $x,
-                    $y,
-                    /* terrainId */ ord($this->header[$this->position]),
-                    /* elevation */ ord($this->header[$this->position + 1])
-                );
-                $this->position += 2;
+                $terrainId = ord($this->header[$this->position++]);
+                if ($terrainId === 0xFF) {
+                    // Skip UserPatch "original terrain ID" data.
+                    $this->position++;
+                    $terrainId = ord($this->header[$this->position++]);
+                }
+                $elevation = ord($this->header[$this->position++]);
+
+                $mapData[$y][$x] = new Tile($x, $y, $terrainId, $elevation);
             }
         }
         return $mapData;
