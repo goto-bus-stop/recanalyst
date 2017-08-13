@@ -1,0 +1,9 @@
+{
+    "require": {
+        "recanalyst/recanalyst": "dev-master",
+        "twig/twig": "^1.29"
+    },
+    "scripts": {
+        "post-update-cmd": "php postupdate.php"
+    }
+}

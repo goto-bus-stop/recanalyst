@@ -1,0 +1,193 @@
+<div class="tabs">
+  <ul role="tablist">
+    <li role="presentation" class="is-active">
+      <a href="#achievements-general" aria-controls="achievements-general" role="tab">Scores</a>
+    </li>
+    <li role="presentation">
+      <a href="#achievements-military" aria-controls="achievements-military" role="tab">Military</a>
+    </li>
+    <li role="presentation">
+      <a href="#achievements-economy" aria-controls="achievements-economy" role="tab">Economy</a>
+    </li>
+    <li role="presentation">
+      <a href="#achievements-technology" aria-controls="achievements-technology" role="tab">Technology</a>
+    </li>
+    <li role="presentation">
+      <a href="#achievements-society" aria-controls="achievements-society" role="tab">Society</a>
+    </li>
+  </ul>
+</div>
+
+<div class="tab-panel is-active" id="achievements-general" role="tabpanel">
+  <h2 class="tab-title title">Scores</h2>
+  <table class="AchievementsGroup table" style="width: auto">
+    <thead>
+      <tr>
+        <td class="AchievementsGroup-column"></td>
+        <th class="AchievementsGroup-column">Military</th>
+        <th class="AchievementsGroup-column">Economy</th>
+        <th class="AchievementsGroup-column">Technology</th>
+        <th class="AchievementsGroup-column">Society</th>
+        <th class="AchievementsGroup-column">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in rec.players %}
+        <tr>
+          <td class="AchievementsGroup-player">
+            {% include 'player_badge.twig.html' with {'player': player} %}
+          </td>
+          <td>{{ player.achievements.military.score }}</td>
+          <td>{{ player.achievements.economy.score }}</td>
+          <td>{{ player.achievements.tech.score }}</td>
+          <td>{{ player.achievements.society.score }}</td>
+          <td>{{ player.achievements.score }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-panel" id="achievements-military" role="tabpanel">
+  <h2 class="tab-title title">Military</h2>
+  <table class="AchievementsGroup table" style="width: auto">
+    <thead>
+      <tr>
+        <td class="AchievementsGroup-column"></td>
+        <th class="AchievementsGroup-column">Units Killed</th>
+        <th class="AchievementsGroup-column">Units Lost</th>
+        <th class="AchievementsGroup-column">Buildings Razed</th>
+        <th class="AchievementsGroup-column">Buildings Lost</th>
+        <th class="AchievementsGroup-column">Units Converted</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in rec.players %}
+        <tr>
+          <td class="AchievementsGroup-player">
+            {% include 'player_badge.twig.html' with {'player': player} %}
+          </td>
+          <td title="Inflicted {{ player.achievements.military.hitPointsKilled }} HP damage">
+            {{ player.achievements.military.unitsKilled }}
+          </td>
+          <td>{{ player.achievements.military.unitsLost }}</td>
+          <td>{{ player.achievements.military.buildingsRazed }}</td>
+          <td>{{ player.achievements.military.buildingsLost }}</td>
+          <td>{{ player.achievements.military.unitsConverted }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-panel" id="achievements-economy" role="tabpanel">
+  <h2 class="tab-title title">Economy</h2>
+  <table class="AchievementsGroup table" style="width: auto">
+    <thead>
+      <tr>
+        <td class="AchievementsGroup-column"></td>
+        <th class="AchievementsGroup-column">Food Gathered</th>
+        <th class="AchievementsGroup-column">Wood Gathered</th>
+        <th class="AchievementsGroup-column">Stone Gathered</th>
+        <th class="AchievementsGroup-column">Gold Gathered</th>
+        <th class="AchievementsGroup-column">Trade Profits</th>
+        <th class="AchievementsGroup-column">Tributes Sent / Recvd.</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in rec.players %}
+        <tr>
+          <td class="AchievementsGroup-player">
+            {% include 'player_badge.twig.html' with {'player': player} %}
+          </td>
+          <td>{{ player.achievements.economy.foodCollected }}</td>
+          <td>{{ player.achievements.economy.woodCollected }}</td>
+          <td>{{ player.achievements.economy.stoneCollected }}</td>
+          <td>{{ player.achievements.economy.goldCollected }}</td>
+          <td>{{ player.achievements.economy.tradeProfit }}</td>
+          <td>{{ player.achievements.economy.tributeSent }} / {{ player.achievements.economy.tributeReceived }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-panel" id="achievements-technology" role="tabpanel">
+  <h2 class="tab-title title">Technology</h2>
+  <table class="AchievementsGroup table" style="width: auto">
+    <thead>
+      <tr>
+        <td class="AchievementsGroup-column"></td>
+        <th class="AchievementsGroup-column">Feudal Age</th>
+        <th class="AchievementsGroup-column">Castle Age</th>
+        <th class="AchievementsGroup-column">Imperial Age</th>
+        <th class="AchievementsGroup-column">Map Explored %</th>
+        <th class="AchievementsGroup-column">Techs Researched</th>
+        <th class="AchievementsGroup-column">Tech Tree Completion %</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in rec.players %}
+        <tr>
+          <td class="AchievementsGroup-player">
+            {% include 'player_badge.twig.html' with {'player': player} %}
+          </td>
+          <td>
+            {% if player.achievements.tech.feudalTime == -1 %}
+              -
+            {% else %}
+              {{ (player.achievements.tech.feudalTime * 1000)|formatGameTime() }}
+            {% endif %}
+          </td>
+          <td>
+            {% if player.achievements.tech.castleTime == -1 %}
+              -
+            {% else %}
+              {{ (player.achievements.tech.castleTime * 1000)|formatGameTime() }}
+            {% endif %}
+          </td>
+          <td>
+            {% if player.achievements.tech.imperialTime == -1 %}
+              -
+            {% else %}
+              {{ (player.achievements.tech.imperialTime * 1000)|formatGameTime() }}
+            {% endif %}
+          </td>
+          <td>{{ player.achievements.tech.mapExploration }}%</td>
+          <td>{{ player.achievements.tech.researchCount }}</td>
+          <td>{{ player.achievements.tech.researchPercent }}%</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-panel" id="achievements-society" role="tabpanel">
+  <h2 class="tab-title title">Society</h2>
+  <table class="AchievementsGroup table" style="width: auto">
+    <thead>
+      <tr>
+        <td class="AchievementsGroup-column"></td>
+        <th class="AchievementsGroup-column">Wonders Built</th>
+        <th class="AchievementsGroup-column">Castles Built</th>
+        <th class="AchievementsGroup-column">Relics Captured</th>
+        <th class="AchievementsGroup-column">Relic Gold Earned</th>
+        <th class="AchievementsGroup-column">Villager High</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in rec.players %}
+        <tr>
+          <td class="AchievementsGroup-player">
+            {% include 'player_badge.twig.html' with {'player': player} %}
+          </td>
+          <td>{{ player.achievements.society.totalWonders }}</td>
+          <td>{{ player.achievements.society.totalCastles }}</td>
+          <td>{{ player.achievements.society.relicsCaptured }}</td>
+          <td>{{ player.achievements.economy.relicGold }}%</td>
+          <td>{{ player.achievements.society.villagerHigh }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
