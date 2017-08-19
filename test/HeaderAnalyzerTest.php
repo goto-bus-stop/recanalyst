@@ -207,6 +207,11 @@ class HeaderAnalyzerTest extends TestCase
                 ['name' => 'Zuppi'],
                 ['name' => 'JorDan_23'],
             ], 2],
+            ['./recs/versions/up1.5.mgz', [
+                ['name' => 'Myth'],
+                ['name' => 'Louis IX'],
+                ['name' => 'Athelred the Unready'],
+            ], 3],
             ['./recs/ai/Lobsth_15-pop-scouts_ai.mgx', [
                 ['name' => 'Eternal Lobster'],
                 ['name' => 'Ernak the Hun'],

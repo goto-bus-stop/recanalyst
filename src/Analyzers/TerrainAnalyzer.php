@@ -28,9 +28,9 @@ class TerrainAnalyzer extends Analyzer
             for ($x = 0; $x < $this->sizeX; $x += 1) {
                 $terrainId = ord($this->header[$this->position++]);
                 if ($terrainId === 0xFF) {
+                    $terrainId = ord($this->header[$this->position++]);
                     // Skip UserPatch "original terrain ID" data.
                     $this->position++;
-                    $terrainId = ord($this->header[$this->position++]);
                 }
                 $elevation = ord($this->header[$this->position++]);
 
