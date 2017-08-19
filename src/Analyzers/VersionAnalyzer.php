@@ -29,6 +29,7 @@ class VersionAnalyzer extends Analyzer
         Version::VERSION_USERPATCH12,
         Version::VERSION_USERPATCH13,
         Version::VERSION_USERPATCH14,
+        Version::VERSION_USERPATCH15,
         Version::VERSION_AOFE21,
     ];
 
@@ -95,6 +96,7 @@ class VersionAnalyzer extends Analyzer
         $analysis->isTrial = in_array($version, $this->trialVersions);
         $analysis->isAoK = in_array($version, $this->aokVersions);
         $analysis->isUserPatch = in_array($version, $this->userpatchVersions);
+        $analysis->isUserPatch15 = $version === Version::VERSION_USERPATCH15;
         $analysis->isHDEdition = in_array($version, $this->hdVersions);
         $analysis->isHDPatch4 = $analysis->isHDEdition && $subVersion >= 12.00;
         $analysis->isAoC = $analysis->isUserPatch || $analysis->isHDEdition ||
@@ -163,6 +165,8 @@ class VersionAnalyzer extends Analyzer
             case 'VER 9.C':
             case 'VER 9.D':
                 return Version::VERSION_USERPATCH14;
+            case 'VER 9.E':
+                return Version::VERSION_USERPATCH15;
             default:
                 return $version;
         }

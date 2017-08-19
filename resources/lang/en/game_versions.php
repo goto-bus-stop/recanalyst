@@ -16,6 +16,7 @@ return [
     Version::VERSION_USERPATCH12 => 'AOC UP1.2',
     Version::VERSION_USERPATCH13 => 'AOC UP1.3',
     Version::VERSION_USERPATCH14 => 'AOC UP1.4',
+    Version::VERSION_USERPATCH15 => 'AOC UP1.5',
     Version::VERSION_AOFE21 => 'AOFE 2.1',
     Version::VERSION_HD => 'HD Edition',
     Version::VERSION_HD43 => 'HD Edition 4.3',
