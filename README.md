@@ -5,9 +5,26 @@
 [![Build Status](https://travis-ci.org/goto-bus-stop/recanalyst.svg?branch=master)](https://travis-ci.org/goto-bus-stop/recanalyst)
 [![Gitter chat](https://badges.gitter.im/goto-bus-stop/recanalyst.svg)](https://gitter.im/goto-bus-stop/recanalyst)
 
-RecAnalyst is a PHP package for analyzing Age of Empires II recorded games. It
-supports recorded game files from Age of Kings, The Conquerors, UserPatch,
-Forgotten Empires, and HD Edition (optionally with expansions).
+RecAnalyst is a PHP package for analyzing Age of Empires II recorded games.
+
+It supports recorded game files from:
+
+ * The Age of Kings
+ * The Conquerors
+ * UserPatch
+ * Forgotten Empires
+ * HD Editions (optionally with expansions)
+
+And reads data such as:
+
+ * Game settings
+ * Players
+ * Chat messages
+ * Research and Age Advancing times
+ * Map data (terrain, elevation)
+ * Initial units
+ * Achievements (UserPatch only)
+ * Tributes
 
 A small demo application is hosted at http://idlebeaver.ninja/recanalyst.
 
