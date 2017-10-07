@@ -29,10 +29,12 @@ class TerrainAnalyzer extends Analyzer
                 $terrainId = ord($this->header[$this->position++]);
                 if ($terrainId === 0xFF) {
                     $terrainId = ord($this->header[$this->position++]);
+                    $elevation = ord($this->header[$this->position++]);
                     // Skip UserPatch "original terrain ID" data.
                     $this->position++;
+                } else {
+                    $elevation = ord($this->header[$this->position++]);
                 }
-                $elevation = ord($this->header[$this->position++]);
 
                 $mapData[$y][$x] = new Tile($x, $y, $terrainId, $elevation);
             }
