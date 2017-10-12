@@ -101,6 +101,7 @@ class BodyAnalyzer extends Analyzer
     const COMMAND_TRADE_ATTRIBUTE = 0x6D;
     const COMMAND_REPAIR = 0x6E;
     const COMMAND_UNLOAD = 0x6F;
+    const COMMAND_MULTI_QUEUE = 0x70;
     const COMMAND_GATE = 0x72;
     const COMMAND_FLARE = 0x73;
     const COMMAND_SPECIAL = 0x74;
@@ -507,6 +508,25 @@ class BodyAnalyzer extends Analyzer
                         } else {
                             $this->units[$unitType] += $amount;
                         }
+                        break;
+                    case self::COMMAND_MULTI_QUEUE:
+                        $this->position += 3;
+                        $unitType = $this->readBody('v', 2);
+                        $numBuildings = ord($this->body[$this->position++]);
+                        $amount = ord($this->body[$this->position++]);
+                        $buildings = [];
+
+                        for ($i = 0; $i < $numBuildings; $i++) {
+                            $buildings[] = $this->readBody('l', 4);
+                        }
+
+                        $this->push(new Actions\MultiQueueAction(
+                            $this->rec,
+                            $this->currentTime,
+                            $buildings,
+                            $unitType,
+                            $amount
+                        ));
                         break;
                     case self::COMMAND_GAME:
                         $this->processGameAction();
