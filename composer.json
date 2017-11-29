@@ -1,9 +1,9 @@
 {
-  "name": "recanalyst/recanalyst",
+  "name": "lichifeng/recanalyst2",
   "description": "Analyzes Age of Empires 2 recorded game files.",
-  "version": "4.2.1",
+  "keywords": ["age-of-empires","game-records", "mgx-analyzer", "mgz-analyzer"],
   "type": "library",
-  "homepage": "http://idlebeaver.ninja/recanalyst",
+  "homepage": "https://github.com/lichifeng/RecAnalyst2",
   "autoload": {
     "psr-4": { "RecAnalyst\\": "src/" }
   },
@@ -18,6 +18,11 @@
       "name": "Idle Beaver",
       "email": "me@idlebeaver.ninja",
       "homepage": "http://idlebeaver.ninja"
+    },
+    {
+      "name": "Patrick Li",
+      "email": "mail@lichifeng.com",
+      "homepage": "https://lichifeng.com"
     }
   ],
   "require": {
