@@ -1,0 +1,180 @@
+<section class="section">
+  <div class="container">
+    <div class="tabs">
+      <ul role="tablist">
+        <li role="presentation" class="is-active">
+          <a href="#general" aria-controls="general" role="tab">General</a>
+        </li>
+        <li role="presentation">
+          <a href="#advancing" aria-controls="advancing" role="tab">Advancing</a>
+        </li>
+        {% if achievements %}
+          <li role="presentation">
+            <a href="#achievements" aria-controls="achievements" role="tab">Achievements</a>
+          </li>
+        {% endif %}
+        <li role="presentation">
+          <a href="#chat" aria-controls="chat" role="tab">Chat</a>
+        </li>
+        <li role="presentation">
+          <a href="#researches" aria-controls="researches" role="tab">Researches</a>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-panel is-active" id="general" role="tabpanel">
+      <h2 class="tab-title title nojs-hidden">General</h2>
+      <div class="columns">
+        <div class="column" style="order: 2">
+          <img src="{{ mapImage }}" alt="Minimap">
+        </div>
+        <div class="column" style="order: 1">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>Version</th>
+                <td>{{ rec.version.name }}</td>
+              </tr>
+              <tr>
+                <th>Duration</th>
+                <td>{{ rec.body.duration|formatGameTime() }}</td>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <td>{{ rec.gameSettings.gameTypeName }}</td>
+              </tr>
+              <tr>
+                <th>Map</th>
+                <td>{{ rec.gameSettings.mapName }}</td>
+              </tr>
+              <tr>
+                <th>PoV</th>
+                <td>
+                  {% if pov %}
+                    {% include 'player_badge.twig.html' with {'player': pov} %}
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="columns is-multiline">
+        {% for team in rec.teams %}
+          <div class="column is-half-tablet is-quarter-desktop">
+            <h4 class="subtitle">Team {{ team.index }}</h4>
+            {% for player in team.players %}
+              <div class="media">
+                <figure class="media-left">
+                  <p class="image">
+                    <img src="vendor/recanalyst/civs/{{ player.colorId }}/{{ player.civId }}.png"
+                         alt="{{ player.civName }}"
+                         title="{{ player.civName }}">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <span class="title is-player-{{ player.colorId }}">
+                    {{ player.name }}
+                  </span>
+                  <p>{{ player.civName }}</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-panel" id="advancing" role="tabpanel">
+      <h2 class="tab-title title">Advancing</h2>
+      <div class="columns is-multiline">
+        {% for team in rec.teams %}
+          <div class="column is-half-tablet">
+            <h4 class="subtitle">Team {{ team.index }}</h4>
+            {% for player in team.players %}
+              <div class="media">
+                <figure class="media-left">
+                  <p class="image">
+                    <img src="vendor/recanalyst/civs/{{ player.colorId }}/{{ player.civId }}.png"
+                         alt="{{ player.civName }}"
+                         title="{{ player.civName }}">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <p>
+                    <span class="title is-5">
+                      <span class="is-player-{{ player.colorId }}">{{ player.name }}</span>
+                      ({{ player.civName }})
+                    </span> <br>
+                    <div class="is-inline-block">
+                      <figure class="image is-16x16">
+                        <img src="vendor/recanalyst/researches/101.png" alt="">
+                      </figure>
+                    </div>
+                    Feudal: {{ player.feudalTime|formatGameTime() }} <br>
+                    <div class="is-inline-block">
+                      <figure class="image is-16x16">
+                        <img src="vendor/recanalyst/researches/102.png" alt="">
+                      </figure>
+                    </div>
+                    Castle: {{ player.castleTime|formatGameTime() }} <br>
+                    <div class="is-inline-block">
+                      <figure class="image is-16x16">
+                        <img src="vendor/recanalyst/researches/103.png" alt="">
+                      </figure>
+                    </div>
+                    Imperial: {{ player.imperialTime|formatGameTime() }}
+                  </p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if achievements %}
+      <div class="tab-panel" id="achievements" role="tabpanel">
+        <h2 class="tab-title title">Achievements</h2>
+        {% include 'achievements_tabs.twig.html' %}
+      </div>
+    {% endif %}
+    <div class="tab-panel" id="chat" role="tabpanel">
+      <h2 class="tab-title title">Chat</h2>
+      <div class="Chat-pregame" style="margin-bottom: 20px">
+        <h3 class="subtitle">Pre-game</h3>
+        {% for message in rec.header.pregameChat %}
+          <div class="ChatMessage">
+            <span class="ChatMessage-sender">{{ message.player.name }}</span>:
+            {{ message.msg }}
+          </div>
+        {% else %}
+          <p class="notification">No chat messages.</p>
+        {% endfor %}
+      </div>
+      <div class="Chat-ingame">
+        <h3 class="subtitle">In-game</h3>
+        {% for message in rec.body.chatMessages if message.group != 'Rating' %}
+          <div class="ChatMessage">
+            <span class="ChatMessage-time">
+              {{ message.time|formatGameTime() }}
+            </span>
+            {% if message.player %}
+              <span class="ChatMessage-sender is-player-{{ message.player.colorId }}">
+                {{ message.player.name }}
+              </span>:
+              {{ message.msg }}
+            {% else %}
+              <em>{{ message.msg }}</em>
+            {% endif %}
+          </div>
+        {% else %}
+          <p class="notification">No chat messages.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-panel" id="researches" role="tabpanel">
+      <h2 class="tab-title title">Researches</h2>
+      {% include 'researches_table.twig.html' with {'players': rec.players} %}
+    </div>
+  </div>
+</section>

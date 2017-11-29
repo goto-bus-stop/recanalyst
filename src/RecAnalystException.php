@@ -1,20 +1,9 @@
 <?php
-/**
- * Defines RecAnalystException class.
- *
- * @package recAnalyst
- */
 
 namespace RecAnalyst;
 
-/**
- * Class RecAnalystException.
- * @package recAnalyst
- */
-class RecAnalystException extends \Exception {
-
-    /* Generic exceptions */
-
+class RecAnalystException extends \Exception
+{
     /**
      * The feature or option is planned but has not yet been implemented. It
      * should be available in a future revision of the package.
@@ -58,19 +47,23 @@ class RecAnalystException extends \Exception {
 
     /**
      * Class constructor.
-     * @param string $mgs Exception message
-     * @param int $code Exception code
+     *
+     * @param  string  $msg  Exception message
+     * @param  int  $code  Exception code
      * @return void
      */
-    public function __construct($msg = '', $code = 0) {
-        parent::__construct($msg, (int)$code);
+    public function __construct($msg = '', $code = 0)
+    {
+        parent::__construct($msg, (int) $code);
     }
 
     /**
      * String representation of the exception.
+     *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return parent::__toString();
     }
 }

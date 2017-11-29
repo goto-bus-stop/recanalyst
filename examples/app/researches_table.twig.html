@@ -1,0 +1,43 @@
+<div class="PlayerResearches">
+  <div class="PlayerResearches-players">
+    {%for player in rec.players %}
+      <div class="PlayerResearches-player is-player-{{ player.colorId }}-bg">
+        <img class="PlayerResearches-civ"
+              src="vendor/recanalyst/civs/{{ player.colorId }}/{{ player.civId }}.png"
+              alt="{{ player.civName() }}"
+              title="{{ player.civName() }}">
+        {{ player.name }}
+      </div>
+    {% endfor %}
+    <div class="PlayerResearches-timeRow">
+      <strong>Minutes</strong>
+    </div>
+  </div>
+  <div class="PlayerResearches-scrollable">
+    <table class="PlayerResearches-researches">
+      {%for player in rec.players %}
+        <tr class="PlayerResearches-row">
+          {% for minute, researches in table[player.index] %}
+            <td class="PlayerResearches-minute">
+              {% for research in researches %}
+                <img class="PlayerResearches-research"
+                      src="vendor/recanalyst/researches/{{ research.id }}.png"
+                      title="{{ research.name }} ({{ research.time|formatGameTime() }})">
+              {% endfor %}
+            </td>
+          {% endfor %}
+        </tr>
+
+        {%if loop.last %}
+          <tr class="PlayerResearches-timeRow">
+            {% for minute in table[player.index]|keys %}
+              <td class="PlayerResearches-time">
+                {{ minute }}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<span class="PlayerBadge is-player-{{ player.colorId }}-bg">
+  {% if player.civId < 0 %}
+    <div class="PlayerBadge-civIcon">&nbsp;</div>
+  {% else %}
+    <img class="PlayerBadge-civIcon"
+         src="vendor/recanalyst/civs/{{ player.colorId }}/{{ player.civId }}.png"
+         alt="{{ player.civName }}"
+         title="{{ player.civName }}">
+  {% endif %}
+  {{ player.name }}
+</span>

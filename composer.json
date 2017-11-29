@@ -1,7 +1,7 @@
 {
   "name": "recanalyst/recanalyst",
   "description": "Analyzes Age of Empires 2 recorded game files.",
-  "version": "3.1.0",
+  "version": "4.2.1",
   "type": "library",
   "homepage": "http://idlebeaver.ninja/recanalyst",
   "autoload": {
@@ -19,5 +19,22 @@
       "email": "me@idlebeaver.ninja",
       "homepage": "http://idlebeaver.ninja"
     }
-  ]
+  ],
+  "require": {
+    "php": ">= 5.6.0",
+    "intervention/image": "^2.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.5",
+    "webmozart/path-util": "^2.3"
+  },
+  "suggest": {
+    "ext-gd": "to generate minimap images using GD.",
+    "ext-imagick": "to generate minimap images using Imagick."
+  },
+  "scripts": {
+    "test": "phpunit test",
+    "make-resources": "php tools/makeResources.php",
+    "clean": "rm -rf tools/openage tools/tmp tools/cache.php"
+  }
 }
