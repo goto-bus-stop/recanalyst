@@ -198,6 +198,12 @@ class BodyAnalyzer extends Analyzer
             }
 
             if ($operationType === self::OP_META || $operationType === self::OP_META2) {
+                if ($operationType === self::OP_META) {
+                    $version->version = $version->version === 5 ? 7 : $version->version;
+                } elseif ($operationType === self::OP_META2) {
+                    $version->version = $version->version === 5 ? 8 : $version->version;
+                }
+
                 $command = $this->readBody('l', 4);
                 if ($command === self::META_GAME_START) {
                     $this->processGameStart();
