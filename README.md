@@ -28,9 +28,9 @@ And reads data such as:
 
 A small demo application is hosted at http://idlebeaver.ninja/recanalyst.
 
-[License][] - [Credits][] - [Requirements][] - [Installation][] -
-[Configuration][] - [Usage Examples][] - [API Documentation][] -
-[Limitations][]
+[License][] - [Credits][] - [Contributing][] - [Requirements][] -
+[Installation][] - [Configuration][] - [Usage Examples][] -
+[API Documentation][] - [Limitations][]
 
 ```php
 $rec = new \RecAnalyst\RecordedGame('recorded_game.mgx2');
@@ -52,6 +52,19 @@ v2.1.0 © 2007-2010 biegleux &lt;biegleux@gmail.com&gt;
 [Original project documentation][]
 
 See also [references.md][].
+
+## Contributing
+
+RecAnalyst is looking for contributors. Please see the [Issues List][] for bugs
+or missing features and help implement them by opening a PR!
+
+RecAnalyst is an OPEN Open Source Project:
+
+> Individuals making significant and valuable contributions are given
+> commit-access to the project to contribute as they see fit. This project is
+> more like an open wiki than a standard guarded open source project.
+
+See the [Contributing Guide][] for more.
 
 ## Requirements
 
@@ -145,6 +158,8 @@ with RecAnalyst:
    the game. In those cases, RecAnalyst cannot determine the `resignTime`
    property for players. See [#35][limitation/resignTime].
 
+[Issues List]: https://github.com/goto-bus-stop/recanalyst
+[Contributing Guide]: ./CONTRIBUTING.md
 [references.md]: ./references.md
 [Composer]: https://getcomposer.org
 [v3.x branch]: https://github.com/goto-bus-stop/recanalyst/tree/v3.x
@@ -155,6 +170,7 @@ with RecAnalyst:
 
 [License]: #license
 [Credits]: #credits
+[Contributing]: #contributing
 [Requirements]: #requirements
 [Installation]: #installation
 [Configuration]: #configuration
