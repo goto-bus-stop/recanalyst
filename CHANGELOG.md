@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.2.2
+Support:
+ - Support UserPatch 1.5 version identifier. (#65)
+
+## 4.2.1
+Support:
+ - Support UserPatch 1.5 terrain reading. (#53)
+
 ## 4.2.0
 Features:
  - Support for HD Edition 4.8 and 5.x (https://github.com/goto-bus-stop/recanalyst/pull/41)
