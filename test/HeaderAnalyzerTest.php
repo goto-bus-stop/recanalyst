@@ -260,6 +260,10 @@ class HeaderAnalyzerTest extends TestCase
                 ['civId' => 15, 'name' => 'robo_boro'],
                 ['civId' => 15, 'name' => 'Klavskis'],
             ], 2],
+            ['./recs/ECL EUE 1v1 GF reallydiao (PoV) vs TheViper g1.mgz', [
+                ['name' => 'TheViper'],
+                ['name' => 'ReallyDiao'],
+            ], 2]
         ];
     }
 
