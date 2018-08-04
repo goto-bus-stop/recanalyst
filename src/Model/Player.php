@@ -137,7 +137,7 @@ class Player
     /**
      * Co-op partners.
      */
-    private $coopPartners;
+    private $coopPartners = [];
 
     /**
      * Contains the player's initial state, such as starting resources
