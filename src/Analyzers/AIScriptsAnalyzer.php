@@ -16,8 +16,9 @@ class AIScriptsAnalyzer extends Analyzer
         $aiScripts = [];
 
         $this->version = $this->get(VersionAnalyzer::class);
+        $this->aiVersion = 0.02;
 
-        $this->position += 2;
+        $this->position += 2; // max strings
         $numAiStrings = $this->readHeader('v', 2);
         $this->position += 4;
         for ($i = 0; $i < $numAiStrings; $i += 1) {
@@ -29,10 +30,11 @@ class AIScriptsAnalyzer extends Analyzer
         for ($i = 0; $i < 8; $i += 1) {
             $aiScripts[] = $this->readScript();
         }
-        $this->position += 104; // unknown
-        $this->position += 10 * 4 * 8; // timers: 10 ints * 8 players
-        $this->position += 256 * 4; // shared goals: 256 ints
-        $this->position += 4096; // ???
+
+        // some data for each player
+        // there _can_ be more here but I don't know what it is yet
+        $this->position += 8 * 8;
+        $this->readMeta();
         if ($this->version->subVersion >= 11.96) {
             $this->position += 1280; // ???
         }
@@ -45,6 +47,7 @@ class AIScriptsAnalyzer extends Analyzer
         }
 
         return (object) [
+            'version' => $this->aiVersion,
             'stringTable' => $stringTable,
             'scripts' => $aiScripts,
         ];
@@ -70,7 +73,6 @@ class AIScriptsAnalyzer extends Analyzer
         }
         return $rules;
     }
-
 
     /**
      * Read information about a trigger effect.
@@ -120,5 +122,37 @@ class AIScriptsAnalyzer extends Analyzer
             $this->readHeader('l', 4),
         ];
         return $action;
+    }
+
+    protected function readMeta()
+    {
+        if ($this->version->subVersion >= 10.82) {
+            $this->aiVersion = $this->readHeader('f', 4);
+            if ($this->aiVersion >= 0.13) {
+                $this->aiVersion = $this->readHeader('f', 4);
+            }
+        }
+        if ($this->aiVersion >= 0.14) {
+            $isDeathMatchGame = $this->readHeader('l', 4);
+            $isRegicideGame = $this->readHeader('l', 4);
+            $mapSize = $this->readHeader('l', 4);
+            $mapType = $this->readHeader('l', 4);
+            $startingResources = $this->readHeader('l', 4);
+            $startingAge = $this->readHeader('l', 4);
+            $cheatsEnabled = $this->readHeader('l', 4);
+            $difficulty = $this->readHeader('l', 4);
+        }
+        if ($this->aiVersion >= 0.12) {
+            // timers: 10 ints * 8 players
+            $this->position += 8 * 10 * 4;
+        }
+        if ($this->aiVersion >= 0.09) {
+            // shared goals: 256 ints
+            $this->position += 256 * 4;
+        }
+        if ($this->aiVersion >= 0.08) {
+            // signals, script goals, received taunt flags
+            $this->position += 4096;
+        }
     }
 }
