@@ -8,3 +8,14 @@ before_install:
   - printf "\n" | pecl install imagick
 before_script: composer install
 script: composer run-script test
+
+after_success:
+  - 'if [ "$TRAVIS_PHP_VERSION" = 7.2 ]; then bash tools/make-doc.sh; fi'
+deploy:
+  provider: gh-pages-test
+  skip-cleanup: true
+  github-token: $GH_TOKEN
+  keep-history: true
+  on:
+    php: '7.2'
+    branch: feature/doc-deploy
