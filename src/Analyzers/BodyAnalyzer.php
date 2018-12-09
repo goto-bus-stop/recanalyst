@@ -40,19 +40,6 @@ class BodyAnalyzer extends Analyzer
     const OP_META2 = 0x04;
 
     /**
-     * Game start identifier.
-     *
-     * @var int
-     */
-    const META_GAME_START = 0x01F4;
-    /**
-     * Chat message identifier.
-     *
-     * @var int
-     */
-    const META_CHAT = -1;
-
-    /**
      * Resignation command ID.
      *
      * @var int
@@ -164,6 +151,27 @@ class BodyAnalyzer extends Analyzer
     private $postGameData = null;
 
     /**
+     * How often checksums are included in a sync message. Each nth message will contain checksums.
+     *
+     * @var int
+     */
+    private $syncChecksumInterval = 500;
+
+    /**
+     * Whether the actions contain sequence numbers. Enabled when the LC_SEQUENCE flag was used to start the game.
+     *
+     * @var bool
+     */
+    private $containsSequenceNumbers = false;
+
+    /**
+     * How many chapters the game contains.
+     *
+     * @var int
+     */
+    private $numberOfChapters = 0;
+
+    /**
      * Run the analysis.
      *
      * @return object
@@ -198,11 +206,12 @@ class BodyAnalyzer extends Analyzer
             }
 
             if ($operationType === self::OP_META || $operationType === self::OP_META2) {
-                $command = $this->readBody('l', 4);
-                if ($command === self::META_GAME_START) {
-                    $this->processGameStart();
-                } elseif ($command === self::META_CHAT) {
+                $syncChecksumInterval = $this->readBody('l', 4);
+                if ($syncChecksumInterval === -1) {
                     $this->processChatMessage();
+                } else {
+                    $this->position -= 4;
+                    $this->processGameStart();
                 }
             } else if ($operationType === self::OP_SYNC) {
                 // There are a lot of sync packets, so we get a significant
@@ -367,16 +376,23 @@ class BodyAnalyzer extends Analyzer
     }
 
     /**
-     * Process the game start data. Not much here right now.
+     * Process the game start data.
      */
     private function processGameStart()
     {
+        $this->syncChecksumInterval = $this->readBody('l', 4);
         if ($this->version->isMgl) {
+            // not sure what difference is vs mgx and up
             $this->position += 28;
             $ver = ord($this->body[$this->position]);
             $this->position += 4;
         } else {
-            $this->position += 20;
+            // These are also stored in the header.
+            $isMultiplayer = $this->readBody('l', 4);
+            $pov = $this->readBody('l', 4);
+            $revealMap = $this->readBody('l', 4);
+            $this->containsSequenceNumbers = $this->readBody('l', 4);
+            $this->numberOfChapters = $this->readBody('l', 4);
         }
     }
 
