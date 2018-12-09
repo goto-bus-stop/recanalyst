@@ -25,14 +25,17 @@
     "intervention/image": "^2.3"
   },
   "require-dev": {
+    "classpreloader/console": "^2.0",
     "phpunit/phpunit": "^5.5",
     "webmozart/path-util": "^2.3"
   },
+  "bin-dir": "bin",
   "suggest": {
     "ext-gd": "to generate minimap images using GD.",
     "ext-imagick": "to generate minimap images using Imagick."
   },
   "scripts": {
+    "post-autoload-dump": "php vendor/bin/classpreloader.php compile --config=classpreloader.php --output=dist/recanalyst.php",
     "test": "phpunit test",
     "make-resources": "php tools/makeResources.php",
     "clean": "rm -rf tools/openage tools/tmp tools/cache.php"
