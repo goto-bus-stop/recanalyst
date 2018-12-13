@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.2.3
+Features:
+ - Read data from the "start game" message in the body. (https://github.com/goto-bus-stop/recanalyst/commit/0584112e6133bee561fbfce5aac0b48676f8fcd7)
+ - Improve sync message parsing with new research. (https://github.com/goto-bus-stop/recanalyst/commit/7a15f551bb3c4452c4cf818f2f96e5e6adb258d8)
+
 ## 4.2.2
 Support:
  - Support UserPatch 1.5 version identifier. (#65)
