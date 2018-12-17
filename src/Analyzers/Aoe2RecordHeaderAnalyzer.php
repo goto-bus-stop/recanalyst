@@ -26,40 +26,34 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
 
         $data['difficulty'] = $this->readHeader('l', 4);
         $data['mapSize'] = $this->readHeader('l', 4);
-        $data['mapId'] = $this->readHeader('l', 4);
-        $data['revealMap'] = $this->readHeader('l', 4);
+        $data['mapId'] = $this->readHeader('l', 4);// MapType
+        $data['revealMap'] = $this->readHeader('l', 4);// Visibility
         $data['victoryType'] = $this->readHeader('l', 4);
-        $data['startingResources'] = $this->readHeader('l', 4);
+        $data['startingResources'] = $this->readHeader('l', 4);// ResourceLevel
         $data['startingAge'] = $this->readHeader('l', 4);
         $data['endingAge'] = $this->readHeader('l', 4);
-        $data['gameType'] = $this->readHeader('l', 4);
+        $data['gameType'] = $this->readHeader('l', 4);// GameMode
 
-        // Separator
-        $this->position += 4;
+        $this->position += 4;// ExpectedMarkerValue (155555)
 
-        if ($version === 1000.0) {
-            $mapName = $this->readAoe2RecordString();
-            $this->readAoe2RecordString();
+        if ($version < 1001.0) {// the following were moved elsewhere:
+            $mapName = $this->readAoe2RecordString();// CustomRandomMapFileName
+            $this->readAoe2RecordString();// CustomScenarioFileName
         }
 
-        // Separator again
-        $this->position += 4;
+        $this->position += 4;// MarkerValue (155555)
 
         $data['gameSpeed'] = $this->readHeader('f', 4);
         $data['treatyLength'] = $this->readHeader('l', 4);
-        $data['popLimit'] = $this->readHeader('l', 4);
-        $data['numPlayers'] = $this->readHeader('l', 4);
+        $data['popLimit'] = $this->readHeader('l', 4);// PopulationLimit
+        $data['numPlayers'] = $this->readHeader('l', 4);// NumPlayersExcludingGaia
 
         $numPlayers = $data['numPlayers'];
 
-        /* Maybe:
-            unusedPlayerColor ← 8 one-byte flags?
-            mVictory.getAmount() ← int?
-        */
-        $this->position += 8;
+        $this->position += 4;// UnusedPlayerColor
+        $this->position += 4;// VictoryAmount
 
-        // Separator.
-        $this->position += 4;
+        $this->position += 4;// MarkerValue (155555)
 
         $data['tradingEnabled'] = ord($this->header[$this->position++]) !== 0;
         $data['teamBonusesDisabled'] = ord($this->header[$this->position++]) !== 0;
@@ -74,8 +68,7 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         $data['animalsEnabled'] = ord($this->header[$this->position++]) !== 0;
         $data['predatorsEnabled'] = ord($this->header[$this->position++]) !== 0;
 
-        // Separator.
-        $this->position += 4;
+        $this->position += 4;// MarkerValue (155555)
 
         // Unknowns.
         $this->position += 8;
@@ -92,8 +85,11 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         }
         $data['players'] = $players;
 
-        // Unknown flag.
-        $this->position++;
+        $this->position += 1;// DummyIsRestoreGame
+        
+        if ($version < 1001.0) {
+            $this->position += 4;// CustomScenarioFileCrc
+        }
 
         $data['fogOfWarEnabled'] = ord($this->header[$this->position++]);
         $data['cheatNotificationsEnabled'] = ord($this->header[$this->position++]);
@@ -102,10 +98,12 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         // Separator.
         $this->position += 4;
 
-        $data['isRanked'] = ord($this->header[$this->position++]);
-        $data['allowSpectators'] = ord($this->header[$this->position++]);
-
-        $data['lobbyVisibility'] = $this->readHeader('l', 4);
+        if ($version >= 1.22) {
+            $data['isRanked'] = ord($this->header[$this->position++]);
+            $data['allowSpectators'] = ord($this->header[$this->position++]);
+            $data['lobbyVisibility'] = $this->readHeader('l', 4);// LobbyVisibilityId
+        }
+        
         $data['customRandomMapFileCrc'] = $this->readHeader('l', 4);
 
         // Few unknown-ishes.
@@ -131,6 +129,28 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
 
         // TODO decide on a format to output this stuff.
         return $data;
+    }
+    
+    /**
+     * "AoK HD.exe" (patch 5.5) sub_601BB0
+     */
+    private function readOldPlayerInfo($version)
+    {
+        if ($version < 2.0) {
+            $this->position += 4;// OldCivArray
+            if ($version <= 1.17) {
+                $this->position += 4;// OldExtraCivElement
+            }
+            $this->position += 4;// OldHasRandomCivArray
+            if ($version <= 1.17) {
+                $this->position += 4;// OldExtraRandomCivElement
+            }
+            return;
+        }
+        if ($version < 1002.0) {
+            $this->position += 4;// CivChoice
+            return;
+        }
     }
 
     private function readPlayers1004($version, $numPlayers)
