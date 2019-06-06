@@ -15,7 +15,7 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 use RecAnalyst\RecordedGame;
-use function RecAnalyst\gametime_format;
+use RecAnalyst\Utils;
 use Intervention\Image\ImageManagerStatic;
 
 $filename = __DIR__ . '/../../test/recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record';
@@ -154,7 +154,7 @@ $mapImage = $rec->mapImage()
                         <dd><?= $rec->version()->name() ?></dd>
 
                         <dt>Duration</dt>
-                        <dd><?= gametime_format($rec->body()->duration) ?></dd>
+                        <dd><?= Utils::formatGameTime($rec->body()->duration) ?></dd>
 
                         <dt>Type</dt>
                         <dd><?= $rec->gameSettings()->gameTypeName() ?></dd>
@@ -208,9 +208,9 @@ $mapImage = $rec->mapImage()
                                         <?= e($player->name) ?> <small>(<?= e($player->civName()) ?>)</small>
                                     </p>
                                     <ol class="list-unstyled">
-                                        <li>Feudal: <?= gametime_format($player->feudalTime) ?></li>
-                                        <li>Castle: <?= gametime_format($player->castleTime) ?></li>
-                                        <li>Imperial: <?= gametime_format($player->imperialTime) ?></li>
+                                        <li>Feudal: <?= Utils::formatGameTime($player->feudalTime) ?></li>
+                                        <li>Castle: <?= Utils::formatGameTime($player->castleTime) ?></li>
+                                        <li>Imperial: <?= Utils::formatGameTime($player->imperialTime) ?></li>
                                     </ol>
                                 </div>
                             <?php } ?>
@@ -234,7 +234,7 @@ $mapImage = $rec->mapImage()
                         <?php foreach ($rec->body()->chatMessages as $message) { ?>
                             <div class="ChatMessage">
                                 <span class="ChatMessage-time">
-                                    <?= gametime_format($message->time) ?>
+                                    <?= Utils::formatGameTime($message->time) ?>
                                 </span>
                                 <?php if ($message->player) { ?>
                                     <span class="ChatMessage-sender" style="color: <?= $message->player->color() ?>">
@@ -260,7 +260,7 @@ $mapImage = $rec->mapImage()
                             <div class="ResearchesLine-researches">
                                 <?php foreach ($player->researches() as $research) { ?>
                                     <div class="Research">
-                                        <div class="Research-time"><?= gametime_format($research->time) ?></div>
+                                        <div class="Research-time"><?= Utils::formatGameTime($research->time) ?></div>
                                         <img class="Research-img" src="<?= getResearchImage($research) ?>">
                                         <div class="Research-name"><?= e($research->name()) ?></div>
                                     </div>

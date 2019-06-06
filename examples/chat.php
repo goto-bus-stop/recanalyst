@@ -13,7 +13,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use function RecAnalyst\gametime_format;
+use RecAnalyst\Utils;
 use RecAnalyst\RecordedGame;
 
 // Read a recorded game filename from the command line.
@@ -38,7 +38,7 @@ foreach ($rec->header()->pregameChat as $chat) {
 // Read the in-game chat from the file body.
 foreach ($rec->body()->chatMessages as $chat) {
     // Format the millisecond time as HH:MM:SS.
-    $time = gametime_format($chat->time);
+    $time = Utils::formatGameTime($chat->time);
 
     if ($chat->player) {
         printf("[%s] <%s> %s\n", $time, $chat->player->name, $chat->msg);
