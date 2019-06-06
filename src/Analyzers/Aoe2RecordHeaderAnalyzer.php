@@ -10,19 +10,25 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
     {
         $data = [];
 
-        $version = $this->readHeader('f', 4); // float 1000, 1004, 1005...
-        $this->position += 4; // int 1000
+        $gameOptionsVersion = $this->readHeader('f', 4); // float 1000, 1004, 1005...
 
-        // Unknown, AoK HD.exe string "mrefDlcOptions" may be related.
-        $this->position += 4;
-
-        $datasetsCount = $this->readHeader('l', 4);
-        $datasets = [];
-        for ($i = 0; $i < $datasetsCount; $i++) {
-            // Not sure what these stand for yet.
-            $datasets[] = $this->readHeader('l', 4);
+        $dataSetOrVersion = $this->readHeader('l', 4);
+        if ($dataSetOrVersion === 0 || $dataSetOrVersion === 1) {
+            $dataSet = $dataSetOrVersion;
+            $dlcOptionsVersion = 0;
+        } else {
+            $dataSet = $this->readHeader('l', 4);
+            $dlcOptionsVersion = $dataSetOrVersion;
         }
-        $data['datasets'] = $datasets;
+
+        $dlcCount = $this->readHeader('l', 4);
+        $dlcs = [];
+        for ($i = 0; $i < $dlcCount; $i++) {
+            $dlcs[] = $this->readHeader('l', 4);
+        }
+        $data['dataSet'] = $dataSet;
+        $data['datasets'] = $dlcs; // backwards compat
+        $data['dlcs'] = $dlcs;
 
         $data['difficulty'] = $this->readHeader('l', 4);
         $data['mapSize'] = $this->readHeader('l', 4);
@@ -37,7 +43,7 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         // Separator
         $this->position += 4;
 
-        if ($version === 1000.0) {
+        if ($gameOptionsVersion === 1000.0) {
             $mapName = $this->readAoe2RecordString();
             $this->readAoe2RecordString();
         }
@@ -80,9 +86,9 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         // Unknowns.
         $this->position += 8;
 
-         if ($version >= 1004.0) {
+         if ($gameOptionsVersion >= 1004.0) {
              // Version 12.49, 12.50, maybe others.
-            $players = $this->readPlayers1004($version, $numPlayers);
+            $players = $this->readPlayers1004($gameOptionsVersion, $numPlayers);
         } else {
             $separator = pack('c*', 0xA3, 0x5F, 0x02, 0x00);
             $this->position = strpos($this->header, $separator, $this->position) + 4;
@@ -122,10 +128,10 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         // Not sure if this should be inside the v1005.0 `if`.
         $data['moddedDatasetWorkshopId'] = $this->readHeader('P', 8);
 
-        if ($version >= 1005.0) {
+        if ($gameOptionsVersion >= 1005.0) {
             $this->readAoe2RecordString();
             $this->position += 4;
-        } else if ($version >= 1004.0) {
+        } else if ($gameOptionsVersion >= 1004.0) {
             $this->position += 8;
         }
 
@@ -133,14 +139,14 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
         return $data;
     }
 
-    private function readPlayers1004($version, $numPlayers)
+    private function readPlayers1004($gameOptionsVersion, $numPlayers)
     {
         $players = [];
         for ($i = 0; $i < 8; $i++) {
             if ($i >= $numPlayers) {
                 // Skip empty players.
                 $this->position += 48;
-                if ($version >= 1005.0) {
+                if ($gameOptionsVersion >= 1005.0) {
                     $this->position += 4;
                 }
                 continue;
@@ -155,7 +161,7 @@ class Aoe2RecordHeaderAnalyzer extends Analyzer
             $aiBaseName = $this->readAoe2RecordString();
             $aiCivNameIndex = ord($this->header[$this->position++]);
             $unknownName = null;
-            if ($version >= 1005.0) {
+            if ($gameOptionsVersion >= 1005.0) {
                 $unknownName = $this->readAoe2RecordString();
             }
             $playerName = $this->readAoe2RecordString();
