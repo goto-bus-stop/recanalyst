@@ -15,13 +15,13 @@ class VersionAnalyzerTest extends TestCase
     {
         $rec = new RecordedGame(Path::join(__DIR__, $file));
         $version = $rec->runAnalyzer(new VersionAnalyzer);
-        $this->assertAttributeEquals(
-            $expectedVersion, 'version', $version,
+        $this->assertEquals(
+            $expectedVersion, $version->version,
             sprintf('Expected \'%s\' to have version \'%d\'.', $file, $expectedVersion)
         );
         foreach ($expectedProps as $prop => $value) {
-            $this->assertAttributeEquals(
-                $value, $prop, $version,
+            $this->assertEquals(
+                $value, $version->$prop,
                 sprintf(
                     'Expected \'%s\' version to %s property \'%s\'.',
                     $file,

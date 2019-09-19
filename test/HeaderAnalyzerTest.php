@@ -22,10 +22,10 @@ class HeaderAnalyzerTest extends TestCase
     {
         $rec = $this->load($file);
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
-        $this->assertAttributeEquals($expectedCount, 'numPlayers', $analysis);
+        $this->assertEquals($expectedCount, $analysis->numPlayers);
         foreach ($expected as $index => $player) {
             foreach ($player as $prop => $value) {
-                $this->assertAttributeEquals($value, $prop, $analysis->players[$index]);
+                $this->assertEquals($value, $analysis->players[$index]->$prop);
             }
         }
     }
@@ -44,7 +44,7 @@ class HeaderAnalyzerTest extends TestCase
             'history' => 'RECANALYST:HISTORY',
         ];
         foreach ($messageTypes as $type => $expected) {
-            $this->assertAttributeContains($expected, $type, $analysis->messages);
+            $this->assertStringContainsString($expected, $analysis->messages->$type);
         }
     }
 
@@ -86,11 +86,11 @@ class HeaderAnalyzerTest extends TestCase
     {
         $rec = $this->load('recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record');
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
-        $this->assertAttributeEquals(1, 'lockDiplomacy', $analysis->gameSettings);
-        $this->assertAttributeEquals(GameSettings::LEVEL_EASIEST, 'difficultyLevel', $analysis->gameSettings);
-        $this->assertAttributeEquals(28, 'mapId', $analysis->gameSettings);
+        $this->assertEquals(1, $analysis->gameSettings->lockDiplomacy);
+        $this->assertEquals(GameSettings::LEVEL_EASIEST, $analysis->gameSettings->difficultyLevel);
+        $this->assertEquals(28, $analysis->gameSettings->mapId);
 
-        $this->assertAttributeContains('Conquest Game', 'instructions', $analysis->messages);
+        $this->assertStringContainsString('Conquest Game', $analysis->messages->instructions);
     }
 
     public function testAoe2RecordVictorySettings()
@@ -98,9 +98,9 @@ class HeaderAnalyzerTest extends TestCase
         $rec = $this->load('recs/versions/HD Tourney r1 robo_boro vs Dutch Class g1.aoe2record');
         $analysis = $rec->runAnalyzer(new HeaderAnalyzer);
 
-        $this->assertAttributeEquals(VictorySettings::STANDARD, 'mode', $analysis->victory);
-        $this->assertAttributeEquals(900, 'scoreLimit', $analysis->victory);
-        $this->assertAttributeEquals(9000, 'timeLimit', $analysis->victory);
+        $this->assertEquals(VictorySettings::STANDARD, $analysis->victory->mode);
+        $this->assertEquals(900, $analysis->victory->scoreLimit);
+        $this->assertEquals(9000, $analysis->victory->timeLimit);
     }
 
     /**
@@ -138,8 +138,8 @@ class HeaderAnalyzerTest extends TestCase
             );
         }
 
-        $this->assertAttributeEquals('hf gl', 'msg', $analysis->pregameChat[$l - 1]);
-        $this->assertAttributeEquals('gl hf', 'msg', $analysis->pregameChat[$l]);
+        $this->assertEquals('hf gl', $analysis->pregameChat[$l - 1]->msg);
+        $this->assertEquals('gl hf', $analysis->pregameChat[$l]->msg);
     }
 
     public function testCoops()
@@ -147,10 +147,10 @@ class HeaderAnalyzerTest extends TestCase
         $rec = $this->load('recs/coop/coop.mgx');
         $players = $rec->runAnalyzer(new HeaderAnalyzer)->players;
 
-        $this->assertAttributeEquals(1, 'index', $players[0]);
-        $this->assertAttributeEquals(2, 'index', $players[1]);
-        $this->assertAttributeEquals(2, 'index', $players[2]);
-        $this->assertAttributeEquals(1, 'index', $players[3]);
+        $this->assertEquals(1, $players[0]->index);
+        $this->assertEquals(2, $players[1]->index);
+        $this->assertEquals(2, $players[2]->index);
+        $this->assertEquals(1, $players[3]->index);
 
         $this->assertTrue($players[0]->isCooping());
         $this->assertTrue($players[1]->isCooping());
@@ -177,10 +177,7 @@ class HeaderAnalyzerTest extends TestCase
         $this->assertCount(3, $partners);
 
         // Check that coop mains are returned correctly.
-        $this->assertEquals(
-            $players[6]->getCoopMain(),
-            $players[0]
-        );
+        $this->assertEquals($players[6]->getCoopMain(), $players[0]);
         $this->assertContains($players[6], $players[0]->getCoopPartners());
     }
 

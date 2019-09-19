@@ -7,7 +7,7 @@ use RecAnalyst\Processors\MapImage;
 
 class MapImageTest extends TestCase
 {
-    public function setup()
+    public function setUp(): void
     {
         MapImage::defaultManager(['driver' => 'imagick']);
     }

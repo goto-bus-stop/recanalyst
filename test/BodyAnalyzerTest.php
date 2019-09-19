@@ -50,18 +50,18 @@ class BodyAnalyzerTest extends TestCase
     {
         $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/MP Replay v4.3 @2015.09.11 221142 (2).msx'));
         $tributes = $rec->runAnalyzer(new BodyAnalyzer)->tributes;
-        $this->assertAttributeEquals(10000, 'amount', $tributes[0]);
-        $this->assertAttributeEquals(Tribute::WOOD, 'resourceId', $tributes[0]);
-        $this->assertAttributeEquals('Ruga the Hun (Original AI)', 'name', $tributes[0]->playerFrom);
-        $this->assertAttributeEquals('Mu Gui-ying (Original AI)', 'name', $tributes[0]->playerTo);
+        $this->assertEquals(10000, $tributes[0]->amount);
+        $this->assertEquals(Tribute::WOOD, $tributes[0]->resourceId);
+        $this->assertEquals('Ruga the Hun (Original AI)', $tributes[0]->playerFrom->name);
+        $this->assertEquals('Mu Gui-ying (Original AI)', $tributes[0]->playerTo->name);
     }
 
     public function testAchievements()
     {
         $rec = new RecordedGame(Path::join(__DIR__, 'recs/versions/up1.4.mgz'));
         $rec->body(); // Populate achievements on player objects.
-        $this->assertAttributeEquals(7411, 'score', $rec->getPlayer(1)->achievements());
-        $this->assertAttributeEquals(9484, 'score', $rec->getPlayer(2)->achievements());
+        $this->assertEquals(7411, $rec->getPlayer(1)->achievements()->score);
+        $this->assertEquals(9484, $rec->getPlayer(2)->achievements()->score);
     }
 
     public function testCoopChat()
@@ -71,9 +71,9 @@ class BodyAnalyzerTest extends TestCase
 
         // All these players are co-oping, so they share a player index.
         // They can all chat separately, though.
-        $this->assertAttributeEquals('yousifr', 'name', $messages[0]->player);
-        $this->assertAttributeEquals('TheBlackWinds', 'name', $messages[3]->player);
-        $this->assertAttributeEquals('Mobius One', 'name', $messages[4]->player);
+        $this->assertEquals('yousifr', $messages[0]->player->name);
+        $this->assertEquals('TheBlackWinds', $messages[3]->player->name);
+        $this->assertEquals('Mobius One', $messages[4]->player->name);
     }
 
     public function recordsProvider()
