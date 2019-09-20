@@ -70,7 +70,7 @@ class StreamExtractor
      * Determine the header length if the Header Length field was not set in the
      * file.
      */
-    private function manuallyDetermineHeaderLength()
+    private function manuallyDetermineHeaderLength(): void
     {
         // This separator is part of the Start Game command, which is the very
         // first command in the recorded game body. It's … reasonably accurate.
@@ -96,7 +96,7 @@ class StreamExtractor
      *
      * @return int
      */
-    private function getFileSize()
+    private function getFileSize(): int
     {
         fseek($this->fp, 0, SEEK_END);
 
@@ -106,7 +106,7 @@ class StreamExtractor
     /**
      * Find the header length.
      */
-    private function determineHeaderLength()
+    private function determineHeaderLength(): void
     {
         $rawRead = fread($this->fp, 4);
         if ($rawRead === false || strlen($rawRead) < 4) {
@@ -145,7 +145,7 @@ class StreamExtractor
      *
      * @return string
      */
-    public function getHeader()
+    public function getHeader(): string
     {
         if ($this->headerContents) {
             return $this->headerContents;
@@ -183,7 +183,7 @@ class StreamExtractor
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         if ($this->bodyContents) {
             return $this->bodyContents;

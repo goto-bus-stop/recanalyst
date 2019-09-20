@@ -52,7 +52,7 @@ class RecAnalystException extends \Exception
      * @param  int  $code  Exception code
      * @return void
      */
-    public function __construct($msg = '', $code = 0)
+    public function __construct(string $msg = '', int $code = 0)
     {
         parent::__construct($msg, (int) $code);
     }
@@ -62,7 +62,7 @@ class RecAnalystException extends \Exception
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return parent::__toString();
     }

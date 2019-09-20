@@ -99,7 +99,7 @@ class RecordedGame
      *
      * @return void
      */
-    private function open()
+    private function open(): void
     {
         $this->fp = fopen($this->filename, 'r');
     }
@@ -109,7 +109,7 @@ class RecordedGame
      *
      * @return \RecAnalyst\ResourcePacks\ResourcePack
      */
-    public function getResourcePack()
+    public function getResourcePack(): ResourcePack
     {
         return $this->resourcePack;
     }
@@ -152,7 +152,7 @@ class RecordedGame
      *
      * @return string
      */
-    public function getHeaderContents()
+    public function getHeaderContents(): string
     {
         return $this->streams->getHeader();
     }
@@ -162,7 +162,7 @@ class RecordedGame
      *
      * @return string
      */
-    public function getBodyContents()
+    public function getBodyContents(): string
     {
         return $this->streams->getBody();
     }
@@ -224,7 +224,7 @@ class RecordedGame
      * @param array  $options  Rendering options.
      * @return \Intervention\Image Rendered image.
      */
-    public function mapImage(array $options = [])
+    public function mapImage(array $options = []): \Intervention\Image
     {
         $proc = new MapImage($this, $options);
         return $proc->run();
@@ -235,7 +235,7 @@ class RecordedGame
      *
      * @return \RecAnalyst\Model\Team[] Teams.
      */
-    public function teams()
+    public function teams(): array
     {
         return $this->header()->teams;
     }
@@ -247,9 +247,9 @@ class RecordedGame
      *
      * @return \RecAnalyst\Model\Player[] Players.
      */
-    public function players()
+    public function players(): array
     {
-        return array_filter($this->header()->players, function ($player) {
+        return array_filter($this->header()->players, function (Player $player) {
             return !$player->isSpectator();
         });
     }
@@ -260,9 +260,9 @@ class RecordedGame
      *
      * @return \RecAnalyst\Model\Player[] Spectators.
      */
-    public function spectators()
+    public function spectators(): array
     {
-        return array_filter($this->header()->players, function ($player) {
+        return array_filter($this->header()->players, function (Player $player) {
             return $player->isSpectator();
         });
     }
@@ -273,7 +273,7 @@ class RecordedGame
      *
      * @return \RecAnalyst\Model\Player
      */
-    public function pov()
+    public function pov(): Player
     {
         foreach ($this->header()->players as $player) {
             if ($player->owner) {
@@ -313,7 +313,7 @@ class RecordedGame
      *
      * @return string A translation key.
      */
-    private function getTranslateKey($args)
+    private function getTranslateKey(array $args): string
     {
         // Game version names are in their own file, not in with resource packs.
         if ($args[0] === 'game_versions') {
@@ -339,7 +339,7 @@ class RecordedGame
     /**
      * @return string
      */
-    public function trans()
+    public function trans(): string
     {
         $key = $this->getTranslateKey(func_get_args());
         return $this->getTranslator()->trans($key);

@@ -26,7 +26,7 @@ class BasicTranslator
     /**
      *
      */
-    public function __construct($locale = 'en')
+    public function __construct(string $locale = 'en')
     {
         $this->locale = $locale;
     }
@@ -34,7 +34,7 @@ class BasicTranslator
     /**
      * @param string  $key  Translation key.
      */
-    public function trans($key)
+    public function trans(string $key): string
     {
         list ($file, $var) = explode('.', $key, 2);
         if (!isset($this->translations[$file])) {
@@ -51,7 +51,7 @@ class BasicTranslator
     /**
      * Get the path to a translation file.
      */
-    private function getFilePath($locale, $file)
+    private function getFilePath(string $locale, string $file): string
     {
         return __DIR__ . '/../resources/lang/' . $locale . '/' . $file . '.php';
     }
@@ -63,7 +63,7 @@ class BasicTranslator
      * @param string  $path  Path, properties separated by '.'s.
      * @return mixed (But probably a string because it's for translations.)
      */
-    private function get($arr, $path)
+    private function get(array $arr, string $path)
     {
         foreach (explode('.', $path) as $prop) {
             $arr = $arr[$prop];
