@@ -1,7 +1,6 @@
 # recanalyst-demo
 
 A small example app for RecAnalyst.
-A hosted version is available at http://idlebeaver.ninja/recanalyst.
 
 ## Running It Yourself
 

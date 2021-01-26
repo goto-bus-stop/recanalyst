@@ -26,8 +26,6 @@ And reads data such as:
  * Achievements (UserPatch only)
  * Tributes
 
-A small demo application is hosted at http://idlebeaver.ninja/recanalyst.
-
 [License][] - [Credits][] - [Contributing][] - [Requirements][] -
 [Installation][] - [Configuration][] - [Usage Examples][] -
 [API Documentation][] - [Limitations][]

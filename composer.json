@@ -3,7 +3,7 @@
   "description": "Analyzes Age of Empires 2 recorded game files.",
   "version": "4.2.3",
   "type": "library",
-  "homepage": "http://idlebeaver.ninja/recanalyst",
+  "homepage": "https://github.com/goto-bus-stop/recanalyst",
   "autoload": {
     "psr-4": { "RecAnalyst\\": "src/" }
   },
